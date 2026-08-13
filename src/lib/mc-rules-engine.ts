@@ -417,7 +417,6 @@ export function replayInnings(events: MCBallEvent[], opts: ReplayOptions = {}): 
       curOverBowlerId = null;
       curOverBowlerName = null;
     } else {
-      // RESET awaitingNewBowler if the over is not yet complete (e.g. after a correction)
       awaitingNewBowler = false;
     }
   }
@@ -455,7 +454,7 @@ export function replayInnings(events: MCBallEvent[], opts: ReplayOptions = {}): 
 
   let inningsShouldEnd: MatchState["inningsShouldEnd"] = null;
   if (wickets >= maxWickets) inningsShouldEnd = "all_out";
-  else if (totalOvers != null && legalBalls >= totalOvers * 6 && (curOverLegal === 0 || curOverLegal >= 6)) inningsShouldEnd = "overs_finished";
+  else if (totalOvers != null && legalBalls >= totalOvers * 6) inningsShouldEnd = "overs_finished";
   else if (target != null && runs >= target) inningsShouldEnd = "target_achieved";
 
   const matchShouldEnd =

@@ -270,31 +270,3 @@ export async function undoLastBallEvent(inningsId: string): Promise<MCBallEvent 
   if (delErr) throw delErr;
   return last;
 }
-
-export async function deleteBallEvent(eventId: string): Promise<void> {
-  const { error } = await (supabase as any).rpc("delete_mc_ball_event", { p_event_id: eventId });
-  if (error) throw error;
-}
-
-export interface UpdateBallInput {
-  eventId: string;
-  runsOffBat: number;
-  extraType: ExtraType | null;
-  extraRuns: number;
-  dismissalType: DismissalType | null;
-  dismissedAthleteId: string | null;
-  dismissedName: string | null;
-}
-
-export async function updateBallEvent(input: UpdateBallInput): Promise<void> {
-  const { error } = await (supabase as any).rpc("update_mc_ball_event", {
-    p_event_id: input.eventId,
-    p_runs_off_bat: input.runsOffBat,
-    p_extra_type: input.extraType,
-    p_extra_runs: input.extraRuns,
-    p_dismissal_type: input.dismissalType,
-    p_dismissed_athlete_id: input.dismissedAthleteId,
-    p_dismissed_name: input.dismissedName,
-  });
-  if (error) throw error;
-}

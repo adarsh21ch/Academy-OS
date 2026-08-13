@@ -7,6 +7,6 @@
 import { createServerFn } from "@tanstack/react-start";
 
 export const getVapidPublicKey = createServerFn({ method: "GET" }).handler(async () => {
-  const key = typeof process !== 'undefined' ? process.env.VAPID_PUBLIC_KEY : undefined;
-  return { publicKey: key ?? null };
+  const key = process.env.VAPID_PUBLIC_KEY ?? null;
+  return { publicKey: key };
 });

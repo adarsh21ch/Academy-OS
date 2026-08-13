@@ -2,7 +2,6 @@ import { useEffect, useMemo, useRef, useState, type ReactNode } from "react";
 import { NumberRoll } from "@/components/ui/number-roll";
 import { useSwipe } from "@/hooks/use-swipe";
 import { cn } from "@/lib/utils";
-import { MCBallEvent } from "@/lib/mc-ball-events";
 import {
   Dialog,
   DialogContent,
@@ -108,10 +107,6 @@ export interface MobileScorerProps {
   dismissedBatterNames?: string[];
 
   onUndo: () => void;
-  onDeleteBall?: (eventId: string) => void;
-  onUpdateBall?: (input: any) => void;
-  onPickBowler?: (eventId: string, opt: { athleteId: string | null; name: string }) => void;
-  allEvents?: MCBallEvent[];
   onRedo?: () => void;
   canRedo?: boolean;
   onSwapStrike: () => void;
@@ -120,7 +115,6 @@ export interface MobileScorerProps {
   onEndMatch: () => void;
   showFinishInnings?: boolean;
   hideEndMatch?: boolean;
-  onEditMatch?: () => void;
 
   onOpenScorecard?: () => void;
   onOpenScorebook?: () => void;
@@ -295,14 +289,10 @@ export function MobileScorer(props: MobileScorerProps) {
                 {props.tournamentLabel}
               </div>
             )}
-            <div 
-              className={cn("mt-1 flex min-w-0 items-center gap-1.5", props.onEditMatch && "cursor-pointer active:opacity-70")}
-              onClick={props.onEditMatch}
-            >
+            <div className="mt-1 flex min-w-0 items-center gap-1.5">
               <span className="truncate text-[15px] font-black leading-none tracking-tight">
                 {props.matchTitle}
               </span>
-              {props.onEditMatch && <FileText className="size-3.5 text-primary" />}
               {props.isLive && (
                 <span className="inline-flex shrink-0 items-center gap-1 rounded-full border border-destructive/40 bg-destructive/10 px-1.5 py-0.5 text-[9px] font-black uppercase leading-none tracking-wider text-destructive">
                   <span className="size-1.5 animate-pulse rounded-full bg-destructive" />
@@ -515,17 +505,12 @@ export function MobileScorer(props: MobileScorerProps) {
         </AlertDialogContent>
       </AlertDialog>
 
-          <OverHistorySheet
-            open={historyOpen}
-            onOpenChange={setHistoryOpen}
-            rows={props.overHistory ?? []}
-            inningsLabel={props.inningsLabel}
-            onDeleteBall={props.onDeleteBall}
-            onUpdateBall={props.onUpdateBall}
-            onPickBowler={props.onPickBowler}
-            bowlingOptions={props.bowlingOptions}
-            allEvents={props.allEvents}
-          />
+      <OverHistorySheet
+        open={historyOpen}
+        onOpenChange={setHistoryOpen}
+        rows={props.overHistory ?? []}
+        inningsLabel={props.inningsLabel}
+      />
     </div>
   );
 }
@@ -858,7 +843,6 @@ function BallBubble({ label }: { label: string }) {
   const six = upper === "6" || upper.endsWith("+6") || (upper.startsWith("NB") && upper.endsWith("7"));
   const extra = /WD|NB|LB|B/.test(upper);
   const isMulti = upper.length > 1;
-
   return (
     <span
       className={cn(

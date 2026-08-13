@@ -573,25 +573,17 @@ export function computeOverSummaries(events: MCBallEvent[]): OverSummaryStat[] {
  * over (last event in the over).
  * ================================================================ */
 
-export interface OverHistoryBall {
-  label: string;
-  ballNumber: number;
-  sequenceNumber: number;
-  eventId: string;
-}
-
 export interface OverHistoryRow {
   overNumber: number; // 0-indexed as stored
   overLabel: string; // "1", "2", ...
   bowler: string; // display name, "" if unknown
-  chips: OverHistoryBall[]; // ball-by-ball chip metadata (legal + illegal)
+  chips: string[]; // ball-by-ball chip labels (legal + illegal)
   runs: number; // total runs in the over (bat + extras)
   wickets: number; // wickets in the over
   runningScore: string; // e.g. "87/2" at end of the over
   legalBalls: number;
   completed: boolean; // 6 legal deliveries reached
 }
-
 
 export function computeOverHistory(
   events: MCBallEvent[],
@@ -622,13 +614,7 @@ export function computeOverHistory(
       };
       rows.set(e.over_number, row);
     }
-    row.chips.push({
-      label: chipLabel(e),
-      ballNumber: e.ball_number,
-      sequenceNumber: e.sequence_number,
-      eventId: e.id,
-    });
-
+    row.chips.push(chipLabel(e));
     row.runs += totalRunsForBall(e);
     if (isWicket) row.wickets += 1;
     if (isLegalDelivery(e.extra_type as ExtraType | null)) row.legalBalls += 1;

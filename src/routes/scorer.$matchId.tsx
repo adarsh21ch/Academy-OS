@@ -46,7 +46,6 @@ import type { DismissalType, ExtraType } from "@/lib/mc-ball-events";
 import { LiveScorecard } from "@/components/match-center/live-scorecard";
 import { ShareMatchDialog } from "@/components/match-center/share-match-dialog";
 import { FinalizationDialog, UnlockMatchDialog } from "@/components/match-center/finalization-ui";
-import { EditMatchDialog } from "@/components/match-center/EditMatchDialog";
 import { detectMatchResult, type InningsRow, type MatchResult } from "@/lib/mc-finalization";
 import { Printer, Share2, FileText, Trophy } from "lucide-react";
 import { useViewportInsets } from "@/hooks/use-visual-viewport";
@@ -130,7 +129,6 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
         .in("id", [session.match.team_a_id, session.match.team_b_id].filter(Boolean));
       return data ?? [];
     },
-    staleTime: 1000 * 60,
   });
 
   // Squad names — resolve athlete_profile_id → student name
@@ -197,13 +195,6 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
     else session.setBowler(payload);
   };
 
-  const handlePickBowler = (eventId: string, opt: { athleteId: string | null; name: string }) => {
-    void session.updateBallBowler(eventId, opt);
-  };
-
-  const handleDeleteBall = (id: string) => void session.deleteBall(id);
-  const handleUpdateBall = (input: any) => void session.updateBall(input);
-
   /* ---------- modal state ---------- */
   const [dismissOpen, setDismissOpen] = useState(false);
   const [caughtOpen, setCaughtOpen] = useState(false);
@@ -226,7 +217,6 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   const [inningsCompleteOpen, setInningsCompleteOpen] = useState(false);
   const [matchCompleteOpen, setMatchCompleteOpen] = useState(false);
   const [finalizeDialogOpen, setFinalizeDialogOpen] = useState(false);
-  const [editMatchOpen, setEditMatchOpen] = useState(false);
   const [unlockDialogOpen, setUnlockDialogOpen] = useState(false);
   const [commentaryCollapsed, setCommentaryCollapsed] = useState(false);
   const [tossWinnerId, setTossWinnerId] = useState<string | null>(null);
@@ -242,13 +232,9 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
     const rs = session.matchState.innings.striker;
     const rn = session.matchState.innings.nonStriker;
     const rb = session.matchState.innings.bowler;
-    
-    // ONLY hydrate if local state is totally empty and rules engine has data
-    // This allows the persistent draft (loaded in useScoringSession) to take precedence
     const strikerEmpty = !session.striker.athleteId && !session.striker.name;
     const nonStrikerEmpty = !session.nonStriker.athleteId && !session.nonStriker.name;
     const bowlerEmpty = !session.bowler.athleteId && !session.bowler.name;
-
     if (strikerEmpty && (rs.athleteId || rs.name)) {
       const dismissed =
         (rs.athleteId && session.matchState.innings.dismissedIds.has(rs.athleteId)) ||
@@ -266,7 +252,17 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
     if (bowlerEmpty && (rb.athleteId || rb.name) && !session.matchState.innings.awaitingNewBowler) {
       session.setBowler({ athleteId: rb.athleteId, name: rb.name });
     }
-  }, [session.loading]); // Only run on initial load completion
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [
+    session.loading,
+    session.matchState.innings.striker.athleteId,
+    session.matchState.innings.striker.name,
+    session.matchState.innings.nonStriker.athleteId,
+    session.matchState.innings.nonStriker.name,
+    session.matchState.innings.bowler.athleteId,
+    session.matchState.innings.bowler.name,
+    session.matchState.innings.awaitingNewBowler,
+  ]);
 
   /* ---------- innings/match completion detection ---------- */
   useEffect(() => {
@@ -448,12 +444,12 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   // (connection status handled implicitly by MobileScorer; kept for future use)
 
   /* ---------- ball submission ---------- */
+  const [redoStack, setRedoStack] = useState<Awaited<ReturnType<typeof session.undo>>[]>([]);
   const submit = async (partial: Parameters<typeof session.submitBall>[0]) => {
-
     try {
       await session.submitBall(partial);
+      setRedoStack([]);
     } catch (e) {
-
       toast.error(e instanceof Error ? e.message : "Failed to record ball");
     }
   };
@@ -480,19 +476,33 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   }, [pendingBallIntent, requiredPicker]);
   const handleUndo = async () => {
     try {
-      await session.undo();
+      const removed = await session.undo();
+      if (removed) setRedoStack((s) => [...s, removed]);
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to undo");
     }
   };
   const handleRedo = async () => {
+    const next = redoStack[redoStack.length - 1];
+    if (!next) return;
+    setRedoStack((s) => s.slice(0, -1));
     try {
-      await session.redo();
+      await session.submitBall({
+        runsOffBat: next.runs_off_bat ?? 0,
+        extraType: (next.extra_type ?? null) as ExtraType | null,
+        extraRuns: next.extra_runs ?? 0,
+        dismissalType: (next.dismissal_type ?? null) as DismissalType | null,
+        dismissedAthleteId: next.dismissed_athlete_id ?? null,
+        dismissedName: next.dismissed_name ?? null,
+        fielderAthleteId: next.fielder_athlete_id ?? null,
+        fielderName: next.fielder_name ?? null,
+        comment: next.comment ?? null,
+      });
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Failed to redo");
+      setRedoStack((s) => [...s, next]);
     }
   };
-
 
   const onRun = (r: 0 | 1 | 2 | 3 | 4 | 5 | 6) => requestSubmit(ballHelpers.run(r));
 
@@ -951,13 +961,7 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
           onOpenBowlerPicker={() => setPickBowlerOpen(true)}
           onUndo={() => void handleUndo()}
           onRedo={() => void handleRedo()}
-          canRedo={true}
-          onDeleteBall={(id) => void session.deleteBall(id)}
-          onUpdateBall={(input) => void session.updateBall(input)}
-          onPickBowler={handlePickBowler}
-          allEvents={session.events}
-
-
+          canRedo={redoStack.length > 0}
           onSwapStrike={() => {
             const s = { ...session.striker };
             session.setStriker({ ...session.nonStriker, onStrike: true });
@@ -1009,28 +1013,6 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
           bowledBowlerIds={bowledBowlerIds}
           dismissedBatterIds={Array.from(session.matchState.innings.dismissedIds)}
           dismissedBatterNames={Array.from(session.matchState.innings.dismissedNames)}
-          onEditMatch={() => setEditMatchOpen(true)}
-        />
-      )}
-
-      {session.match && (
-        <EditMatchDialog
-          open={editMatchOpen}
-          onOpenChange={setEditMatchOpen}
-          matchId={session.match.id}
-          teamA={{ 
-            id: session.match.team_a_id, 
-            name: teamMap.get(session.match.team_a_id)?.name ?? "Team A" 
-          }}
-          teamB={{ 
-            id: session.match.team_b_id, 
-            name: teamMap.get(session.match.team_b_id)?.name ?? "Team B" 
-          }}
-          overs={session.match.overs}
-          matchFormat={session.match.match_format}
-          onUpdated={() => {
-            // Optional: load() is called by the hook's visibility listener or realtime
-          }}
         />
       )}
 
