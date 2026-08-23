@@ -770,9 +770,15 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   return (
     <MobileViewportShell
       className="scorer-root z-40"
-      children={null}
+      children={<div />}
       header={
-        <div className="flex-none">
+        <>
+
+
+
+
+
+          <div className="flex-none">
           {isDemo ? (
             <div className="grid flex-1 place-items-center p-8 text-center">
               <div className="max-w-md space-y-3">
@@ -903,7 +909,8 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
               </div>
             </div>
           ) : (
-            <MobileScorer
+            <div className="flex-none">
+              <MobileScorer
               onExit={() => void navigate({ to: "/match-center/live" })}
               matchTitle={matchTitle}
               tournamentLabel={tournamentLabel || undefined}
@@ -1015,7 +1022,33 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
           dismissedBatterIds={Array.from(session.matchState.innings.dismissedIds)}
           dismissedBatterNames={Array.from(session.matchState.innings.dismissedNames)}
         />
-      )}
+      </div>
+        )}
+      </div>
+    </>
+  );
+
+  return (
+    <MobileViewportShell
+      className="scorer-root z-40"
+      header={content}
+      children={
+        <>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
       {/* ---------- modals ---------- */}
       <DismissalModal open={dismissOpen} onOpenChange={setDismissOpen} onSelect={handleDismissal} />
@@ -1371,12 +1404,8 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
         </SheetContent>
       </Sheet>
 
-      {/* No-ball classification sheet for demo */}
-        </div>
-      }
-    />
-  );
-}
+
+
 
 function SquadSection({ title, players }: { title: string; players: PlayerOption[] }) {
   return (
