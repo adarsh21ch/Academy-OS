@@ -2051,3 +2051,7 @@ function DemoScorerBody({
           </DialogFooter>
         </DialogContent>
       </Dialog>
+    </MobileViewportShell>
+  );
+}
+
