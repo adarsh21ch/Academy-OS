@@ -1905,7 +1905,6 @@ function DemoScorerBody({
     .map((b) => b.player.athleteId as string);
 
   return (
-  return (
     <MobileViewportShell
       className="scorer-root z-40"
       header={
