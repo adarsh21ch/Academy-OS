@@ -892,6 +892,7 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
 
 
 
+
       {/* ---------- modals ---------- */}
       <DismissalModal open={dismissOpen} onOpenChange={setDismissOpen} onSelect={handleDismissal} />
 
