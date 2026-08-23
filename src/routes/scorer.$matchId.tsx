@@ -770,144 +770,144 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   return (
     <MobileViewportShell
       className="scorer-root z-40"
-      children={
-        <div className="flex h-full flex-col">
+      header={
+        <div className="flex-none">
           {isDemo ? (
-        <div className="grid flex-1 place-items-center p-8 text-center">
-          <div className="max-w-md space-y-3">
-            <div className="text-lg font-semibold">Demo scorer</div>
-            <p className="text-sm text-muted-foreground">
-              This is a placeholder route. Create a real match from Match Center → Create, then open
-              its scorer.
-            </p>
-            <Button asChild>
-              <Link to="/match-center/create">Create a match</Link>
-            </Button>
-          </div>
-        </div>
-      ) : lockStatus === "blocked" ? (
-        <div className="grid flex-1 place-items-center p-6 text-center">
-          <div className="max-w-sm space-y-3">
-            <div className="text-lg font-semibold">Match is being scored</div>
-            <p className="text-sm text-muted-foreground">
-              This match is currently being scored by another user. To prevent conflicting updates,
-              only one scorer can be active at a time.
-            </p>
-            <Button variant="outline" onClick={() => void navigate({ to: "/match-center/live" })}>
-              Back to live matches
-            </Button>
-          </div>
-        </div>
-      ) : lockStatus === "pending" ? (
-        <div className="grid flex-1 place-items-center text-sm text-muted-foreground">
-          Preparing scoring session…
-        </div>
-      ) : session.loading ? (
-        <div className="grid flex-1 place-items-center text-sm text-muted-foreground">
-          Loading match…
-        </div>
-      ) : session.error ? (
-        <div className="grid flex-1 place-items-center p-6 text-center">
-          <div className="max-w-sm space-y-3">
-            <div className="text-base font-semibold">Unable to load match</div>
-            <p className="text-xs text-muted-foreground">
-              We couldn't reach the match data. Check your connection and try again.
-            </p>
-            <div className="flex justify-center gap-2">
-              <Button size="sm" variant="outline" onClick={() => void session.reload()}>
-                Retry
-              </Button>
-              <Button size="sm" variant="ghost" asChild>
-                <Link to="/match-center/matches">Back to matches</Link>
-              </Button>
+            <div className="grid flex-1 place-items-center p-8 text-center">
+              <div className="max-w-md space-y-3">
+                <div className="text-lg font-semibold">Demo scorer</div>
+                <p className="text-sm text-muted-foreground">
+                  This is a placeholder route. Create a real match from Match Center → Create, then open
+                  its scorer.
+                </p>
+                <Button asChild>
+                  <Link to="/match-center/create">Create a match</Link>
+                </Button>
+              </div>
             </div>
-          </div>
-        </div>
-      ) : noInnings ? (
-        <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
-          <div className="text-base font-semibold">Toss & Innings 1</div>
-          <p className="max-w-sm text-xs text-muted-foreground">
-            Record the toss before starting the match. Choose who won the toss and what they elected to do.
-          </p>
-
-          <div className="w-full max-w-sm space-y-4 text-left">
-            <div>
-              <div className="mb-2 text-xs font-medium text-muted-foreground">Who won the toss?</div>
-              <div className="grid grid-cols-2 gap-2">
-                {[
-                  { id: session.match?.team_a_id, label: teamMap.get(session.match?.team_a_id ?? "")?.name ?? "Team A" },
-                  { id: session.match?.team_b_id, label: teamMap.get(session.match?.team_b_id ?? "")?.name ?? "Team B" },
-                ].map((t) => (
-                  <Button
-                    key={t.id ?? t.label}
-                    type="button"
-                    variant={tossWinnerId === t.id ? "default" : "outline"}
-                    onClick={() => t.id && setTossWinnerId(t.id)}
-                    className="h-11"
-                  >
-                    {t.label}
+          ) : lockStatus === "blocked" ? (
+            <div className="grid flex-1 place-items-center p-6 text-center">
+              <div className="max-w-sm space-y-3">
+                <div className="text-lg font-semibold">Match is being scored</div>
+                <p className="text-sm text-muted-foreground">
+                  This match is currently being scored by another user. To prevent conflicting updates,
+                  only one scorer can be active at a time.
+                </p>
+                <Button variant="outline" onClick={() => void navigate({ to: "/match-center/live" })}>
+                  Back to live matches
+                </Button>
+              </div>
+            </div>
+          ) : lockStatus === "pending" ? (
+            <div className="grid flex-1 place-items-center text-sm text-muted-foreground">
+              Preparing scoring session…
+            </div>
+          ) : session.loading ? (
+            <div className="grid flex-1 place-items-center text-sm text-muted-foreground">
+              Loading match…
+            </div>
+          ) : session.error ? (
+            <div className="grid flex-1 place-items-center p-6 text-center">
+              <div className="max-w-sm space-y-3">
+                <div className="text-base font-semibold">Unable to load match</div>
+                <p className="text-xs text-muted-foreground">
+                  We couldn't reach the match data. Check your connection and try again.
+                </p>
+                <div className="flex justify-center gap-2">
+                  <Button size="sm" variant="outline" onClick={() => void session.reload()}>
+                    Retry
                   </Button>
-                ))}
+                  <Button size="sm" variant="ghost" asChild>
+                    <Link to="/match-center/matches">Back to matches</Link>
+                  </Button>
+                </div>
               </div>
             </div>
+          ) : noInnings ? (
+            <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
+              <div className="text-base font-semibold">Toss & Innings 1</div>
+              <p className="max-w-sm text-xs text-muted-foreground">
+                Record the toss before starting the match. Choose who won the toss and what they elected to do.
+              </p>
 
-            <div>
-              <div className="mb-2 text-xs font-medium text-muted-foreground">Elected to</div>
-              <div className="grid grid-cols-2 gap-2">
+              <div className="w-full max-w-sm space-y-4 text-left">
+                <div>
+                  <div className="mb-2 text-xs font-medium text-muted-foreground">Who won the toss?</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    {[
+                      { id: session.match?.team_a_id, label: teamMap.get(session.match?.team_a_id ?? "")?.name ?? "Team A" },
+                      { id: session.match?.team_b_id, label: teamMap.get(session.match?.team_b_id ?? "")?.name ?? "Team B" },
+                    ].map((t) => (
+                      <Button
+                        key={t.id ?? t.label}
+                        type="button"
+                        variant={tossWinnerId === t.id ? "default" : "outline"}
+                        onClick={() => t.id && setTossWinnerId(t.id)}
+                        className="h-11"
+                      >
+                        {t.label}
+                      </Button>
+                    ))}
+                  </div>
+                </div>
+
+                <div>
+                  <div className="mb-2 text-xs font-medium text-muted-foreground">Elected to</div>
+                  <div className="grid grid-cols-2 gap-2">
+                    <Button
+                      type="button"
+                      variant={tossDecision === "bat" ? "default" : "outline"}
+                      onClick={() => setTossDecision("bat")}
+                      className="h-11"
+                    >
+                      Bat first
+                    </Button>
+                    <Button
+                      type="button"
+                      variant={tossDecision === "bowl" ? "default" : "outline"}
+                      onClick={() => setTossDecision("bowl")}
+                      className="h-11"
+                    >
+                      Bowl first
+                    </Button>
+                  </div>
+                </div>
+
+                {tossWinnerId && tossDecision ? (
+                  <div className="rounded-md border bg-muted/40 p-3 text-xs">
+                    <span className="font-medium">
+                      {teamMap.get(tossWinnerId)?.name ?? "Winner"}
+                    </span>{" "}
+                    won the toss and elected to{" "}
+                    <span className="font-medium">{tossDecision === "bat" ? "bat" : "bowl"}</span> first.
+                  </div>
+                ) : null}
+              </div>
+
+              <div className="flex w-full max-w-sm flex-col gap-2 pt-2">
                 <Button
-                  type="button"
-                  variant={tossDecision === "bat" ? "default" : "outline"}
-                  onClick={() => setTossDecision("bat")}
+                  onClick={() => void confirmTossAndStart()}
+                  disabled={!tossWinnerId || !tossDecision || tossSaving}
                   className="h-11"
                 >
-                  Bat first
+                  {tossSaving ? "Starting…" : "Start innings 1"}
                 </Button>
                 <Button
-                  type="button"
-                  variant={tossDecision === "bowl" ? "default" : "outline"}
-                  onClick={() => setTossDecision("bowl")}
-                  className="h-11"
+                  variant="ghost"
+                  size="sm"
+                  onClick={() => void navigate({ to: "/match-center/live" })}
                 >
-                  Bowl first
+                  Back
                 </Button>
               </div>
             </div>
-
-            {tossWinnerId && tossDecision ? (
-              <div className="rounded-md border bg-muted/40 p-3 text-xs">
-                <span className="font-medium">
-                  {teamMap.get(tossWinnerId)?.name ?? "Winner"}
-                </span>{" "}
-                won the toss and elected to{" "}
-                <span className="font-medium">{tossDecision === "bat" ? "bat" : "bowl"}</span> first.
-              </div>
-            ) : null}
-          </div>
-
-          <div className="flex w-full max-w-sm flex-col gap-2 pt-2">
-            <Button
-              onClick={() => void confirmTossAndStart()}
-              disabled={!tossWinnerId || !tossDecision || tossSaving}
-              className="h-11"
-            >
-              {tossSaving ? "Starting…" : "Start innings 1"}
-            </Button>
-            <Button
-              variant="ghost"
-              size="sm"
-              onClick={() => void navigate({ to: "/match-center/live" })}
-            >
-              Back
-            </Button>
-          </div>
-        </div>
-      ) : (
-        <MobileScorer
-          onExit={() => void navigate({ to: "/match-center/live" })}
-          matchTitle={matchTitle}
-          tournamentLabel={tournamentLabel || undefined}
-          isLive={!!session.activeInnings && !session.match?.match_locked}
-          freeHit={session.matchState.innings.freeHit}
+          ) : (
+            <MobileScorer
+              onExit={() => void navigate({ to: "/match-center/live" })}
+              matchTitle={matchTitle}
+              tournamentLabel={tournamentLabel || undefined}
+              isLive={!!session.activeInnings && !session.match?.match_locked}
+              freeHit={session.matchState.innings.freeHit}
           score={`${stats.team.runs}/${stats.team.wickets}`}
           overs={currentOverLabel}
           crr={String(stats.team.runRate)}
@@ -2221,8 +2221,6 @@ function DemoScorerBody({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-        </div>
-      }
-    />
+    </MobileViewportShell>
   );
 }
