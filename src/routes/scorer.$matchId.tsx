@@ -1967,125 +1967,32 @@ function DemoScorerBody({
         </div>
       }
     >
-      <div className="flex h-full flex-col">
+      <div className="flex-1 min-h-0">
         {match.match_locked ? (
-          {match.match_locked ? (
-        <div className="min-h-0 flex-1 overflow-y-auto">
-          <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-4">
-            <LiveScorecard
-              events={session.events}
-              innings={activeInnings}
-              totalOvers={match.overs ?? null}
-              matchInfo={{
-                ground: match.ground_name,
-                tournament: match.match_type,
-                date: match.scheduled_date,
-                format: match.match_format,
-                playingRules: match.playing_rules,
-                homeTeam: homeName,
-                awayTeam: awayName,
-                result: match.result,
-              }}
-            />
+          <div className="min-h-0 flex-1 overflow-y-auto">
+            <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-4">
+              <LiveScorecard
+                events={session.events}
+                innings={activeInnings}
+                totalOvers={match.overs ?? null}
+                matchInfo={{
+                  ground: match.ground_name,
+                  tournament: match.match_type,
+                  date: match.scheduled_date,
+                  format: match.match_format,
+                  playingRules: match.playing_rules,
+                  homeTeam: homeName,
+                  awayTeam: awayName,
+                  result: match.result,
+                }}
+              />
+            </div>
           </div>
-        </div>
-      ) : (
-        <MobileScorer
-          onExit={() => void navigate({ to: "/match-center/live" })}
-          matchTitle={matchTitle}
-          tournamentLabel={tournamentLabel || undefined}
-          isLive={isLive}
-          score={`${stats.team.runs}/${stats.team.wickets}`}
-          overs={currentOverLabel}
-          crr={String(stats.team.runRate)}
-          rrr={stats.team.requiredRunRate != null ? String(stats.team.requiredRunRate) : undefined}
-          target={activeInnings?.target != null ? String(activeInnings.target) : undefined}
-          chase={chase}
-          striker={{ ...strikerStat, isKeeper: session.striker.athleteId ? session.playingXI.find(p => p.athlete_profile_id === session.striker.athleteId)?.is_keeper : false }}
-          nonStriker={{ ...nonStrikerStat, isKeeper: session.nonStriker.athleteId ? session.playingXI.find(p => p.athlete_profile_id === session.nonStriker.athleteId)?.is_keeper : false }}
-          bowler={bowlerStat}
-          partnership={
-            stats.team.currentPartnership
-              ? {
-                  runs: stats.team.currentPartnership.runs,
-                  balls: stats.team.currentPartnership.balls,
-                }
-              : null
-          }
-          overBalls={
-            session.matchState.innings.awaitingNewBowler
-              ? []
-              : session.currentOver.events.map(ballChipLabel)
-          }
-          currentOverLabel={currentOverLabel}
-          overHistory={overHistory}
-          insights={{
-            partnership: stats.team.currentPartnership
-              ? `${stats.team.currentPartnership.runs}(${stats.team.currentPartnership.balls})`
-              : "0(0)",
-            projected:
-              match.overs && stats.team.legalBalls > 0
-                ? String(Math.round(stats.team.runRate * match.overs))
-                : "–",
-            lastWicket: stats.team.fallOfWickets.at(-1)
-              ? `${stats.team.fallOfWickets.at(-1)?.score}/${stats.team.fallOfWickets.at(-1)?.wicketNumber}`
-              : "–",
-            extras: String(stats.team.extras.total),
-            recentOvers: stats.team.overs_summary.slice(-3).map((over) => ({
-              label: `${over.overNumber + 1}`,
-              runs: over.runs,
-              wickets: over.wickets,
-            })),
-          }}
-          onRun={onRun}
-          onExtra={(k) => setExtraKind(k)}
-          onOut={() => setDismissOpen(true)}
-          onOpenStrikerPicker={() => setPickStrikerOpen(true)}
-          onOpenNonStrikerPicker={() => setPickNonStrikerOpen(true)}
-          onOpenBowlerPicker={() => setPickBowlerOpen(true)}
-          onUndo={() => void handleUndo()}
-          onRedo={() => void handleRedo()}
-          canRedo={redoStack.length > 0}
-          onSwapStrike={() => {
-            const s = { ...session.striker };
-            session.setStriker({ ...session.nonStriker, onStrike: true });
-            session.setNonStriker({ ...s, onStrike: false });
-          }}
-          onRetiredHurt={() => void finalizeWicket("retired_hurt")}
-          onFinishInnings={activeInnings?.innings_number === 1 ? startSecondInnings : undefined}
-          showFinishInnings={activeInnings?.innings_number === 1}
-          onEndMatch={finalizeMatch}
-          onOpenScorecard={() => setScorecardOpen(true)}
-          scorecardContent={
-            <LiveScorecard
-              hideHero
-              events={session.events}
-              innings={activeInnings}
-              totalOvers={match.overs ?? null}
-              matchInfo={{
-                ground: match.ground_name,
-                tournament: match.match_type,
-                date: match.scheduled_date,
-                format: match.match_format,
-                homeTeam: homeName,
-                awayTeam: awayName,
-                result: match.result,
-              }}
-            />
-          }
-          onShareMatch={() => setShareOpen(true)}
-          battingOptions={battingOptions}
-          bowlingOptions={bowlingOptions}
-          onPickPlayer={(role, p) => setPlayer(role, p)}
-          requiredPicker={requiredPicker}
-          awaitingNewBatter={session.matchState.innings.awaitingNewBatter}
-          awaitingNewBatterRole={incomingBatterRole ?? "striker"}
-          awaitingNewBowler={session.matchState.innings.awaitingNewBowler}
-          previousBowlerId={previousOverBowler?.bowlerAthleteId ?? null}
-          previousBowlerName={previousOverBowler?.bowlerName ?? null}
-          bowledBowlerIds={bowledBowlerIds}
-        />
-      )}
+        ) : (
+          /* Main view is in the header for safe-area reasons */
+          null
+        )}
+      </div>
 
       {/* ---------- modals ---------- */}
       <DismissalModal open={dismissOpen} onOpenChange={setDismissOpen} onSelect={handleDismissal} />
