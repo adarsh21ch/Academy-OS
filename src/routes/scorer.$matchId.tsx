@@ -205,7 +205,10 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   const [pickNonStrikerOpen, setPickNonStrikerOpen] = useState(false);
   const [pickBowlerOpen, setPickBowlerOpen] = useState(false);
   const [extraKind, setExtraKind] = useState<"Wide" | "No Ball" | "Bye" | "Leg Bye" | null>(null);
-  
+  const [pickerRole, setPickerRole] = useState<"striker" | "nonStriker" | "bowler" | null>(null);
+  const [playerPickerOpen, setPlayerPickerOpen] = useState(false);
+  const [penaltyOpen, setPenaltyOpen] = useState(false);
+
   // No-ball classification state
   const [nbClassificationOpen, setNbClassificationOpen] = useState(false);
   const [pendingNoBallRuns, setPendingNoBallRuns] = useState<number | null>(null);
@@ -797,71 +800,56 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
             </div>
           </div>
         ) : (
-          <div className="flex flex-col">
-            <ScorerTopBar
-              title={matchTitle}
-              tournament={tournamentLabel}
-              onUndo={() => void session.undo()}
-              onEnd={() => setEndDialogOpen(true)}
-              isDemo={isDemo}
-            />
+          <MobileScorer
+            onExit={() => void navigate({ to: "/match-center/live" })}
+            matchTitle={matchTitle}
+            tournamentLabel={tournamentLabel || undefined}
+            isLive={!isDemo}
+            score={`${stats.team.runs}/${stats.team.wickets}`}
+            overs={formatOversCompact(stats.team.legalBalls)}
+            crr={String(stats.team.runRate)}
+            rrr={stats.team.requiredRunRate != null ? String(stats.team.requiredRunRate) : undefined}
+            target={session.activeInnings?.target != null ? String(session.activeInnings.target) : undefined}
+            chase={chase}
+            striker={{
+              name: session.striker.name || undefined,
+              runs: stats.striker?.runs,
+              balls: stats.striker?.balls,
+              fours: stats.striker?.fours,
+              sixes: stats.striker?.sixes,
+              strikeRate: stats.striker?.strikeRate
+            }}
+            nonStriker={{
+              name: session.nonStriker.name || undefined,
+              runs: stats.nonStriker?.runs,
+              balls: stats.nonStriker?.balls,
+              fours: stats.nonStriker?.fours,
+              sixes: stats.nonStriker?.sixes,
+              strikeRate: stats.nonStriker?.strikeRate
+            }}
+            bowler={{
+              name: session.bowler.name || undefined,
+              overs: stats.bowler ? formatOversCompact(stats.bowler.legalBalls) : "0.0",
+              runs: stats.bowler?.runs,
+              wickets: stats.bowler?.wickets,
+              economy: stats.bowler?.economy
+            }}
+            overBalls={stats.recentBalls.map(b => b.chip)}
+            onRun={onRun}
+            onExtra={(kind) => setExtraKind(kind)}
+            onOut={() => setDismissOpen(true)}
+            onUndo={() => void session.undo()}
+            onEndMatch={() => setFinalizeDialogOpen(true)}
+            onOpenStrikerPicker={() => { setPickerRole("striker"); setPlayerPickerOpen(true); }}
+            onOpenNonStrikerPicker={() => { setPickerRole("nonStriker"); setPlayerPickerOpen(true); }}
+            onOpenBowlerPicker={() => { setPickerRole("bowler"); setPlayerPickerOpen(true); }}
+            battingOptions={battingOptions}
+            bowlingOptions={bowlingOptions}
+            onPickPlayer={(role, p) => setPlayer(role, p)}
+            awaitingNewBatter={session.matchState.innings.awaitingNewBatter}
+            awaitingNewBowler={session.matchState.innings.awaitingNewBowler}
+          />
 
-            <div className="px-4 py-2">
-              <ScoreOverview
-                runs={stats.team.runs}
-                wickets={stats.team.wickets}
-                overs={formatOversCompact(stats.team.legalBalls)}
-                chase={chase}
-                recentBalls={stats.recentBalls}
-              />
-            </div>
-
-            <div className="px-4 pb-2">
-              <BatterBowlerGrid
-                striker={session.striker}
-                nonStriker={session.nonStriker}
-                bowler={session.bowler}
-                onSelectPlayer={(role) => {
-                  setPickerRole(role);
-                  setPlayerPickerOpen(true);
-                }}
-              />
-            </div>
-
-            <ScorerActions
-              onRun={onRun}
-              onExtra={(kind) => setExtraKind(kind)}
-              onDismissal={() => setDismissOpen(true)}
-              onPenalty={() => setPenaltyOpen(true)}
-              onOverEnd={
-                session.matchState.innings.awaitingNewBowler
-                  ? () => setNewBowlerOpen(true)
-                  : undefined
-              }
-              onShareMatch={!isDemo ? () => setShareOpen(true) : undefined}
-              onOpenScorebook={
-                !isDemo
-                  ? () =>
-                      void navigate({
-                        to: "/match-center/scorebook/$matchId",
-                        params: { matchId },
-                      })
-                  : undefined
-              }
-              battingOptions={battingOptions}
-              bowlingOptions={bowlingOptions}
-              onPickPlayer={(role, p) => setPlayer(role, p)}
-              requiredPicker={requiredPicker}
-              awaitingNewBatter={session.matchState.innings.awaitingNewBatter}
-              awaitingNewBatterRole={incomingBatterRole ?? "striker"}
-              awaitingNewBowler={session.matchState.innings.awaitingNewBowler}
-              previousBowlerId={previousOverBowler?.bowlerAthleteId ?? null}
-              previousBowlerName={previousOverBowler?.bowlerName ?? null}
-              bowledBowlerIds={bowledBowlerIds}
-              dismissedBatterIds={Array.from(session.matchState.innings.dismissedIds)}
-              dismissedBatterNames={Array.from(session.matchState.innings.dismissedNames)}
-            />
-          </div>
         )}
       </div>
     </>
