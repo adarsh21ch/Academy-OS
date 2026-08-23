@@ -770,7 +770,6 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   return (
     <MobileViewportShell
       className="scorer-root z-40"
-      children={null}
       header={
         <div className="flex-none">
           {isDemo ? (
@@ -1908,6 +1907,31 @@ function DemoScorerBody({
   return (
     <MobileViewportShell
       className="scorer-root z-40"
+      children={
+        <div className="flex-1 min-h-0">
+          {match.match_locked ? (
+            <div className="min-h-0 flex-1 overflow-y-auto">
+              <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-4">
+                <LiveScorecard
+                  events={session.events}
+                  innings={activeInnings}
+                  totalOvers={match.overs ?? null}
+                  matchInfo={{
+                    ground: match.ground_name,
+                    tournament: match.match_type,
+                    date: match.scheduled_date,
+                    format: match.match_format,
+                    playingRules: match.playing_rules,
+                    homeTeam: homeName,
+                    awayTeam: awayName,
+                    result: match.result,
+                  }}
+                />
+              </div>
+            </div>
+          ) : null}
+        </div>
+      }
       header={
         <div className="flex-none">
           <MobileScorer
@@ -1958,17 +1982,24 @@ function DemoScorerBody({
             onShareMatch={() => setShareOpen(true)}
             battingOptions={battingOptions}
             bowlingOptions={bowlingOptions}
-            onSelectStriker={() => setPickStrikerOpen(true)}
-            onSelectNonStriker={() => setPickNonStrikerOpen(true)}
-            onSelectBowler={() => setPickBowlerOpen(true)}
+            onOpenStrikerPicker={() => setPickStrikerOpen(true)}
+            onOpenNonStrikerPicker={() => setPickNonStrikerOpen(true)}
+            onOpenBowlerPicker={() => setPickBowlerOpen(true)}
             onRun={onRun}
             onExtra={(kind) => setExtraKind(kind)}
+            onOut={() => setDismissOpen(true)}
             onUndo={() => void session.undo()}
+            onSwapStrike={() => {
+              const s = { ...session.striker };
+              session.setStriker({ ...session.nonStriker, onStrike: true });
+              session.setNonStriker({ ...s, onStrike: false });
+            }}
+            onRetiredHurt={() => void finalizeWicket("retired_hurt")}
           />
         </div>
       }
     >
-      <div className="flex-1 min-h-0">
+
         {match.match_locked ? (
           <div className="min-h-0 flex-1 overflow-y-auto">
             <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-4">
