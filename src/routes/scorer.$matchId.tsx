@@ -1905,33 +1905,9 @@ function DemoScorerBody({
     .map((b) => b.player.athleteId as string);
 
   return (
+  return (
     <MobileViewportShell
       className="scorer-root z-40"
-      children={
-        <div className="flex-1 min-h-0">
-          {match.match_locked ? (
-            <div className="min-h-0 flex-1 overflow-y-auto">
-              <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-4">
-                <LiveScorecard
-                  events={session.events}
-                  innings={activeInnings}
-                  totalOvers={match.overs ?? null}
-                  matchInfo={{
-                    ground: match.ground_name,
-                    tournament: match.match_type,
-                    date: match.scheduled_date,
-                    format: match.match_format,
-                    playingRules: match.playing_rules,
-                    homeTeam: homeName,
-                    awayTeam: awayName,
-                    result: match.result,
-                  }}
-                />
-              </div>
-            </div>
-          ) : null}
-        </div>
-      }
       header={
         <div className="flex-none">
           <MobileScorer
@@ -1999,7 +1975,7 @@ function DemoScorerBody({
         </div>
       }
     >
-
+      <div className="flex-1 min-h-0">
         {match.match_locked ? (
           <div className="min-h-0 flex-1 overflow-y-auto">
             <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-4">
@@ -2022,6 +1998,7 @@ function DemoScorerBody({
           </div>
         ) : null}
       </div>
+
 
       {/* ---------- modals ---------- */}
       <DismissalModal open={dismissOpen} onOpenChange={setDismissOpen} onSelect={handleDismissal} />
