@@ -42,8 +42,8 @@ export function MobileViewportShell({
     // Offset compensation for iOS keyboard scroll
     transform: insets.offsetTop ? `translateY(${insets.offsetTop}px)` : undefined,
     // Safe area horizontal padding
-    paddingLeft: "env(safe-area-inset-left)",
-    paddingRight: "env(safe-area-inset-right)",
+    paddingLeft: "var(--app-safe-left)",
+    paddingRight: "var(--app-safe-right)",
   };
 
   return (
