@@ -347,7 +347,7 @@ export function ChatPanel({
   }, [messages]);
 
   return (
-    <div className={cn("flex h-full flex-col", keyboardOpen && "pb-[env(safe-area-inset-bottom)]")}>
+    <div className={cn("flex h-full flex-col", keyboardOpen && "pb-[var(--app-safe-bottom)]")}>
       <Conversation className="flex-1">
         <ConversationContent>
           {messages.length === 0 ? (
@@ -493,7 +493,7 @@ export function ChatPanel({
           // home indicator area — don't double-pad.
           paddingBottom: insets.keyboardOpen
             ? "0.75rem"
-            : "calc(0.75rem + env(safe-area-inset-bottom, 0px))",
+            : "calc(0.75rem + var(--app-safe-bottom))",
         }}
       >
 

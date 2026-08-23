@@ -28,7 +28,7 @@ export function InsightsTabsBar() {
   return (
     <nav
       aria-label="Insights sections"
-      className="sticky top-[calc(env(safe-area-inset-top)+6.5rem)] z-20 -mx-4 mb-4 flex gap-1 overflow-x-auto no-scrollbar px-4 md:mx-0 md:px-0 bg-background/95 backdrop-blur py-1 border-b md:border-none"
+      className="sticky top-[calc(var(--app-safe-top)+6.5rem)] z-20 -mx-4 mb-4 flex gap-1 overflow-x-auto no-scrollbar px-4 md:mx-0 md:px-0 bg-background/95 backdrop-blur py-1 border-b md:border-none"
     >
       {TABS.map((tab) => {
         const active = tab.match.some(

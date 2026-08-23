@@ -113,7 +113,7 @@ export function AcademyAuthLayout({ children }: { children: ReactNode }) {
 
       <div className="mx-auto grid min-h-dvh w-full lg:grid-cols-[1.05fr_1fr]">
         <BrandPanel brand={brand} hasArt={hasArt} />
-        <main className="relative flex min-h-dvh w-full flex-col justify-center px-5 pb-[max(2rem,env(safe-area-inset-bottom))] pt-[max(2rem,env(safe-area-inset-top))] sm:px-8">
+        <main className="relative flex min-h-dvh w-full flex-col justify-center px-5 pb-[max(2rem,var(--app-safe-bottom))] pt-[max(2rem,var(--app-safe-top))] sm:px-8">
           {/* Mobile-only academy artwork band, kept behind a heavy scrim */}
           {hasArt ? (
             <div className="pointer-events-none absolute inset-x-0 top-0 h-[38dvh] overflow-hidden lg:hidden">

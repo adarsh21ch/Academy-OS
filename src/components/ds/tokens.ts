@@ -63,10 +63,10 @@ export const motion = {
 
 /** Safe-area helpers (inline styles). */
 export const safeArea = {
-  top: "env(safe-area-inset-top)",
-  bottom: "env(safe-area-inset-bottom)",
-  left: "env(safe-area-inset-left)",
-  right: "env(safe-area-inset-right)",
+  top: "var(--app-safe-top)",
+  bottom: "var(--app-safe-bottom)",
+  left: "var(--app-safe-left)",
+  right: "var(--app-safe-right)",
 } as const;
 
 /** Bottom navigation height (mobile). */

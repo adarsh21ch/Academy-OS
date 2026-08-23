@@ -83,6 +83,11 @@
 }
 
 :root {
+  --app-safe-top: max(env(safe-area-inset-top), 12px);
+  --app-safe-bottom: max(env(safe-area-inset-bottom), 8px);
+  --app-safe-left: var(--app-safe-left);
+  --app-safe-right: var(--app-safe-right);
+
   --radius: 0.625rem;
   --background: oklch(0.985 0 0);
   --foreground: oklch(0.16 0 0);
@@ -481,11 +486,21 @@
  * Mobile-first utilities (Prompt 15C)
  * Presentation only — no logic impact.
  * ============================================================ */
-@utility safe-pb {
-  padding-bottom: calc(env(safe-area-inset-bottom) + 12px);
+@utility pt-safe {
+  padding-top: var(--app-safe-top);
 }
-@utility safe-pt {
-  padding-top: calc(env(safe-area-inset-top) + 8px);
+@utility pb-safe {
+  padding-bottom: var(--app-safe-bottom);
+}
+@utility pl-safe {
+  padding-left: var(--app-safe-left);
+}
+@utility pr-safe {
+  padding-right: var(--app-safe-right);
+}
+@utility px-safe {
+  padding-left: var(--app-safe-left);
+  padding-right: var(--app-safe-right);
 }
 @utility tap-target {
   min-height: 44px;

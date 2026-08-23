@@ -123,7 +123,7 @@ export function PreferencesCard() {
           </SheetTrigger>
           <SheetContent
             side="bottom"
-            className="rounded-t-2xl border-t border-border p-0 pb-[env(safe-area-inset-bottom)]"
+            className="rounded-t-2xl border-t border-border p-0 pb-[var(--app-safe-bottom)]"
           >
             <SheetHeader className="px-4 pt-4 pb-2 text-left">
               <SheetTitle className="text-base">Select Language</SheetTitle>

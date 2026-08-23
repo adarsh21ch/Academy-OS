@@ -45,12 +45,12 @@ export function TenantPlaceholder() {
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-x-0 top-0 z-30 bg-[#0a0a0a]"
-        style={{ height: "env(safe-area-inset-top)" }}
+        style={{ height: "var(--app-safe-top)" }}
       />
       <div
         aria-hidden="true"
         className="bg-[#0a0a0a]"
-        style={{ height: "env(safe-area-inset-top)" }}
+        style={{ height: "var(--app-safe-top)" }}
       />
       <Nav whatsappUrl={whatsappUrl} />
       <Hero whatsappUrl={whatsappUrl} emailUrl={emailUrl} />
@@ -142,7 +142,7 @@ function Nav({ whatsappUrl }: { whatsappUrl: string }) {
   return (
     <nav
       className="sticky z-30 border-b border-white/5 bg-[#0a0a0a]/70 backdrop-blur-md"
-      style={{ top: "env(safe-area-inset-top)" }}
+      style={{ top: "var(--app-safe-top)" }}
     >
       <div className="mx-auto flex w-full max-w-6xl items-center justify-between px-4 py-4 sm:px-6">
         <div className="flex items-center gap-2.5">

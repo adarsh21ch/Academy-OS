@@ -163,7 +163,7 @@ function PublicMatchPage() {
 
       <footer
         className="mt-auto border-t bg-card/60 px-4 py-4 text-center text-xs text-muted-foreground backdrop-blur"
-        style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 1rem)" }}
+        style={{ paddingBottom: "calc(var(--app-safe-bottom) + 1rem)" }}
       >
         Powered by Academy OS · Read-only public match link
       </footer>

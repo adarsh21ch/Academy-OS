@@ -135,7 +135,7 @@ function NevorAIPage() {
     <MobileViewportShell
       data-nevorai-workspace
       className="z-[60]"
-      desktopClassName="md:static md:z-auto md:-mx-8 md:-mt-8 md:-mb-8 md:h-[calc(100dvh-env(safe-area-inset-top)-3.5rem)]"
+      desktopClassName="md:static md:z-auto md:-mx-8 md:-mt-8 md:-mb-8 md:h-[calc(100dvh-var(--app-safe-top)-3.5rem)]"
       header={
         <header className="flex shrink-0 items-center justify-between gap-2 border-b border-border/50 px-3 py-2.5 lg:px-6">
           <Link

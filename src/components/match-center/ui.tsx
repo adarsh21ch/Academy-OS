@@ -444,7 +444,7 @@ export function StickyActionBar({
         "sticky bottom-0 left-0 right-0 z-20 -mx-4 md:mx-0 mt-6 border-t border-border bg-background/95 backdrop-blur px-4 pt-3 md:static md:border-0 md:bg-transparent md:p-0 md:backdrop-blur-0 no-tap-highlight",
         className,
       )}
-      style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + 12px)" }}
+      style={{ paddingBottom: "calc(var(--app-safe-bottom) + 12px)" }}
     >
       <div
         className={cn(
