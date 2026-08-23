@@ -867,12 +867,9 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
     </>
   );
 
-  return (
-    <MobileViewportShell
-      className="scorer-root z-40"
-      header={content}
-      children={
-        <>
+  const modals = (
+    <>
+
 
 
 
