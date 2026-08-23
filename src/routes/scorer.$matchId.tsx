@@ -1988,10 +1988,7 @@ function DemoScorerBody({
               />
             </div>
           </div>
-        ) : (
-          /* Main view is in the header for safe-area reasons */
-          null
-        )}
+        ) : null}
       </div>
 
       {/* ---------- modals ---------- */}
