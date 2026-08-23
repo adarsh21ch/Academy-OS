@@ -1160,7 +1160,7 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
       <Sheet open={scorecardOpen} onOpenChange={setScorecardOpen}>
         <SheetContent
           side="bottom"
-          className="flex h-[90dvh] flex-col rounded-t-[28px] border-t-0 p-0 pb-[env(safe-area-inset-bottom)] shadow-2xl"
+          className="flex h-[90dvh] flex-col rounded-t-[28px] border-t-0 p-0 pb-[var(--app-safe-bottom)] shadow-2xl"
         >
           <div className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-muted-foreground/30" />
           <SheetHeader className="shrink-0 space-y-0.5 px-5 pt-3 pb-2 text-left">
@@ -2160,7 +2160,7 @@ function DemoScorerBody({
       <Sheet open={scorecardOpen} onOpenChange={setScorecardOpen}>
         <SheetContent
           side="bottom"
-          className="flex h-[90dvh] flex-col rounded-t-[28px] border-t-0 p-0 pb-[env(safe-area-inset-bottom)] shadow-2xl"
+          className="flex h-[90dvh] flex-col rounded-t-[28px] border-t-0 p-0 pb-[var(--app-safe-bottom)] shadow-2xl"
         >
           <div className="mx-auto mt-2 h-1 w-10 shrink-0 rounded-full bg-muted-foreground/30" />
           <SheetHeader className="shrink-0 space-y-0.5 px-5 pt-3 pb-2 text-left">
