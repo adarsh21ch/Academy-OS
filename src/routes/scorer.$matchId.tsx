@@ -770,6 +770,7 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   return (
     <MobileViewportShell
       className="scorer-root z-40"
+      children={null}
       header={
         <div className="flex-none">
           {isDemo ? (
