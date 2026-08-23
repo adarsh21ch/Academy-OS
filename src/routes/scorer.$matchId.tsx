@@ -1185,8 +1185,6 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
           />
         </>
       )}
-        </>
-      )}
     </>
   );
 
@@ -1198,6 +1196,7 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
     />
   );
 }
+
 
 function SquadSection({ title, players }: { title: string; players: PlayerOption[] }) {
 
@@ -2052,6 +2051,3 @@ function DemoScorerBody({
           </DialogFooter>
         </DialogContent>
       </Dialog>
-    </MobileViewportShell>
-  );
-}
