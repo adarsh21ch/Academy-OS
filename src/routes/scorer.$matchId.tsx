@@ -770,6 +770,7 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
   return (
     <MobileViewportShell
       className="scorer-root z-40"
+      children={null}
       header={
         <div className="flex-none">
           {isDemo ? (
@@ -1931,7 +1932,7 @@ function DemoScorerBody({
                   }
                 : undefined
             }
-            overBalls={overHistory.map((h) => h.ballLabel)}
+            overBalls={overHistory.map((h) => ballChipLabel(h.event))}
             overHistory={overHistory}
             currentOverLabel={currentOverLabel}
             hideEndMatch={match.match_locked}
