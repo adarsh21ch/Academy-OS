@@ -767,262 +767,101 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
     .filter((b) => (b.legalBalls > 0 || b.wides > 0 || b.noBalls > 0) && b.player.athleteId)
     .map((b) => b.player.athleteId as string);
 
-  return (
-    <MobileViewportShell
-      className="scorer-root z-40"
-      children={<div />}
-      header={
-        <>
-
-
-
-
-
-          <div className="flex-none">
-          {isDemo ? (
-            <div className="grid flex-1 place-items-center p-8 text-center">
-              <div className="max-w-md space-y-3">
-                <div className="text-lg font-semibold">Demo scorer</div>
-                <p className="text-sm text-muted-foreground">
-                  This is a placeholder route. Create a real match from Match Center → Create, then open
-                  its scorer.
-                </p>
-                <Button asChild>
-                  <Link to="/match-center/create">Create a match</Link>
-                </Button>
-              </div>
-            </div>
-          ) : lockStatus === "blocked" ? (
-            <div className="grid flex-1 place-items-center p-6 text-center">
-              <div className="max-w-sm space-y-3">
-                <div className="text-lg font-semibold">Match is being scored</div>
-                <p className="text-sm text-muted-foreground">
-                  This match is currently being scored by another user. To prevent conflicting updates,
-                  only one scorer can be active at a time.
-                </p>
-                <Button variant="outline" onClick={() => void navigate({ to: "/match-center/live" })}>
-                  Back to live matches
-                </Button>
-              </div>
-            </div>
-          ) : lockStatus === "pending" ? (
-            <div className="grid flex-1 place-items-center text-sm text-muted-foreground">
-              Preparing scoring session…
-            </div>
-          ) : session.loading ? (
-            <div className="grid flex-1 place-items-center text-sm text-muted-foreground">
-              Loading match…
-            </div>
-          ) : session.error ? (
-            <div className="grid flex-1 place-items-center p-6 text-center">
-              <div className="max-w-sm space-y-3">
-                <div className="text-base font-semibold">Unable to load match</div>
-                <p className="text-xs text-muted-foreground">
-                  We couldn't reach the match data. Check your connection and try again.
-                </p>
-                <div className="flex justify-center gap-2">
-                  <Button size="sm" variant="outline" onClick={() => void session.reload()}>
-                    Retry
-                  </Button>
-                  <Button size="sm" variant="ghost" asChild>
-                    <Link to="/match-center/matches">Back to matches</Link>
-                  </Button>
-                </div>
-              </div>
-            </div>
-          ) : noInnings ? (
-            <div className="flex flex-1 flex-col items-center justify-center gap-4 p-6 text-center">
-              <div className="text-base font-semibold">Toss & Innings 1</div>
-              <p className="max-w-sm text-xs text-muted-foreground">
-                Record the toss before starting the match. Choose who won the toss and what they elected to do.
+  const content = (
+    <>
+      <div className="flex-none">
+        {isDemo ? (
+          <div className="grid flex-1 place-items-center p-8 text-center">
+            <div className="max-w-md space-y-3">
+              <div className="text-lg font-semibold">Demo scorer</div>
+              <p className="text-sm text-muted-foreground">
+                This is a placeholder route. Create a real match from Match Center → Create, then open
+                its scorer.
               </p>
-
-              <div className="w-full max-w-sm space-y-4 text-left">
-                <div>
-                  <div className="mb-2 text-xs font-medium text-muted-foreground">Who won the toss?</div>
-                  <div className="grid grid-cols-2 gap-2">
-                    {[
-                      { id: session.match?.team_a_id, label: teamMap.get(session.match?.team_a_id ?? "")?.name ?? "Team A" },
-                      { id: session.match?.team_b_id, label: teamMap.get(session.match?.team_b_id ?? "")?.name ?? "Team B" },
-                    ].map((t) => (
-                      <Button
-                        key={t.id ?? t.label}
-                        type="button"
-                        variant={tossWinnerId === t.id ? "default" : "outline"}
-                        onClick={() => t.id && setTossWinnerId(t.id)}
-                        className="h-11"
-                      >
-                        {t.label}
-                      </Button>
-                    ))}
-                  </div>
-                </div>
-
-                <div>
-                  <div className="mb-2 text-xs font-medium text-muted-foreground">Elected to</div>
-                  <div className="grid grid-cols-2 gap-2">
-                    <Button
-                      type="button"
-                      variant={tossDecision === "bat" ? "default" : "outline"}
-                      onClick={() => setTossDecision("bat")}
-                      className="h-11"
-                    >
-                      Bat first
-                    </Button>
-                    <Button
-                      type="button"
-                      variant={tossDecision === "bowl" ? "default" : "outline"}
-                      onClick={() => setTossDecision("bowl")}
-                      className="h-11"
-                    >
-                      Bowl first
-                    </Button>
-                  </div>
-                </div>
-
-                {tossWinnerId && tossDecision ? (
-                  <div className="rounded-md border bg-muted/40 p-3 text-xs">
-                    <span className="font-medium">
-                      {teamMap.get(tossWinnerId)?.name ?? "Winner"}
-                    </span>{" "}
-                    won the toss and elected to{" "}
-                    <span className="font-medium">{tossDecision === "bat" ? "bat" : "bowl"}</span> first.
-                  </div>
-                ) : null}
-              </div>
-
-              <div className="flex w-full max-w-sm flex-col gap-2 pt-2">
-                <Button
-                  onClick={() => void confirmTossAndStart()}
-                  disabled={!tossWinnerId || !tossDecision || tossSaving}
-                  className="h-11"
-                >
-                  {tossSaving ? "Starting…" : "Start innings 1"}
-                </Button>
-                <Button
-                  variant="ghost"
-                  size="sm"
-                  onClick={() => void navigate({ to: "/match-center/live" })}
-                >
-                  Back
-                </Button>
-              </div>
+              <Button asChild>
+                <Link to="/match-center/create">Create a match</Link>
+              </Button>
             </div>
-          ) : (
-            <div className="flex-none">
-              <MobileScorer
-              onExit={() => void navigate({ to: "/match-center/live" })}
-              matchTitle={matchTitle}
-              tournamentLabel={tournamentLabel || undefined}
-              isLive={!!session.activeInnings && !session.match?.match_locked}
-              freeHit={session.matchState.innings.freeHit}
-          score={`${stats.team.runs}/${stats.team.wickets}`}
-          overs={currentOverLabel}
-          crr={String(stats.team.runRate)}
-          rrr={stats.team.requiredRunRate != null ? String(stats.team.requiredRunRate) : undefined}
-          target={
-            session.activeInnings?.target != null ? String(session.activeInnings.target) : undefined
-          }
-          chase={chase}
-          striker={{ ...strikerStat, isKeeper: session.striker.athleteId ? session.playingXI.find(p => p.athlete_profile_id === session.striker.athleteId)?.is_keeper : false }}
-          nonStriker={{ ...nonStrikerStat, isKeeper: session.nonStriker.athleteId ? session.playingXI.find(p => p.athlete_profile_id === session.nonStriker.athleteId)?.is_keeper : false }}
-          bowler={bowlerStat}
-          partnership={
-            stats.team.currentPartnership
-              ? {
-                  runs: stats.team.currentPartnership.runs,
-                  balls: stats.team.currentPartnership.balls,
-                }
-              : null
-          }
-          overBalls={
-            session.matchState.innings.awaitingNewBowler
-              ? []
-              : session.currentOver.events.map(ballChipLabel)
-          }
-          currentOverLabel={currentOverLabel}
-          overHistory={overHistory}
-          inningsLabel={undefined}
-          insights={{
-            partnership: stats.team.currentPartnership
-              ? `${stats.team.currentPartnership.runs}(${stats.team.currentPartnership.balls})`
-              : "0(0)",
-            projected:
-              session.match?.overs && stats.team.legalBalls > 0
-                ? String(Math.round(stats.team.runRate * session.match.overs))
-                : "–",
-            lastWicket: stats.team.fallOfWickets.at(-1)
-              ? `${stats.team.fallOfWickets.at(-1)?.score}/${stats.team.fallOfWickets.at(-1)?.wicketNumber}`
-              : "–",
-            extras: String(stats.team.extras.total),
-            recentOvers: stats.team.overs_summary.slice(-3).map((over) => ({
-              label: `${over.overNumber + 1}`,
-              runs: over.runs,
-              wickets: over.wickets,
-            })),
-          }}
-          onRun={onRun}
-          onExtra={(k) => setExtraKind(k)}
-          onOut={() => setDismissOpen(true)}
-          onOpenStrikerPicker={() => setPickStrikerOpen(true)}
-          onOpenNonStrikerPicker={() => setPickNonStrikerOpen(true)}
-          onOpenBowlerPicker={() => setPickBowlerOpen(true)}
-          onUndo={() => void handleUndo()}
-          onRedo={() => void handleRedo()}
-          canRedo={redoStack.length > 0}
-          onSwapStrike={() => {
-            const s = { ...session.striker };
-            session.setStriker({ ...session.nonStriker, onStrike: true });
-            session.setNonStriker({ ...s, onStrike: false });
-          }}
-          onRetiredHurt={() => void finalizeWicket("retired_hurt")}
-          onFinishInnings={
-            session.activeInnings?.innings_number === 1 ? startSecondInnings : undefined
-          }
-          showFinishInnings={session.activeInnings?.innings_number === 1}
-          onEndMatch={finalizeMatch}
-          onOpenScorecard={() => setScorecardOpen(true)}
-          scorecardContent={
-            <LiveScorecard
-              hideHero
-              events={session.events}
-              innings={session.activeInnings}
-              totalOvers={session.match?.overs ?? null}
-              matchInfo={{
-                homeTeam: homeName,
-                awayTeam: awayName,
-                format: session.match?.match_format ?? null,
-                ground: session.match?.ground_name ?? null,
-                tournament: session.match?.match_type ?? null,
-                date: session.match?.scheduled_date ?? null,
-                result: resultLine,
-              }}
+          </div>
+        ) : lockStatus === "blocked" ? (
+          <div className="grid flex-1 place-items-center p-6 text-center">
+            <div className="max-w-sm space-y-3">
+              <div className="text-lg font-semibold">Match is being scored</div>
+              <p className="text-sm text-muted-foreground">
+                This match is currently being scored by another user. To prevent conflicting updates,
+                only one scorer is allowed at a time.
+              </p>
+              <Button onClick={() => window.history.back()} variant="outline">
+                Go back
+              </Button>
+            </div>
+          </div>
+        ) : (
+          <div className="flex flex-col">
+            <ScorerTopBar
+              title={matchTitle}
+              tournament={tournamentLabel}
+              onUndo={() => void session.undo()}
+              onEnd={() => setEndDialogOpen(true)}
+              isDemo={isDemo}
             />
-          }
-          onShareMatch={!isDemo ? () => setShareOpen(true) : undefined}
-          onOpenScorebook={
-            !isDemo
-              ? () =>
-                  void navigate({
-                    to: "/match-center/scorebook/$matchId",
-                    params: { matchId },
-                  })
-              : undefined
-          }
-          battingOptions={battingOptions}
-          bowlingOptions={bowlingOptions}
-          onPickPlayer={(role, p) => setPlayer(role, p)}
-          requiredPicker={requiredPicker}
-          awaitingNewBatter={session.matchState.innings.awaitingNewBatter}
-          awaitingNewBatterRole={incomingBatterRole ?? "striker"}
-          awaitingNewBowler={session.matchState.innings.awaitingNewBowler}
-          previousBowlerId={previousOverBowler?.bowlerAthleteId ?? null}
-          previousBowlerName={previousOverBowler?.bowlerName ?? null}
-          bowledBowlerIds={bowledBowlerIds}
-          dismissedBatterIds={Array.from(session.matchState.innings.dismissedIds)}
-          dismissedBatterNames={Array.from(session.matchState.innings.dismissedNames)}
-        />
-      </div>
+
+            <div className="px-4 py-2">
+              <ScoreOverview
+                runs={stats.team.runs}
+                wickets={stats.team.wickets}
+                overs={formatOversCompact(stats.team.legalBalls)}
+                chase={chase}
+                recentBalls={stats.recentBalls}
+              />
+            </div>
+
+            <div className="px-4 pb-2">
+              <BatterBowlerGrid
+                striker={session.striker}
+                nonStriker={session.nonStriker}
+                bowler={session.bowler}
+                onSelectPlayer={(role) => {
+                  setPickerRole(role);
+                  setPlayerPickerOpen(true);
+                }}
+              />
+            </div>
+
+            <ScorerActions
+              onRun={onRun}
+              onExtra={(kind) => setExtraKind(kind)}
+              onDismissal={() => setDismissOpen(true)}
+              onPenalty={() => setPenaltyOpen(true)}
+              onOverEnd={
+                session.matchState.innings.awaitingNewBowler
+                  ? () => setNewBowlerOpen(true)
+                  : undefined
+              }
+              onShareMatch={!isDemo ? () => setShareOpen(true) : undefined}
+              onOpenScorebook={
+                !isDemo
+                  ? () =>
+                      void navigate({
+                        to: "/match-center/scorebook/$matchId",
+                        params: { matchId },
+                      })
+                  : undefined
+              }
+              battingOptions={battingOptions}
+              bowlingOptions={bowlingOptions}
+              onPickPlayer={(role, p) => setPlayer(role, p)}
+              requiredPicker={requiredPicker}
+              awaitingNewBatter={session.matchState.innings.awaitingNewBatter}
+              awaitingNewBatterRole={incomingBatterRole ?? "striker"}
+              awaitingNewBowler={session.matchState.innings.awaitingNewBowler}
+              previousBowlerId={previousOverBowler?.bowlerAthleteId ?? null}
+              previousBowlerName={previousOverBowler?.bowlerName ?? null}
+              bowledBowlerIds={bowledBowlerIds}
+              dismissedBatterIds={Array.from(session.matchState.innings.dismissedIds)}
+              dismissedBatterNames={Array.from(session.matchState.innings.dismissedNames)}
+            />
+          </div>
         )}
       </div>
     </>
@@ -1034,6 +873,7 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
       header={content}
       children={
         <>
+
 
 
 
