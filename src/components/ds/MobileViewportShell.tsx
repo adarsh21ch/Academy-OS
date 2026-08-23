@@ -55,31 +55,34 @@ export function MobileViewportShell({
       )}
       style={containerStyle}
     >
-      {header && (
+      {header ? (
         <div
           className="flex-none"
-          style={{ paddingTop: "env(safe-area-inset-top)" }}
+          style={{ paddingTop: "var(--app-safe-top)" }}
         >
           {header}
         </div>
+      ) : (
+        <div style={{ paddingTop: "var(--app-safe-top)" }} />
       )}
 
       <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain [-webkit-overflow-scrolling:touch]">
         {children}
       </div>
 
-      {footer && (
+      {footer ? (
         <div
           className="flex-none"
           style={{
-            // Drop safe area bottom padding when keyboard is open as the home indicator is hidden
             paddingBottom: insets.keyboardOpen
               ? "0px"
-              : "env(safe-area-inset-bottom)",
+              : "var(--app-safe-bottom)",
           }}
         >
           {footer}
         </div>
+      ) : (
+        <div style={{ paddingBottom: insets.keyboardOpen ? "0px" : "var(--app-safe-bottom)" }} />
       )}
     </div>
   );

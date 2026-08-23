@@ -167,6 +167,8 @@ export function FinalizationDialog({
       onFinalized?.();
       onOpenChange(false);
       setStep(1);
+      // P2 Task D: Ensure navigation away from scorer after finalization
+      window.location.href = "/match-center/matches";
     } catch (e) {
       toast.error(e instanceof Error ? e.message : "Could not finalize match");
     } finally {

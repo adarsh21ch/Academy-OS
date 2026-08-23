@@ -15,8 +15,8 @@ export function useMobileSurfaceStyle() {
   const mobileStyle = {
     maxHeight: height,
     transform: insets.offsetTop ? `translate(var(--tw-translate-x), calc(var(--tw-translate-y) + ${insets.offsetTop}px))` : undefined,
-    paddingTop: "env(safe-area-inset-top)",
-    paddingBottom: "env(safe-area-inset-bottom)",
+    paddingTop: "var(--app-safe-top)",
+    paddingBottom: "var(--app-safe-bottom)",
   };
 
   return { mobileStyle, insets };

@@ -1907,8 +1907,68 @@ function DemoScorerBody({
   return (
     <MobileViewportShell
       className="scorer-root z-40"
-      children={
-        <div className="flex h-full flex-col">
+      header={
+        <div className="flex-none">
+          <MobileScorer
+            onExit={() => void navigate({ to: "/match-center/live" })}
+            matchTitle={matchTitle}
+            tournamentLabel={tournamentLabel || undefined}
+            isLive={isLive}
+            score={`${stats.team.runs}/${stats.team.wickets}`}
+            overs={currentOverLabel}
+            crr={String(stats.team.runRate)}
+            rrr={stats.team.requiredRunRate != null ? String(stats.team.requiredRunRate) : undefined}
+            target={activeInnings?.target != null ? String(activeInnings.target) : undefined}
+            chase={chase}
+            striker={{ ...strikerStat, isKeeper: session.striker.athleteId ? session.playingXI.find(p => p.athlete_profile_id === session.striker.athleteId)?.is_keeper : false }}
+            nonStriker={{ ...nonStrikerStat, isKeeper: session.nonStriker.athleteId ? session.playingXI.find(p => p.athlete_profile_id === session.nonStriker.athleteId)?.is_keeper : false }}
+            bowler={bowlerStat}
+            partnership={
+              stats.team.currentPartnership
+                ? {
+                    runs: stats.team.currentPartnership.runs,
+                    balls: stats.team.currentPartnership.balls,
+                  }
+                : undefined
+            }
+            overBalls={overHistory}
+            overHistory={overHistory}
+            currentOverLabel={currentOverLabel}
+            hideEndMatch={match.match_locked}
+            onEndMatch={finalizeMatch}
+            onOpenScorecard={() => setScorecardOpen(true)}
+            scorecardContent={
+              <LiveScorecard
+                hideHero
+                events={session.events}
+                innings={activeInnings}
+                totalOvers={match.overs ?? null}
+                matchInfo={{
+                  ground: match.ground_name,
+                  tournament: match.match_type,
+                  date: match.scheduled_date,
+                  format: match.match_format,
+                  homeTeam: homeName,
+                  awayTeam: awayName,
+                  result: match.result,
+                }}
+              />
+            }
+            onShareMatch={() => setShareOpen(true)}
+            battingOptions={battingOptions}
+            bowlingOptions={bowlingOptions}
+            onSelectStriker={() => setPickStrikerOpen(true)}
+            onSelectNonStriker={() => setPickNonStrikerOpen(true)}
+            onSelectBowler={() => setPickBowlerOpen(true)}
+            onRun={onRun}
+            onExtra={(kind) => setExtraKind(kind)}
+            onUndo={() => void session.undo()}
+          />
+        </div>
+      }
+    >
+      <div className="flex h-full flex-col">
+        {match.match_locked ? (
           {match.match_locked ? (
         <div className="min-h-0 flex-1 overflow-y-auto">
           <div className="mx-auto max-w-5xl space-y-4 p-3 sm:p-4">
