@@ -806,35 +806,24 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
             tournamentLabel={tournamentLabel || undefined}
             isLive={!isDemo}
             score={`${stats.team.runs}/${stats.team.wickets}`}
-            overs={formatOversCompact(stats.team.legalBalls)}
+            overs={currentOverLabel}
             crr={String(stats.team.runRate)}
             rrr={stats.team.requiredRunRate != null ? String(stats.team.requiredRunRate) : undefined}
             target={session.activeInnings?.target != null ? String(session.activeInnings.target) : undefined}
             chase={chase}
-            striker={{
-              name: session.striker.name || undefined,
-              runs: stats.striker?.runs,
-              balls: stats.striker?.balls,
-              fours: stats.striker?.fours,
-              sixes: stats.striker?.sixes,
-              strikeRate: stats.striker?.strikeRate
+            striker={strikerStat}
+            nonStriker={nonStrikerStat}
+            bowler={bowlerStat}
+            overBalls={overHistory.flatMap((h) => h.chips)}
+            overHistory={overHistory}
+            currentOverLabel={currentOverLabel}
+            onSwapStrike={() => {
+              const s = { ...session.striker };
+              session.setStriker({ ...session.nonStriker, onStrike: true });
+              session.setNonStriker({ ...s, onStrike: false });
             }}
-            nonStriker={{
-              name: session.nonStriker.name || undefined,
-              runs: stats.nonStriker?.runs,
-              balls: stats.nonStriker?.balls,
-              fours: stats.nonStriker?.fours,
-              sixes: stats.nonStriker?.sixes,
-              strikeRate: stats.nonStriker?.strikeRate
-            }}
-            bowler={{
-              name: session.bowler.name || undefined,
-              overs: stats.bowler ? formatOversCompact(stats.bowler.legalBalls) : "0.0",
-              runs: stats.bowler?.runs,
-              wickets: stats.bowler?.wickets,
-              economy: stats.bowler?.economy
-            }}
-            overBalls={stats.recentBalls.map(b => b.chip)}
+            onRetiredHurt={() => setDismissOpen(true)}
+
             onRun={onRun}
             onExtra={(kind) => setExtraKind(kind)}
             onOut={() => setDismissOpen(true)}
