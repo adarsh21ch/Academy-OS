@@ -1932,7 +1932,7 @@ function DemoScorerBody({
                   }
                 : undefined
             }
-            overBalls={overHistory.map((h) => ballChipLabel(h.event_data))}
+            overBalls={overHistory.flatMap((h) => h.chips)}
             overHistory={overHistory}
             currentOverLabel={currentOverLabel}
             hideEndMatch={match.match_locked}
