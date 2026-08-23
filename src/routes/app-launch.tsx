@@ -92,8 +92,8 @@ function AppLaunch() {
     <div
       className="fixed inset-0 grid place-items-center bg-background text-foreground"
       style={{
-        paddingTop: "env(safe-area-inset-top)",
-        paddingBottom: "env(safe-area-inset-bottom)",
+        paddingTop: "var(--app-safe-top)",
+        paddingBottom: "var(--app-safe-bottom)",
       }}
       role="status"
       aria-live="polite"

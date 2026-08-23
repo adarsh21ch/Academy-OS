@@ -10,7 +10,7 @@ export function MobileCtaBar() {
   const phone = tenant.phone;
   return (
     <div className="fixed inset-x-0 bottom-0 z-30 border-t border-border/60 bg-background/95 backdrop-blur-lg sm:hidden">
-      <div className="grid grid-cols-2 gap-2 p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))]">
+      <div className="grid grid-cols-2 gap-2 p-2 pb-[max(0.5rem,var(--app-safe-bottom))]">
         {phone ? (
           <a
             href={`tel:${phone}`}

@@ -50,16 +50,16 @@ export function SiteHeader() {
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-x-0 top-0 z-40 bg-background"
-        style={{ height: "env(safe-area-inset-top)" }}
+        style={{ height: "var(--app-safe-top)" }}
       />
       <div
         aria-hidden="true"
         className="bg-background"
-        style={{ height: "env(safe-area-inset-top)" }}
+        style={{ height: "var(--app-safe-top)" }}
       />
       <header
         className="sticky z-40 border-b border-border/60 bg-background/85 backdrop-blur-lg"
-        style={{ top: "env(safe-area-inset-top)" }}
+        style={{ top: "var(--app-safe-top)" }}
       >
         <div className="mx-auto flex h-16 max-w-screen-2xl items-center gap-4 px-4 sm:px-8">
           {/* Lockup — mark shrink-0, text block min-w-0 + truncate so it never wraps */}

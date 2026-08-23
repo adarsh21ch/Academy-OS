@@ -85,8 +85,8 @@
 :root {
   --app-safe-top: max(env(safe-area-inset-top), 12px);
   --app-safe-bottom: max(env(safe-area-inset-bottom), 8px);
-  --app-safe-left: env(safe-area-inset-left);
-  --app-safe-right: env(safe-area-inset-right);
+  --app-safe-left: var(--app-safe-left);
+  --app-safe-right: var(--app-safe-right);
 
   --radius: 0.625rem;
   --background: oklch(0.985 0 0);

@@ -604,7 +604,7 @@ export function DismissalModal({
         </div>
         <div
           className="grid grid-cols-3 gap-2 px-3 pb-3"
-          style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + .75rem)" }}
+          style={{ paddingBottom: "calc(var(--app-safe-bottom) + .75rem)" }}
         >
           {DISMISSALS.map((d) => (
             <Button
@@ -705,7 +705,7 @@ export function PlayerPickerModal({
         )}
         <div
           className="min-h-0 flex-1 overflow-y-auto pb-3 pt-2"
-          style={{ maxHeight: "48dvh", paddingBottom: "calc(env(safe-area-inset-bottom) + .75rem)" }}
+          style={{ maxHeight: "48dvh", paddingBottom: "calc(var(--app-safe-bottom) + .75rem)" }}
         >
           {filtered.length === 0 ? (
             <div className="py-6 text-center text-sm text-muted-foreground">No players found.</div>
@@ -783,7 +783,7 @@ export function RunOutModal({
         </SheetHeader>
         <div
           className="grid grid-cols-2 gap-2 px-3 pb-3"
-          style={{ paddingBottom: "calc(env(safe-area-inset-bottom) + .75rem)" }}
+          style={{ paddingBottom: "calc(var(--app-safe-bottom) + .75rem)" }}
         >
           <Button
             variant="outline"

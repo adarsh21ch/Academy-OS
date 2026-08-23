@@ -90,7 +90,7 @@ export function ModuleTabs({
   return (
     <div
       className={cn(
-        "sticky top-[calc(env(safe-area-inset-top)+3.5rem)] z-30 -mx-4 md:-mx-8 px-4 md:px-8 bg-background/95 backdrop-blur border-b border-border/60",
+        "sticky top-[calc(var(--app-safe-top)+3.5rem)] z-30 -mx-4 md:-mx-8 px-4 md:px-8 bg-background/95 backdrop-blur border-b border-border/60",
         className,
       )}
     >

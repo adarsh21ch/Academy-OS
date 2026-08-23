@@ -347,7 +347,7 @@ export function ChatPanel({
   }, [messages]);
 
   return (
-    <div className={cn("flex h-full flex-col", keyboardOpen && "pb-[env(safe-area-inset-bottom)]")}>
+    <div className={cn("flex h-full flex-col", keyboardOpen && "pb-[var(--app-safe-bottom)]")}>
       <Conversation className="flex-1">
         <ConversationContent>
           {messages.length === 0 ? (

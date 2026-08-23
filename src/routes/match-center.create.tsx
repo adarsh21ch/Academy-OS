@@ -722,7 +722,7 @@ function CreateMatchPage() {
       )}
 
       {/* Sticky step header — progress + title stay pinned while body scrolls */}
-      <div className="sticky top-[calc(env(safe-area-inset-top)+3.5rem)] z-20 -mx-0 border-b border-border/60 bg-background/95 px-4 pb-3 pt-3 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-0 sm:backdrop-blur-none">
+      <div className="sticky top-[calc(var(--app-safe-top)+3.5rem)] z-20 -mx-0 border-b border-border/60 bg-background/95 px-4 pb-3 pt-3 backdrop-blur sm:static sm:mx-0 sm:border-0 sm:bg-transparent sm:px-0 sm:pb-0 sm:pt-0 sm:backdrop-blur-none">
         <div className="mb-3 flex items-center gap-3">
           <div className="h-1.5 flex-1 overflow-hidden rounded-full bg-muted">
             <div

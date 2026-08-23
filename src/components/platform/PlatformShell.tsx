@@ -54,16 +54,16 @@ export function PlatformShell({ children }: { children: ReactNode }) {
       <div
         aria-hidden="true"
         className="pointer-events-none fixed inset-x-0 top-0 z-40 bg-neutral-950"
-        style={{ height: "env(safe-area-inset-top)" }}
+        style={{ height: "var(--app-safe-top)" }}
       />
       <div
         aria-hidden="true"
         className="bg-neutral-950"
-        style={{ height: "env(safe-area-inset-top)" }}
+        style={{ height: "var(--app-safe-top)" }}
       />
       <header
         className="sticky z-40 border-b border-white/10 bg-neutral-950/80 backdrop-blur"
-        style={{ top: "env(safe-area-inset-top)" }}
+        style={{ top: "var(--app-safe-top)" }}
       >
         <div className="flex h-14 items-center gap-3 px-4 md:px-6">
           <Sheet open={open} onOpenChange={setOpen}>
@@ -115,7 +115,7 @@ export function PlatformShell({ children }: { children: ReactNode }) {
       </header>
 
       <div className="flex">
-        <aside className="hidden md:block w-64 border-r border-white/10 bg-neutral-950 sticky top-[calc(env(safe-area-inset-top)+3.5rem)] h-[calc(100dvh-env(safe-area-inset-top)-3.5rem)]">
+        <aside className="hidden md:block w-64 border-r border-white/10 bg-neutral-950 sticky top-[calc(var(--app-safe-top)+3.5rem)] h-[calc(100dvh-var(--app-safe-top)-3.5rem)]">
           <Inner onSignOut={signOut} email={session.user.email ?? ""} />
         </aside>
         <main className="flex-1 p-4 md:p-8 max-w-6xl mx-auto w-full">{children ?? <Outlet />}</main>

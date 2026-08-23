@@ -282,7 +282,7 @@ function RootComponent() {
           richColors
           position="top-center"
           theme="dark"
-          offset="calc(env(safe-area-inset-top) + 3.25rem)"
+          offset="calc(var(--app-safe-top) + 3.25rem)"
           toastOptions={{ className: "scorer-safe-toast" }}
         />
       </TenantProvider>
