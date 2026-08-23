@@ -1931,7 +1931,7 @@ function DemoScorerBody({
                   }
                 : undefined
             }
-            overBalls={overHistory}
+            overBalls={overHistory.map((h) => h.ballLabel)}
             overHistory={overHistory}
             currentOverLabel={currentOverLabel}
             hideEndMatch={match.match_locked}
