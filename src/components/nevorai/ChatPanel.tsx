@@ -493,7 +493,7 @@ export function ChatPanel({
           // home indicator area — don't double-pad.
           paddingBottom: insets.keyboardOpen
             ? "0.75rem"
-            : "calc(0.75rem + env(safe-area-inset-bottom, 0px))",
+            : "calc(0.75rem + var(--app-safe-bottom))",
         }}
       >
 

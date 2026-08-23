@@ -1329,7 +1329,7 @@ function RegisterContent() {
                 )}
                 style={
                   isMobile
-                    ? { paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom, 0px))" }
+                    ? { paddingBottom: "calc(0.75rem + var(--app-safe-bottom))" }
                     : undefined
                 }
               >
@@ -1368,7 +1368,7 @@ function RegisterContent() {
                 "sticky bottom-0 z-20 flex items-center gap-2 border-t border-border bg-background/95 px-4 py-3 backdrop-blur",
                 isMobile ? "-mx-4" : "-mx-6 px-6"
               )}
-              style={isMobile ? { paddingBottom: "calc(0.75rem + env(safe-area-inset-bottom, 0px))" } : undefined}
+              style={isMobile ? { paddingBottom: "calc(0.75rem + var(--app-safe-bottom))" } : undefined}
             >
               {step > 1 ? (
                 <button
