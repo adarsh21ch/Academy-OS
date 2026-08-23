@@ -1188,16 +1188,22 @@ function LiveScorerPage({ matchId }: { matchId: string }) {
           />
         </>
       )}
+        </>
+      )}
     </>
-  }
-/>
+  );
 
-
-
-
-
+  return (
+    <MobileViewportShell
+      className="scorer-root z-40"
+      header={content}
+      children={modals}
+    />
+  );
+}
 
 function SquadSection({ title, players }: { title: string; players: PlayerOption[] }) {
+
   return (
     <div>
       <div className="mb-1.5 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
