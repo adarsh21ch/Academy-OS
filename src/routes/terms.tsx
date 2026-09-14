@@ -47,7 +47,8 @@ function Terms() {
         collected through Razorpay; we do not store your card details.
       </p>
       <p>
-        Cancellation and refunds are covered by our{" "}
+        You can cancel at any time and billing stops at the end of the period you have paid for.
+        Subscription fees already paid are not refunded — see our{" "}
         <Link to="/refund">Refunds &amp; Cancellation Policy</Link>.
       </p>
 

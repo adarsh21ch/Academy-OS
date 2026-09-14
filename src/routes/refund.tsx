@@ -8,7 +8,7 @@ export const Route = createFileRoute("/refund")({
     seo({
       title: "Refunds & Cancellation Policy — Cricket Academy OS",
       description:
-        "How to cancel your Cricket Academy OS subscription, when a refund applies, and how long a refund takes to reach you.",
+        "How to cancel your Cricket Academy OS subscription, what happens to access after you cancel, and our no-refund policy on subscription fees.",
       path: "/refund",
     }),
   component: Refund,
@@ -19,7 +19,7 @@ function Refund() {
     <LegalLayout
       current="/refund"
       title="Refunds & Cancellation Policy"
-      intro="This policy explains how to cancel your Cricket Academy OS subscription, when a refund applies, and how long it takes."
+      intro="This policy explains how to cancel your Cricket Academy OS subscription and how subscription fees are treated."
     >
       <h2>Cancelling your subscription</h2>
       <p>
@@ -27,61 +27,45 @@ function Refund() {
         writing to <a href={`mailto:${LEGAL_ENTITY.email}`}>{LEGAL_ENTITY.email}</a> or messaging us
         on WhatsApp at{" "}
         <a href={`https://wa.me/91${LEGAL_ENTITY.whatsapp}`}>+91 {LEGAL_ENTITY.whatsapp}</a>. There
-        is no cancellation fee and no lock-in.
+        is no cancellation fee and no lock-in period.
       </p>
       <p>
-        Cancellation takes effect at the end of the period you have already paid for. Your academy
-        keeps full access until that date, and you are not billed again afterwards.
+        Cancellation stops the next renewal. Your academy keeps full access until the end of the
+        period you have already paid for, and you are not billed again after that.
       </p>
 
-      <h2>When a refund applies</h2>
-      <ul>
-        <li>
-          <strong>First subscription, within 7 days.</strong> If you are unhappy with the service
-          within 7 days of your first payment, write to us and we will refund that payment in full.
-        </li>
-        <li>
-          <strong>Duplicate or incorrect charge.</strong> Refunded in full, always, as soon as it is
-          confirmed.
-        </li>
-        <li>
-          <strong>Service not delivered.</strong> If we were unable to set up your academy, the
-          payment is refunded in full.
-        </li>
-      </ul>
-
-      <h2>When a refund does not apply</h2>
-      <ul>
-        <li>
-          Renewal periods already in progress — cancelling stops the next renewal rather than
-          refunding the current one, and you keep access for the rest of the period you paid for.
-        </li>
-        <li>
-          One-time setup, data-migration or custom-work charges, once that work has been delivered.
-        </li>
-        <li>
-          Accounts suspended for breach of our <Link to="/terms">Terms of Service</Link>.
-        </li>
-      </ul>
-
-      <h2>How to request a refund</h2>
+      <h2>Subscription fees are non-refundable</h2>
       <p>
-        Email <a href={`mailto:${LEGAL_ENTITY.email}`}>{LEGAL_ENTITY.email}</a> from the address on
-        your account, with your academy name and the payment reference. We acknowledge every request
-        within 2 working days.
+        Subscription fees, once paid, are not refunded — including for the remaining part of a
+        billing period you cancel in the middle of, and including one-time setup, data-migration or
+        custom-work charges. Cancelling ends future billing; it does not return fees already paid.
+      </p>
+      <p>
+        This is why we run a live walkthrough before anyone pays.{" "}
+        <Link to="/demo">Book a demo</Link> and see the product running on a real academy first, so
+        you know exactly what you are buying.
       </p>
 
-      <h2>How long a refund takes</h2>
+      <h2>Billing errors</h2>
       <p>
-        Approved refunds are sent back to the original payment method through Razorpay within 5–7
-        working days. Your bank or card issuer may take a few additional days to show the credit. We
-        do not issue refunds in cash or to a different account than the one that paid.
+        A duplicate charge, a charge after you cancelled, or an amount different from the one
+        confirmed to you is a billing error, not a refund request — write to us and we will reverse
+        it in full. Reversals are sent back to the original payment method through Razorpay within
+        5–7 working days; your bank or card issuer may take a few additional days to show the
+        credit. We do not send money to any account other than the one that paid.
+      </p>
+
+      <h2>Accounts we suspend</h2>
+      <p>
+        Accounts suspended for breach of our <Link to="/terms">Terms of Service</Link> are not
+        eligible for any reversal of fees already paid.
       </p>
 
       <h2>Questions</h2>
       <p>
-        Billing questions: <a href={`mailto:${LEGAL_ENTITY.email}`}>{LEGAL_ENTITY.email}</a>. We
-        would rather fix the problem than lose you — tell us what went wrong first.
+        Billing questions: <a href={`mailto:${LEGAL_ENTITY.email}`}>{LEGAL_ENTITY.email}</a>. If
+        something is not working the way we promised, tell us — we would rather fix it than have you
+        leave.
       </p>
     </LegalLayout>
   );
