@@ -719,10 +719,10 @@ function Features() {
 
 function FeeRecoveryDesk() {
   const points = [
-    "They can see exactly who is pending, how much, and for how long.",
-    "They call, WhatsApp and email those parents — politely, in their language.",
-    "Every contact is logged, so you can see who was reached and what they said.",
-    "You get the money. You never make the awkward call.",
+    "Works from your live pending list — who's behind, how much, how long.",
+    "Calls, WhatsApps and emails those parents on your academy's behalf — politely, in their language.",
+    "Logs every conversation, so you always know where each parent stands.",
+    "You get the money. You never have to ask.",
   ];
   return (
     <section className="border-y border-slate-800 py-20 sm:py-28" style={{ background: INK }}>
@@ -744,9 +744,8 @@ function FeeRecoveryDesk() {
             You coach. We make the awkward calls.
           </motion.h2>
           <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-slate-300">
-            Chasing pending fees is the worst part of running an academy — and the part most owners
-            put off. So we do it for you. Your subscription includes a dedicated person from our
-            team, assigned to your academy, who follows up on every unpaid fee.
+            Chasing pending fees is the job every academy owner puts off. So we do it for you: one
+            person from our team, assigned to your academy, following up on every unpaid fee.
           </p>
           <ul className="mt-8 space-y-3.5">
             {points.map((t) => (
@@ -773,7 +772,7 @@ function FeeRecoveryDesk() {
               FR
             </span>
             <div>
-              <div className="text-sm font-semibold text-white">Your fee recovery desk</div>
+              <div className="text-sm font-semibold text-white">Your Fee Recovery Desk</div>
               <div className="text-xs text-slate-400">Assigned to your academy</div>
             </div>
           </div>
@@ -796,7 +795,7 @@ function FeeRecoveryDesk() {
             ))}
           </div>
           <p className="mt-5 text-xs leading-relaxed text-slate-500">
-            Illustrative view. Your desk works from your real pending-fee list.
+            Illustrative. Your desk works from your academy's real numbers.
           </p>
         </motion.div>
       </div>
