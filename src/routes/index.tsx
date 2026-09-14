@@ -36,7 +36,7 @@ export const Route = createFileRoute("/")({
       {
         name: "description",
         content:
-          "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                            \n                                            HELLO",
+          "Professional coaching, flexible batches, transparent fees and live match coverage. Register online in minutes.",
       },
       { property: "og:title", content: "Sports Academy — Coaching, Batches & Live Match Centre" },
       {
