@@ -97,6 +97,10 @@ function PricingPage() {
             body="Solo coaches and multi-branch academies pay differently — we scope it to your student count and modules."
           />
           <PricingPoint
+            title="A real person chases your fees"
+            body="Your subscription includes a dedicated Fee Recovery Desk — our team member calls, messages and emails the parents whose fees are pending, so you never have to."
+          />
+          <PricingPoint
             title="One Nevorai subscription"
             body="Cricket Academy OS billing runs through your Nevorai account, alongside any other Nevorai tools you use."
           />

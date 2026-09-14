@@ -1,16 +1,17 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { seo } from "@/lib/seo";
 import {
-  Users,
-  ClipboardCheck,
-  Wallet,
-  Swords,
-  Globe,
-  BellRing,
-  MessageSquare,
   BarChart3,
-  Smartphone,
+  BellRing,
   Building2,
+  ClipboardCheck,
+  Globe,
+  MessageSquare,
+  PhoneCall,
+  Smartphone,
+  Swords,
+  Users,
+  Wallet,
 } from "lucide-react";
 import { sportsList } from "@/lib/sports";
 
@@ -28,6 +29,11 @@ export const Route = createFileRoute("/features")({
 });
 
 const MODULES = [
+  {
+    icon: PhoneCall,
+    name: "Fee Recovery Desk",
+    desc: "A real person from our team calls, messages and emails the parents whose fees are pending — so you never have to.",
+  },
   {
     icon: ClipboardCheck,
     name: "Attendance",

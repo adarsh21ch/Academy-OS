@@ -48,6 +48,7 @@ export function TenantPlaceholder() {
       <ProofStrip />
       <WhatItSaves />
       <Features />
+      <FeeRecoveryDesk />
       <MatchCentre />
       <HowItWorks />
       <SeeItLive />
@@ -714,6 +715,95 @@ function Features() {
   );
 }
 
+/* ═══════════════════════ Fee Recovery Desk ═══════════════════════ */
+
+function FeeRecoveryDesk() {
+  const points = [
+    "They can see exactly who is pending, how much, and for how long.",
+    "They call, WhatsApp and email those parents — politely, in their language.",
+    "Every contact is logged, so you can see who was reached and what they said.",
+    "You get the money. You never make the awkward call.",
+  ];
+  return (
+    <section className="border-y border-slate-800 py-20 sm:py-28" style={{ background: INK }}>
+      <div className="mx-auto grid w-full max-w-6xl gap-12 px-5 sm:px-8 lg:grid-cols-[1.1fr_0.9fr] lg:items-center">
+        <div>
+          <div className="flex items-center gap-2.5">
+            <span className="h-px w-7" style={{ background: BALL }} />
+            <span
+              className="text-xs font-semibold uppercase tracking-[0.16em]"
+              style={{ color: BALL }}
+            >
+              Included with your subscription
+            </span>
+          </div>
+          <motion.h2
+            {...reveal}
+            className="mt-4 max-w-2xl text-3xl font-semibold leading-tight tracking-tight text-white sm:text-[2.6rem]"
+          >
+            You coach. We make the awkward calls.
+          </motion.h2>
+          <p className="mt-5 max-w-xl text-[17px] leading-relaxed text-slate-300">
+            Chasing pending fees is the worst part of running an academy — and the part most owners
+            put off. So we do it for you. Your subscription includes a dedicated person from our
+            team, assigned to your academy, who follows up on every unpaid fee.
+          </p>
+          <ul className="mt-8 space-y-3.5">
+            {points.map((t) => (
+              <li key={t} className="flex gap-3 text-[15px] leading-relaxed text-slate-200">
+                <TickIcon className="mt-0.5 h-5 w-5 shrink-0" />
+                <span>{t}</span>
+              </li>
+            ))}
+          </ul>
+          <p className="mt-8 text-sm leading-relaxed text-slate-400">
+            No software can do this part. A reminder gets ignored; a person on the phone doesn't.
+          </p>
+        </div>
+
+        <motion.div
+          {...reveal}
+          className="rounded-3xl border border-slate-700/70 bg-slate-900/60 p-7 backdrop-blur"
+        >
+          <div className="flex items-center gap-3">
+            <span
+              className="grid h-11 w-11 place-items-center rounded-xl text-sm font-semibold text-white"
+              style={{ background: BALL }}
+            >
+              FR
+            </span>
+            <div>
+              <div className="text-sm font-semibold text-white">Your fee recovery desk</div>
+              <div className="text-xs text-slate-400">Assigned to your academy</div>
+            </div>
+          </div>
+          <div className="mt-6 space-y-3">
+            {[
+              { name: "Aarav S. — U14", due: "₹3,000", state: "Called · paying Friday" },
+              { name: "Ishita R. — U12", due: "₹2,500", state: "WhatsApp sent · awaiting" },
+              { name: "Kabir M. — U16", due: "₹3,000", state: "Paid ✓" },
+            ].map((r) => (
+              <div
+                key={r.name}
+                className="flex items-center justify-between gap-3 rounded-xl border border-slate-700/60 bg-slate-950/50 px-4 py-3"
+              >
+                <div className="min-w-0">
+                  <div className="truncate text-sm font-medium text-slate-100">{r.name}</div>
+                  <div className="truncate text-xs text-slate-400">{r.state}</div>
+                </div>
+                <div className="shrink-0 text-sm font-semibold text-white">{r.due}</div>
+              </div>
+            ))}
+          </div>
+          <p className="mt-5 text-xs leading-relaxed text-slate-500">
+            Illustrative view. Your desk works from your real pending-fee list.
+          </p>
+        </motion.div>
+      </div>
+    </section>
+  );
+}
+
 /* ═══════════════════════ Match Centre ═══════════════════════ */
 
 function MatchCentre() {
@@ -985,6 +1075,10 @@ const FAQ_GROUPS: FaqGroup[] = [
       {
         q: "I already manage everything on WhatsApp and a register. Why change?",
         a: "Because that works until it doesn't — a fee gets missed, a register goes missing, an enquiry at 6 AM never gets answered. Cricket Academy OS keeps the same simple habits (you still use WhatsApp) but nothing depends on you remembering it.",
+      },
+      {
+        q: "Who actually chases the parents who haven't paid?",
+        a: "We do. Your subscription includes a dedicated person from our team who sees your pending-fee list and follows up by call, WhatsApp and email until it's paid. Every contact is logged so you can see what happened. You never have to ask a parent for money yourself.",
       },
       {
         q: "Do I need to be technical?",

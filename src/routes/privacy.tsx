@@ -57,6 +57,15 @@ function Privacy() {
         already permitted to see.
       </p>
 
+      <h2>Fee Recovery Desk</h2>
+      <p>
+        Where your academy uses the Fee Recovery Desk, the staff member assigned to you accesses the
+        names, guardian contact details and outstanding fee amounts of the students concerned, in
+        order to contact them on your academy's behalf. They act on your instructions, contact only
+        the students you have outstanding fees against, and log each contact to your account. They
+        do not use those contacts for anything else.
+      </p>
+
       <h2>Data isolation</h2>
       <p>
         Every record is scoped to a single tenant (academy). Row-level security in the database
