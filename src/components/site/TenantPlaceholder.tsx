@@ -9,7 +9,7 @@ import {
   waHref,
 } from "@/lib/platform-settings";
 
-const DEMO_MSG = "Hi, I'd like to know more about AcademyOS for my academy.";
+const DEMO_MSG = "Hi, I'd like to know more about Cricket Academy OS for my academy.";
 
 const fadeUp = {
   initial: { opacity: 0, y: 16 },
@@ -31,7 +31,7 @@ export function TenantPlaceholder() {
     staleTime: 60_000,
   });
   const whatsappUrl = waHref(settings.contact_whatsapp, DEMO_MSG);
-  const emailUrl = `mailto:${settings.contact_email}?subject=${encodeURIComponent("AcademyOS — enquiry")}`;
+  const emailUrl = `mailto:${settings.contact_email}?subject=${encodeURIComponent("Cricket Academy OS — enquiry")}`;
 
   return (
     <div className="min-h-dvh w-full bg-white text-slate-900 antialiased">
@@ -62,7 +62,7 @@ function Nav({ whatsappUrl }: { whatsappUrl: string }) {
           <div className="grid h-8 w-8 place-items-center rounded-lg bg-slate-900 text-sm font-bold text-white">
             A
           </div>
-          <span className="text-lg font-semibold tracking-tight text-slate-900">AcademyOS</span>
+          <span className="text-lg font-semibold tracking-tight text-slate-900">Cricket Academy OS</span>
         </div>
         <div className="hidden items-center gap-8 text-sm font-medium text-slate-600 md:flex">
           <a href="#features" className="transition-colors hover:text-slate-900">
@@ -114,9 +114,12 @@ function Hero({ whatsappUrl, emailUrl }: { whatsappUrl: string; emailUrl: string
       />
       <div className="mx-auto grid w-full max-w-6xl grid-cols-1 items-center gap-14 px-5 py-20 sm:px-8 sm:py-28 lg:grid-cols-2">
         <div className="space-y-7">
-          <motion.div {...fadeUp} className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm">
+          <motion.div
+            {...fadeUp}
+            className="inline-flex items-center gap-2 rounded-full border border-slate-200 bg-white px-3 py-1 text-xs font-medium text-slate-600 shadow-sm"
+          >
             <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-            Built for coaching academies &amp; gyms
+            Built specifically for cricket academies
           </motion.div>
 
           <motion.h1
@@ -124,7 +127,7 @@ function Hero({ whatsappUrl, emailUrl }: { whatsappUrl: string; emailUrl: string
             transition={{ ...fadeUp.transition, delay: 0.05 }}
             className="text-4xl font-semibold leading-tight tracking-tight text-slate-900 sm:text-5xl"
           >
-            Run your academy without the spreadsheets and WhatsApp chaos.
+            Run your cricket academy without the spreadsheets and WhatsApp chaos.
           </motion.h1>
 
           <motion.p
@@ -132,9 +135,9 @@ function Hero({ whatsappUrl, emailUrl }: { whatsappUrl: string; emailUrl: string
             transition={{ ...fadeUp.transition, delay: 0.1 }}
             className="max-w-xl text-lg leading-relaxed text-slate-600"
           >
-            AcademyOS handles admissions, fees, attendance and parent communication in one
+            Cricket Academy OS handles admissions, fees, attendance and live match scoring in one
             place — with your own branded website and a WhatsApp assistant for enquiries. Built
-            for owners who'd rather coach than chase paperwork.
+            for academy owners who'd rather coach than chase paperwork.
           </motion.p>
 
           <motion.div
@@ -237,9 +240,9 @@ function ChatRow({ name, msg }: { name: string; msg: string }) {
 
 function TrustStrip() {
   const items = [
-    "Own branded website for your academy",
+    "Own branded website for your cricket academy",
+    "Live match scoring, built in — not bolted on",
     "WhatsApp-first, no app download for parents",
-    "Setup in a day, not weeks",
   ];
   return (
     <section className="border-b border-slate-200 bg-white py-8">
@@ -280,8 +283,8 @@ function Features() {
       icon: <GlobeIcon />,
     },
     {
-      title: "Batches & scheduling",
-      body: "Organise students into batches by age, level or sport, and keep everyone on the right schedule.",
+      title: "Match Centre & live scoring",
+      body: "Score matches ball-by-ball from a phone, with a public live scoreboard parents and players can follow.",
       icon: <UsersIcon />,
     },
     {
@@ -294,8 +297,8 @@ function Features() {
     <section id="features" className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
       <SectionHead
         eyebrow="What's included"
-        title="Everything it takes to run the business side of your academy"
-        body="One system for the day-to-day admin, so you can spend your time coaching instead of managing paperwork."
+        title="Everything it takes to run the business side of your cricket academy"
+        body="One system for admin and match-day, so you can spend your time coaching instead of managing paperwork."
       />
       <div className="mt-14 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3">
         {items.map((it, i) => (
@@ -366,7 +369,7 @@ function SeeItLive() {
     <section className="mx-auto w-full max-w-6xl px-5 py-20 sm:px-8 sm:py-28">
       <SectionHead
         eyebrow="Live example"
-        title="See a real academy running on AcademyOS"
+        title="See a real academy running on Cricket Academy OS"
         body="Not a mockup — this is a paying customer's actual public site, admissions form and live match scoring."
       />
       <div className="mt-12 grid gap-6 md:grid-cols-[1.3fr_1fr]">
@@ -434,7 +437,7 @@ function Faq() {
   const items = [
     {
       q: "Do I need to be technical to use this?",
-      a: "No. If you can use WhatsApp, you can run AcademyOS. We set up your site, fee plans and batches for you, and coaches just tap through attendance from their phone.",
+      a: "No. If you can use WhatsApp, you can run Cricket Academy OS. We set up your site, fee plans and batches for you, and coaches just tap through attendance from their phone.",
     },
     {
       q: "What happens to my existing students and fee records?",
@@ -474,9 +477,7 @@ function Faq() {
                   className="flex w-full items-center justify-between gap-4 px-6 py-5 text-left"
                   aria-expanded={isOpen}
                 >
-                  <span className="text-sm font-semibold text-slate-900 sm:text-base">
-                    {it.q}
-                  </span>
+                  <span className="text-sm font-semibold text-slate-900 sm:text-base">{it.q}</span>
                   <span
                     className={`shrink-0 text-slate-400 transition-transform ${isOpen ? "rotate-45" : ""}`}
                     aria-hidden
@@ -540,7 +541,7 @@ function Footer() {
   return (
     <footer className="border-t border-slate-200 py-8">
       <div className="mx-auto flex w-full max-w-6xl flex-col items-start justify-between gap-3 px-5 text-sm text-slate-500 sm:flex-row sm:items-center sm:px-8">
-        <div>AcademyOS by Nevorai</div>
+        <div>Cricket Academy OS by Nevorai</div>
         <div className="text-slate-400">No academy configured for this URL</div>
       </div>
     </footer>
@@ -574,14 +575,22 @@ function SectionHead({
       >
         {title}
       </motion.h2>
-      {body && <p className={`text-base text-slate-600 ${center ? "max-w-md" : "max-w-xl"}`}>{body}</p>}
+      {body && (
+        <p className={`text-base text-slate-600 ${center ? "max-w-md" : "max-w-xl"}`}>{body}</p>
+      )}
     </div>
   );
 }
 
 function CheckIcon() {
   return (
-    <svg className="h-4 w-4 shrink-0 text-emerald-600" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
+    <svg
+      className="h-4 w-4 shrink-0 text-emerald-600"
+      fill="none"
+      stroke="currentColor"
+      viewBox="0 0 24 24"
+      aria-hidden
+    >
       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2.5} d="M5 13l4 4L19 7" />
     </svg>
   );
@@ -639,7 +648,12 @@ function UsersIcon() {
 function ChartIcon() {
   return (
     <svg className="h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24" aria-hidden>
-      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 3v18h18M8 17V9m5 8V5m5 12v-6" />
+      <path
+        strokeLinecap="round"
+        strokeLinejoin="round"
+        strokeWidth={2}
+        d="M3 3v18h18M8 17V9m5 8V5m5 12v-6"
+      />
     </svg>
   );
 }

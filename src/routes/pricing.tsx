@@ -11,13 +11,13 @@ import {
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing · AcademyOS" },
+      { title: "Pricing · Cricket Academy OS" },
       {
         name: "description",
         content:
-          "AcademyOS pricing is part of your Nevorai subscription. Talk to us to find the right fit for your academy.",
+          "Cricket Academy OS pricing is part of your Nevorai subscription. Talk to us to find the right fit for your academy.",
       },
-      { property: "og:title", content: "AcademyOS Pricing" },
+      { property: "og:title", content: "Cricket Academy OS Pricing" },
       {
         property: "og:description",
         content: "Talk to our team to find the right plan for your academy.",
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
-const ENQUIRY_MSG = "Hi, I'd like to know more about AcademyOS pricing for my academy.";
+const ENQUIRY_MSG = "Hi, I'd like to know more about Cricket Academy OS pricing for my academy.";
 
 function PricingPage() {
   const { data: settings = DEFAULT_PLATFORM_SETTINGS } = useQuery({
@@ -38,14 +38,14 @@ function PricingPage() {
     staleTime: 60_000,
   });
   const whatsappUrl = waHref(settings.contact_whatsapp, ENQUIRY_MSG);
-  const emailUrl = `mailto:${settings.contact_email}?subject=${encodeURIComponent("AcademyOS — pricing enquiry")}`;
+  const emailUrl = `mailto:${settings.contact_email}?subject=${encodeURIComponent("Cricket Academy OS — pricing enquiry")}`;
 
   return (
     <div className="min-h-dvh bg-white text-slate-900">
       <header className="border-b border-slate-200">
         <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
           <Link to="/" className="text-lg font-semibold tracking-tight">
-            AcademyOS
+            Cricket Academy OS
           </Link>
           <nav className="flex items-center gap-6 text-sm">
             <Link to="/" className="text-slate-600 hover:text-slate-900">
@@ -75,9 +75,9 @@ function PricingPage() {
           Pricing that fits your academy
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-slate-600">
-          AcademyOS is one of the tools in your Nevorai subscription — priced around the size of
-          your academy and the modules you actually need. Talk to us and we'll put together a
-          plan together, no card required upfront.
+          Cricket Academy OS is one of the tools in your Nevorai subscription — priced around the size of
+          your academy and the modules you actually need. Talk to us and we'll put together a plan
+          together, no card required upfront.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -106,7 +106,7 @@ function PricingPage() {
           />
           <PricingPoint
             title="One Nevorai subscription"
-            body="AcademyOS billing runs through your Nevorai account, alongside any other Nevorai tools you use."
+            body="Cricket Academy OS billing runs through your Nevorai account, alongside any other Nevorai tools you use."
           />
           <PricingPoint
             title="No long-term lock-in"
@@ -120,20 +120,20 @@ function PricingPage() {
         <div className="mt-8 space-y-6">
           {[
             {
-              q: "How is AcademyOS priced?",
+              q: "How is Cricket Academy OS priced?",
               a: "There's no fixed public price list — it depends on your academy's size and which modules you need. Talk to us and we'll quote a plan that fits.",
             },
             {
               q: "How does billing actually work?",
-              a: "AcademyOS is billed as part of your Nevorai subscription, not as a separate standalone charge.",
+              a: "Cricket Academy OS is billed as part of your Nevorai subscription, not as a separate standalone charge.",
             },
             {
               q: "Can the plan change as my academy grows?",
               a: "Yes — talk to us any time your student count or needs change and we'll adjust the plan.",
             },
             {
-              q: "Do you support sports other than cricket?",
-              a: "Cricket is fully live. Badminton, football, volleyball, basketball, tennis, swimming and gym flows are on the roadmap and already work with the shared modules (attendance, fees, website, portals).",
+              q: "Is this only for cricket academies?",
+              a: "Yes — Cricket Academy OS is built specifically for cricket, including live ball-by-ball match scoring. It's not a generic sports app with cricket bolted on.",
             },
           ].map((row) => (
             <div key={row.q}>
@@ -156,7 +156,7 @@ function PricingPage() {
             Book demo
           </Link>
         </div>
-        <p className="mt-4">© {new Date().getFullYear()} AcademyOS by Nevorai.</p>
+        <p className="mt-4">© {new Date().getFullYear()} Cricket Academy OS by Nevorai.</p>
       </footer>
     </div>
   );
