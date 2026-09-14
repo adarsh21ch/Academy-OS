@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import {
   Users,
   ClipboardCheck,
@@ -14,23 +15,15 @@ import {
 import { sportsList } from "@/lib/sports";
 
 export const Route = createFileRoute("/features")({
-  head: () => ({
-    meta: [
-      { title: "Features · AcademyOS — Everything to run a sports academy" },
-      {
-        name: "description",
-        content:
-          "Attendance, billing, matches, parent app, website and communications — one platform for sports academies.",
-      },
-      { property: "og:title", content: "AcademyOS Features" },
-      {
-        property: "og:description",
-        content: "One Sports Operating System — every module you need to run an academy.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "Features — Cricket Academy Management Software | Cricket Academy OS",
+      description:
+        "Admissions and enquiries, fee collection with automatic reminders, attendance, live match scoring, parent updates on WhatsApp and your own academy website — in one system.",
+      path: "/features",
+      keywords:
+        "cricket academy management software features, academy attendance software, academy fee reminder software, cricket scoring app, academy website builder",
+    }),
   component: FeaturesPage,
 });
 
@@ -93,7 +86,7 @@ function FeaturesPage() {
       <header className="border-b">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="font-semibold tracking-tight">
-            AcademyOS
+            Cricket Academy OS
           </Link>
           <nav className="flex items-center gap-4 text-sm">
             <Link to="/features" className="font-medium">
@@ -121,8 +114,8 @@ function FeaturesPage() {
           Every module a sports academy needs. One platform.
         </h1>
         <p className="mt-4 text-lg text-muted-foreground max-w-2xl">
-          From the first enquiry to career records, AcademyOS handles the whole lifecycle. Pick a
-          sport, we handle the rest.
+          From the first enquiry to career records, Cricket Academy OS handles the whole lifecycle.
+          Pick a sport, we handle the rest.
         </p>
       </section>
 
@@ -185,7 +178,7 @@ function FeaturesPage() {
       </section>
 
       <footer className="border-t py-8 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} AcademyOS
+        © {new Date().getFullYear()} Cricket Academy OS
       </footer>
     </div>
   );

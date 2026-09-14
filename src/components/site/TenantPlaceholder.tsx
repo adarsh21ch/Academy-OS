@@ -302,8 +302,8 @@ function Hero({ whatsappUrl, emailUrl }: { whatsappUrl: string; emailUrl: string
             className="max-w-xl text-lg leading-relaxed text-white/70"
           >
             Admissions, fees, attendance and ball-by-ball match scoring in one place — plus your own
-            academy website and Nev AI answering parent enquiries on WhatsApp while you are on
-            the ground.
+            academy website and Nev AI answering parent enquiries on WhatsApp while you are on the
+            ground.
           </motion.p>
 
           <motion.div
@@ -1249,8 +1249,21 @@ function Footer() {
           </Link>
         </div>
       </div>
-      <div className="mx-auto mt-8 w-full max-w-6xl px-5 text-xs text-slate-400 sm:px-8">
-        © {new Date().getFullYear()} Nevorai · Made in India
+      {/* Razorpay requires terms, privacy, refund and contact to be reachable
+          from the site the customer pays from — keep these links here. */}
+      <div className="mx-auto mt-8 flex w-full max-w-6xl flex-wrap items-center gap-x-5 gap-y-2 px-5 text-xs text-slate-400 sm:px-8">
+        <Link to="/terms" className="hover:text-slate-700">
+          Terms
+        </Link>
+        <Link to="/privacy" className="hover:text-slate-700">
+          Privacy
+        </Link>
+        <Link to="/refund" className="hover:text-slate-700">
+          Refunds &amp; Cancellation
+        </Link>
+      </div>
+      <div className="mx-auto mt-4 w-full max-w-6xl px-5 text-xs text-slate-400 sm:px-8">
+        © {new Date().getFullYear()} Nevorai Technologies · GSTIN 23CBCPC3986J1ZN · Made in India
       </div>
     </footer>
   );

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * DashboardList — canonical list container. Same radius, border and shadow
- * as every other surface in Academy OS. Compose with DashboardListRow
+ * as every other surface in Cricket Academy OS. Compose with DashboardListRow
  * (or hand-roll rows only when strictly required).
  */
 export function DashboardList({

@@ -395,7 +395,7 @@
 
 /* ============================================================
  * Typography utilities — semantic type scale.
- * Every text element on Academy OS should map to one of these.
+ * Every text element on Cricket Academy OS should map to one of these.
  * ============================================================ */
 @utility ds-display {
   font-size: clamp(2rem, 4vw, 3rem);

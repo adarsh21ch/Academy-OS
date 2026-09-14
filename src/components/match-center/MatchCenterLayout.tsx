@@ -31,7 +31,7 @@ export type PageHeaderProps = {
 };
 
 /**
- * In-page header for individual Match Center screens. The AcademyOS shell
+ * In-page header for individual Match Center screens. The Cricket Academy OS shell
  * (DashboardShell) provides the global top bar and bottom nav — this header
  * sits inside the page content and carries the page title + actions.
  */
@@ -261,7 +261,7 @@ function MatchCenterModuleHeader({ title, hideAction }: { title?: string; hideAc
 }
 
 /* -------------------------------------------------------------------------- */
-/* Layout — mounts the AcademyOS shell so Match Center feels native to it.    */
+/* Layout — mounts the Cricket Academy OS shell so Match Center feels native to it.    */
 /* -------------------------------------------------------------------------- */
 
 export function MatchCenterLayout({ children }: { children?: ReactNode }) {

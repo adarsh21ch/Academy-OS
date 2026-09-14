@@ -1,5 +1,5 @@
 /**
- * Canonical gender values for AcademyOS.
+ * Canonical gender values for Cricket Academy OS.
  * - 'male': UI label "Boy"
  * - 'female': UI label "Girl"
  */

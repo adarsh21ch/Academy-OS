@@ -39,7 +39,7 @@ export function TenantGate({
     const host = typeof window !== "undefined" ? window.location.hostname : "";
     // Reserved platform host (academy.nevorai.com, nevorai.com, lovable
     // preview URLs…) → platform marketing site. Any other unknown hostname
-    // is a misconfigured domain, not an ad for Academy OS.
+    // is a misconfigured domain, not an ad for Cricket Academy OS.
     return isReservedPlatformHost(host) ? <TenantPlaceholder /> : <DomainNotConfigured />;
   }
 

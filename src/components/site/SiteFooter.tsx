@@ -132,7 +132,7 @@ export function SiteFooter() {
             </Link>
             {features.powered_by_badge !== false ? (
               <div>
-                Powered by <span className="font-semibold text-foreground">Academy OS</span>
+                Powered by <span className="font-semibold text-foreground">Cricket Academy OS</span>
               </div>
             ) : null}
           </div>

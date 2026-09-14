@@ -27,7 +27,7 @@ import {
 
 export const Route = createFileRoute("/platform-admin/settings")({
   head: () => ({
-    meta: [{ title: "Platform Settings · AcademyOS" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Platform Settings · Cricket Academy OS" }, { name: "robots", content: "noindex" }],
   }),
   component: SettingsPage,
 });
@@ -102,7 +102,7 @@ function SettingsPage() {
               </p>
               {whatsapp && waValid && (
                 <a
-                  href={waHref(whatsapp, "Hi — testing the Academy OS contact link")}
+                  href={waHref(whatsapp, "Hi — testing the Cricket Academy OS contact link")}
                   target="_blank"
                   rel="noreferrer"
                   className="inline-flex items-center gap-1 text-xs text-emerald-300 hover:text-emerald-200"

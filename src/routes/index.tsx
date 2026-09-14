@@ -15,6 +15,7 @@ import {
   Mail,
 } from "lucide-react";
 import { TenantGate } from "@/components/site/TenantGate";
+import { isPlatformRequest, platformJsonLd, seo } from "@/lib/seo";
 import { useTenant } from "@/lib/tenant-context";
 import { feePlansQuery, sectionsBy, sectionOne, siteContentQuery } from "@/lib/site-queries";
 import { signedUrl } from "@/lib/storage";
@@ -28,29 +29,29 @@ import {
 } from "@/components/site/StarPlayersShowcase";
 
 export const Route = createFileRoute("/")({
-  // Static crawler-facing defaults. TenantProvider overrides document.title and
-  // the description at runtime with the resolved academy's own branding.
-  head: () => ({
-    meta: [
-      { title: "Sports Academy — Coaching, Batches & Live Match Centre" },
-      {
-        name: "description",
-        content:
-          "Professional coaching, flexible batches, transparent fees and live match coverage. Register online in minutes.",
-      },
-      { property: "og:title", content: "Sports Academy — Coaching, Batches & Live Match Centre" },
-      {
-        property: "og:description",
-        content:
-          "Professional coaching, flexible batches, transparent fees and live match coverage. Register online in minutes.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  // One route, two audiences: the platform marketing site on a reserved host
+  // (academyos.nevorai.com) and each academy's own site on its subdomain or
+  // custom domain. Decided from the request Host header at SSR time — link
+  // unfurlers (WhatsApp, Facebook) never run the JS that patches titles later.
+  head: () =>
+    isPlatformRequest()
+      ? seo({
+          title: "Cricket Academy Software for Indian Academies | Cricket Academy OS",
+          description:
+            "Run your cricket academy on one system — admissions, fee collection and reminders, attendance, live match scoring and your own academy website. Built in India by Nevorai.",
+          path: "/",
+          keywords:
+            "cricket academy software, cricket academy management software, cricket academy management system, sports academy software India, cricket coaching management software, academy fee management software, cricket academy app",
+          jsonLd: platformJsonLd(),
+        })
+      : seo({
+          title: "Cricket Academy — Coaching, Batches, Fees & Live Match Centre",
+          description:
+            "Professional coaching, flexible batches, transparent fees and live match coverage. Register online in minutes.",
+          path: "/",
+        }),
   component: HomeRoute,
 });
-
 
 function HomeRoute() {
   // Installed PWA (standalone display-mode) users should never see the
@@ -76,7 +77,7 @@ function useStandaloneAppRedirect() {
       (window.navigator as unknown as { standalone?: boolean }).standalone === true ||
       // Android / Chrome TWA / PWA detection
       window.matchMedia?.("(display-mode: minimal-ui)").matches ||
-      // Some Android launchers inject specific user agents or headers, 
+      // Some Android launchers inject specific user agents or headers,
       // but checking display-mode covers 99% of modern PWA launches.
       document.referrer.includes("android-app://");
 
@@ -86,7 +87,6 @@ function useStandaloneAppRedirect() {
     }
   }, [navigate]);
 }
-
 
 type Hero = {
   headline?: string;
@@ -711,8 +711,7 @@ function HomeContent() {
                   // /maps/place/…) don't 403 inside an iframe.
                   const raw = (mapContent?.embed_url ?? "").trim();
                   const isEmbeddable =
-                    raw.includes("google.com/maps/embed") ||
-                    /[?&]output=embed(&|$)/.test(raw);
+                    raw.includes("google.com/maps/embed") || /[?&]output=embed(&|$)/.test(raw);
                   const src = isEmbeddable
                     ? raw
                     : tenant.address

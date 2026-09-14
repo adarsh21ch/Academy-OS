@@ -1,5 +1,5 @@
 /**
- * AcademyOS pricing plans — single source of truth.
+ * Cricket Academy OS pricing plans — single source of truth.
  * Change prices here; no code edits elsewhere.
  * Displayed on /pricing and referenced by /dashboard/subscription.
  */

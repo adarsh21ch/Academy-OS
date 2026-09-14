@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Attendance module
+ * Cricket Academy OS V2 — Attendance module
  *
  * Speed-optimised UX. All summary values are DERIVED from the shared
  * attendance lifecycle (append-only history + attendance_today view).
@@ -72,7 +72,7 @@ import { VirtualList } from "@/components/ds/VirtualList";
 export const Route = createFileRoute("/dashboard/attendance")({
   head: () => ({
     meta: [
-      { title: "Attendance · AcademyOS" },
+      { title: "Attendance · Cricket Academy OS" },
       {
         name: "description",
         content:

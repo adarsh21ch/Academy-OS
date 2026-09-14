@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Financial Core (Phase 02.7)
+ * Cricket Academy OS V2 — Financial Core (Phase 02.7)
  *
  * Owner-only. Do not import from admin, student, or parent surfaces.
  * Every query is tenant-scoped and relies on RLS + `is_tenant_owner`.

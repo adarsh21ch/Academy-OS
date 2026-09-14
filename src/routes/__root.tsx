@@ -15,6 +15,7 @@ import appCss from "../styles.css?url";
 import { reportLovableError } from "../lib/lovable-error-reporting";
 import { TenantProvider } from "../lib/tenant-context";
 import { ImpersonationBanner } from "../components/platform/ImpersonationBanner";
+import { PLATFORM_OG_IMAGE } from "../lib/seo";
 
 function NotFoundComponent() {
   return (
@@ -100,46 +101,42 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         content:
           "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover, shrink-to-fit=no, interactive-widget=resizes-content",
       },
-      { title: "Academy OS" },
+      // Site-wide fallbacks. Every marketing route overrides these via `seo()`;
+      // tenant sites get their academy's own title/description patched in by
+      // TenantProvider. These only show on routes that set no head of their own.
+      { title: "Cricket Academy OS — Cricket Academy Management Software" },
       {
         name: "description",
         content:
-          "'''Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.'''\n                                            \n                                            One more thing I need to refresh. For example, some user do registration, but on the pending it is not showing. I have to refresh the tab then that particular request is showing to approve. Please make sure user no need to refresh or close or reopen the application or open the tab. Whenever somebody do registration complete, automatically it shows in the end to approve, right?",
+          "Cricket academy management software for Indian academies — admissions, fees, attendance, live match scoring and your own academy website.",
       },
-      { name: "author", content: "AcademyOS" },
+      { name: "author", content: "Nevorai" },
       // PWA / standalone app hints so installed app launches without browser chrome.
       { name: "theme-color", content: "#0a0a0a" },
       { name: "mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-capable", content: "yes" },
       { name: "apple-mobile-web-app-status-bar-style", content: "black-translucent" },
-      { name: "apple-mobile-web-app-title", content: "Academy OS" },
-      { name: "application-name", content: "Academy OS" },
+      { name: "apple-mobile-web-app-title", content: "Cricket Academy OS" },
+      { name: "application-name", content: "Cricket Academy OS" },
       { name: "format-detection", content: "telephone=no" },
-      { property: "og:title", content: "Academy OS" },
+      { property: "og:site_name", content: "Cricket Academy OS" },
+      { property: "og:locale", content: "en_IN" },
+      { property: "og:type", content: "website" },
+      { property: "og:title", content: "Cricket Academy OS" },
       {
         property: "og:description",
         content:
-          "Academy OS — the white-label operating system for sports academies, gyms and coaching centres.",
+          "Cricket academy management software for Indian academies — admissions, fees, attendance, live match scoring and your own academy website.",
       },
-      { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
-      { name: "twitter:site", content: "@AcademyOS" },
-      { name: "twitter:title", content: "Academy OS" },
+      { name: "twitter:title", content: "Cricket Academy OS" },
       {
         name: "twitter:description",
         content:
-          "Academy OS — the white-label operating system for sports academies, gyms and coaching centres.",
+          "Cricket academy management software for Indian academies — admissions, fees, attendance, live match scoring and your own academy website.",
       },
-      {
-        property: "og:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a79bd1d0-a426-4630-9f49-ec348bbfce86/id-preview-e4e25ca1--1720a839-1551-46d2-be56-cea0a1c13adf.lovable.app-1783239834008.png",
-      },
-      {
-        name: "twitter:image",
-        content:
-          "https://pub-bb2e103a32db4e198524a2e9ed8f35b4.r2.dev/a79bd1d0-a426-4630-9f49-ec348bbfce86/id-preview-e4e25ca1--1720a839-1551-46d2-be56-cea0a1c13adf.lovable.app-1783239834008.png",
-      },
+      { property: "og:image", content: PLATFORM_OG_IMAGE },
+      { name: "twitter:image", content: PLATFORM_OG_IMAGE },
     ],
     links: [
       {
@@ -182,14 +179,14 @@ function AppSplash() {
           className="grid h-20 w-20 place-items-center rounded-3xl text-4xl"
           style={{ backgroundColor: "transparent" }}
         >
-          <img 
-            src="/api/public/tenant-icon" 
-            alt="" 
-            className="size-20 object-contain" 
+          <img
+            src="/api/public/tenant-icon"
+            alt=""
+            className="size-20 object-contain"
             onError={(e) => {
-              e.currentTarget.style.display = 'none';
-              if (e.currentTarget.parentElement) e.currentTarget.parentElement.innerText = '🏏';
-            }} 
+              e.currentTarget.style.display = "none";
+              if (e.currentTarget.parentElement) e.currentTarget.parentElement.innerText = "🏏";
+            }}
           />
         </div>
         <div className="flex flex-col items-center gap-2">
@@ -197,14 +194,13 @@ function AppSplash() {
             <div className="h-full w-full origin-left animate-progress bg-primary" />
           </div>
           <p className="text-[10px] uppercase tracking-[0.3em] text-muted-foreground font-semibold">
-            AcademyOS
+            Cricket Academy OS
           </p>
         </div>
       </div>
     </div>
   );
 }
-
 
 function RootShell({ children }: { children: ReactNode }) {
   // Pre-hydration theme boot — supports "light" | "dark" | "system" (default: system).
@@ -250,7 +246,7 @@ function ThemeSystemListener() {
 function PwaBootstrap() {
   // Registers the service worker (guarded — never runs in Lovable preview,
   // dev, iframes, or when `?sw=off` is present) and captures the browser's
-  // install prompt so the parent portal can offer a "Install AcademyOS" CTA.
+  // install prompt so the parent portal can offer a "Install Cricket Academy OS" CTA.
   useEffect(() => {
     if (typeof window === "undefined") return;
     void (async () => {

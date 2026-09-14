@@ -5,7 +5,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Universal Module Header — sits directly under the DashboardShell top bar
- * inside every major AcademyOS module (Match Center, Players, Registrations,
+ * inside every major Cricket Academy OS module (Match Center, Players, Registrations,
  * Admissions, Reports, Communications, Website, Fees).
  *
  * Pattern:

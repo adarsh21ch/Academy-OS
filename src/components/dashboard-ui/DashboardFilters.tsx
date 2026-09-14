@@ -50,7 +50,7 @@ export function DashboardFilterSelect({
 
 /**
  * DashboardFilters — panel that hosts a grid of DashboardFilterSelect. Same
- * card token as the rest of Academy OS.
+ * card token as the rest of Cricket Academy OS.
  */
 export function DashboardFilters({
   children,

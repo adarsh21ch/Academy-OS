@@ -79,7 +79,7 @@ export const StudentIDCard = React.forwardRef<HTMLDivElement, StudentIDCardProps
               style={{ backgroundColor: brandColor }}
             >
               <div className="font-black tracking-tight text-[11px] uppercase text-center leading-tight line-clamp-2">
-                {student.academy_name || "AcademyOS"}
+                {student.academy_name || "Cricket Academy OS"}
               </div>
             </div>
 
@@ -135,7 +135,7 @@ export const StudentIDCard = React.forwardRef<HTMLDivElement, StudentIDCardProps
               )}
             </div>
             <div className="font-black tracking-tight text-[11px] uppercase text-center leading-tight z-10 text-white">
-              {student.academy_name || "AcademyOS"}
+              {student.academy_name || "Cricket Academy OS"}
             </div>
             {/* Wave shape */}
               <div 

@@ -276,7 +276,7 @@ function StudentProfilePage() {
                   photo_url: (s.photo_url as string) || null,
                   joined_at: s.joined_at,
                   dob: s.dob,
-                  academy_name: ctx.tenant_name || "AcademyOS",
+                  academy_name: ctx.tenant_name || "Cricket Academy OS",
                   academy_logo: ctx.tenant_logo || undefined,
                   academy_address: ctx.tenant_address || undefined,
                   academy_phone: ctx.tenant_phone || undefined,

@@ -1,5 +1,5 @@
 /**
- * AcademyOS — In-app QR attendance scanner (student portal).
+ * Cricket Academy OS — In-app QR attendance scanner (student portal).
  *
  * Opens the phone camera, reads the academy's attendance QR poster, then runs
  * the EXACT same canonical flow the standalone `/checkin` page uses:

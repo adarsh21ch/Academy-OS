@@ -5,7 +5,7 @@ import { AccountCard } from "@/components/settings/AccountCard";
 
 export const Route = createFileRoute("/dashboard/settings")({
   head: () => ({
-    meta: [{ title: "Settings · Academy OS" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Settings · Cricket Academy OS" }, { name: "robots", content: "noindex" }],
   }),
   component: SettingsPage,
 });

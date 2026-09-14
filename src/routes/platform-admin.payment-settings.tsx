@@ -12,7 +12,7 @@ function Page() {
       <header className="mb-6">
         <h1 className="text-2xl font-semibold">Platform Payments</h1>
         <p className="mt-1 text-sm text-neutral-400">
-          Credentials used by NevorAI to charge academies for their AcademyOS subscriptions. Never used for
+          Credentials used by NevorAI to charge academies for their Cricket Academy OS subscriptions. Never used for
           student fees.
         </p>
       </header>

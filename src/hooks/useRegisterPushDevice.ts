@@ -1,6 +1,6 @@
 /**
  * `useRegisterPushDevice` — subscribes the current browser to Web Push and
- * registers the subscription with AcademyOS so the automation engine can
+ * registers the subscription with Cricket Academy OS so the automation engine can
  * deliver notifications to this device.
  *
  * Safe to call from any authenticated route; it no-ops in Lovable preview,

@@ -12,7 +12,7 @@ import { PLAN_META, nextPlan, type PlanTier } from "@/lib/payments/plans";
 
 export const Route = createFileRoute("/dashboard/subscription")({
   head: () => ({
-    meta: [{ title: "AcademyOS Plan · Academy" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Cricket Academy OS Plan · Academy" }, { name: "robots", content: "noindex" }],
   }),
   component: () => (
     <OwnerOnly>

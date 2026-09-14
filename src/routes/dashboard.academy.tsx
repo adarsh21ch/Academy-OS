@@ -27,7 +27,7 @@ import { SearchBar } from "@/components/ds/SearchBar";
 
 export const Route = createFileRoute("/dashboard/academy")({
   head: () => ({
-    meta: [{ title: "Manage · AcademyOS" }, { name: "robots", content: "noindex" }],
+    meta: [{ title: "Manage · Cricket Academy OS" }, { name: "robots", content: "noindex" }],
   }),
   component: ManageHub,
 });

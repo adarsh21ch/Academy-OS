@@ -1,5 +1,5 @@
 /**
- * AcademyOS — QR check-in poster rendering.
+ * Cricket Academy OS — QR check-in poster rendering.
  *
  * The poster is drawn once onto an A4 canvas (150 dpi) and then exported as a
  * PNG image or a single-page PDF. Owners on mobile can't reliably print, so the

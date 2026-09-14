@@ -23,7 +23,7 @@ import {
 export const Route = createFileRoute("/dashboard/coach/analytics")({
   head: () => ({
     meta: [
-      { title: "Coach Analytics · AcademyOS" },
+      { title: "Coach Analytics · Cricket Academy OS" },
       { name: "robots", content: "noindex" },
     ],
   }),

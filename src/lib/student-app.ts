@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Student App data layer (Phase 02.8).
+ * Cricket Academy OS V2 — Student App data layer (Phase 02.8).
  *
  * Thin composition over the frozen Attendance, Player Profile, and
  * Match Center modules. No new business logic — just typed helpers

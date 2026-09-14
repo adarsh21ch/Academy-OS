@@ -24,7 +24,7 @@ import { cn } from "@/lib/utils";
 export const Route = createFileRoute("/dashboard/automation")({
   head: () => ({
     meta: [
-      { title: "Automation History · AcademyOS" },
+      { title: "Automation History · Cricket Academy OS" },
       { name: "robots", content: "noindex" },
     ],
   }),

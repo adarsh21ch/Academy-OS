@@ -10,7 +10,7 @@ export const Route = createFileRoute("/dashboard/billing")({
   },
   head: () => ({
     meta: [
-      { title: "Billing · AcademyOS" },
+      { title: "Billing · Cricket Academy OS" },
       { name: "robots", content: "noindex" },
     ],
   }),

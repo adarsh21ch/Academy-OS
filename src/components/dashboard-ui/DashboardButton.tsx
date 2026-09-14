@@ -2,7 +2,7 @@ import { forwardRef, type ButtonHTMLAttributes, type ReactNode } from "react";
 import { cn } from "@/lib/utils";
 
 /**
- * DashboardButton — the single button system for Academy OS.
+ * DashboardButton — the single button system for Cricket Academy OS.
  *
  * Wraps the same visual tokens as the Students module (rounded-full, brand
  * primary using `--brand`/`--brand-ink`). Use this instead of `ui/button`

@@ -4,7 +4,7 @@ import { cn } from "@/lib/utils";
 /**
  * DashboardPage — the outer container every dashboard route must use.
  * Provides the canonical horizontal padding, max-width, and vertical rhythm
- * extracted from the Students module (the Academy OS golden standard).
+ * extracted from the Students module (the Cricket Academy OS golden standard).
  *
  * Do NOT reproduce this wrapper per module. Always compose:
  *   <DashboardPage>

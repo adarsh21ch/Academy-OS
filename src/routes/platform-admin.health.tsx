@@ -95,7 +95,7 @@ function HealthPage() {
         <h1 className="text-2xl md:text-3xl font-bold tracking-tight flex items-center gap-2">
           <Activity className="size-6" /> System health
         </h1>
-        <p className="text-sm text-neutral-400">Live probes against the AcademyOS backbone.</p>
+        <p className="text-sm text-neutral-400">Live probes against the Cricket Academy OS backbone.</p>
       </header>
       <div className="grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
         {probes.map((p) => (

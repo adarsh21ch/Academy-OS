@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * DashboardBadge / DashboardStatusBadge — the single pill token used for
- * status, tags, and counters everywhere in Academy OS.
+ * status, tags, and counters everywhere in Cricket Academy OS.
  */
 
 export type BadgeTone =

@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { isPlatformRequest, seo } from "@/lib/seo";
 import { useQuery } from "@tanstack/react-query";
 import { TenantGate } from "@/components/site/TenantGate";
 import { PageHero } from "@/components/site/PageHero";
@@ -12,14 +13,14 @@ import {
 } from "@/components/ui/accordion";
 
 export const Route = createFileRoute("/faq")({
-  head: () => ({
-    meta: [
-      { title: "Frequently Asked Questions" },
-      { name: "description", content: "Answers to common questions about the academy." },
-      { property: "og:title", content: "Frequently Asked Questions" },
-      { property: "og:description", content: "Answers to common questions about the academy." },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "FAQ — Admissions, Fees, Batches & Timings",
+      description:
+        "Answers to common questions about joining the academy: admissions, batch timings, fees, trials, equipment and attendance.",
+      path: "/faq",
+      index: !isPlatformRequest(),
+    }),
   component: () => (
     <TenantGate>
       <FaqPage />

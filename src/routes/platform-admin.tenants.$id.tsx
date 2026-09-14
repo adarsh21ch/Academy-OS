@@ -63,7 +63,7 @@ const FEATURE_LIST: { key: FeatureKey; label: string; help: string }[] = [
   {
     key: "powered_by_badge",
     label: "Powered-by badge",
-    help: "Show 'Powered by Academy OS' on the public site footer.",
+    help: "Show 'Powered by Cricket Academy OS' on the public site footer.",
   },
 ];
 

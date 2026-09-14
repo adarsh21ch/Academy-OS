@@ -146,7 +146,7 @@ function MatchCenterDashboard() {
       <PageHeader
         title="Match Center"
         description="Your live sports command center — everything happening in your academy, at a glance."
-        breadcrumbs={[{ label: "Academy OS", to: "/dashboard" }, { label: "Match Center" }]}
+        breadcrumbs={[{ label: "Cricket Academy OS", to: "/dashboard" }, { label: "Match Center" }]}
         actions={
           <Button asChild>
             <Link to="/match-center/create">

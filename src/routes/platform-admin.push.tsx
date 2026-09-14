@@ -586,7 +586,7 @@ function DevicesTable() {
       testFn({
         data: {
           userId,
-          title: "AcademyOS test push",
+          title: "Cricket Academy OS test push",
           body: "This is a test notification from the platform admin dashboard.",
           deepLink: "/parent",
         },
@@ -893,7 +893,7 @@ function TestPushPanel() {
     full_name: string | null;
     email: string | null;
   } | null>(null);
-  const [title, setTitle] = useState("Hello from AcademyOS");
+  const [title, setTitle] = useState("Hello from Cricket Academy OS");
   const [subtitle, setSubtitle] = useState("");
   const [body, setBody] = useState("This is a test notification.");
   const [deepLink, setDeepLink] = useState("/parent");

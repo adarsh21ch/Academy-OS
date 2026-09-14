@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Attendance domain constants.
+ * Cricket Academy OS V2 — Attendance domain constants.
  *
  * Single source of truth. Never hardcode these strings anywhere else —
  * always import from this module. New check-in methods (QR, face, GPS,

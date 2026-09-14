@@ -1,5 +1,5 @@
 /**
- * Centralized observability helper for AcademyOS.
+ * Centralized observability helper for Cricket Academy OS.
  *
  * Wraps `window.__lovableEvents.captureException` (installed by the Lovable
  * runtime) plus `console` so that critical failures are routed to a single

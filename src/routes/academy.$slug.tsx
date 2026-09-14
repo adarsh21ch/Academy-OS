@@ -16,7 +16,7 @@ export const Route = createFileRoute("/academy/$slug")({
       { title: `${params.slug} — Academy` },
       {
         name: "description",
-        content: `Live scores, players, records and recognitions for ${params.slug} on Academy OS.`,
+        content: `Live scores, players, records and recognitions for ${params.slug} on Cricket Academy OS.`,
       },
       { property: "og:title", content: `${params.slug} — Academy` },
       {
@@ -84,7 +84,7 @@ function AcademySite() {
       </section>
 
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        Powered by Academy OS
+        Powered by Cricket Academy OS
       </footer>
     </main>
   );

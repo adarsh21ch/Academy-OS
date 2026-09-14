@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { Sparkles } from "lucide-react";
 import { useQuery } from "@tanstack/react-query";
 import {
@@ -9,23 +10,14 @@ import {
 } from "@/lib/platform-settings";
 
 export const Route = createFileRoute("/pricing")({
-  head: () => ({
-    meta: [
-      { title: "Pricing · Cricket Academy OS" },
-      {
-        name: "description",
-        content:
-          "Cricket Academy OS pricing is part of your Nevorai subscription. Talk to us to find the right fit for your academy.",
-      },
-      { property: "og:title", content: "Cricket Academy OS Pricing" },
-      {
-        property: "og:description",
-        content: "Talk to our team to find the right plan for your academy.",
-      },
-      { property: "og:type", content: "website" },
-      { name: "twitter:card", content: "summary_large_image" },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "Pricing — Cricket Academy OS for Indian Academies",
+      description:
+        "Cricket Academy OS pricing is part of your Nevorai subscription. Talk to us and we will set your academy up on the right plan.",
+      path: "/pricing",
+      keywords: "cricket academy software price, academy management software cost India",
+    }),
   component: PricingPage,
 });
 
@@ -75,9 +67,9 @@ function PricingPage() {
           Pricing that fits your academy
         </h1>
         <p className="mx-auto mt-4 max-w-xl text-lg text-slate-600">
-          Cricket Academy OS is one of the tools in your Nevorai subscription — priced around the size of
-          your academy and the modules you actually need. Talk to us and we'll put together a plan
-          together, no card required upfront.
+          Cricket Academy OS is one of the tools in your Nevorai subscription — priced around the
+          size of your academy and the modules you actually need. Talk to us and we'll put together
+          a plan together, no card required upfront.
         </p>
 
         <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
@@ -155,8 +147,20 @@ function PricingPage() {
           <Link to="/demo" className="hover:text-slate-900">
             Book demo
           </Link>
+          <Link to="/terms" className="hover:text-slate-900">
+            Terms
+          </Link>
+          <Link to="/privacy" className="hover:text-slate-900">
+            Privacy
+          </Link>
+          <Link to="/refund" className="hover:text-slate-900">
+            Refunds &amp; Cancellation
+          </Link>
         </div>
-        <p className="mt-4">© {new Date().getFullYear()} Cricket Academy OS by Nevorai.</p>
+        <p className="mt-4">
+          © {new Date().getFullYear()} Cricket Academy OS by Nevorai Technologies · GSTIN
+          23CBCPC3986J1ZN
+        </p>
       </footer>
     </div>
   );

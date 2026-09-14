@@ -306,7 +306,7 @@ function PublicTournamentPage() {
       </div>
 
       <footer className="border-t border-border py-6 text-center text-xs text-muted-foreground">
-        <span>Powered by Academy OS · {academy.name}</span>
+        <span>Powered by Cricket Academy OS · {academy.name}</span>
       </footer>
 
       <TournamentShareDialog

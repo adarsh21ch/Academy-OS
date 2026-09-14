@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Notifications (Phase 03.1).
+ * Cricket Academy OS V2 — Notifications (Phase 03.1).
  *
  * Single centralized notification data layer. Every module publishes events
  * via `publish_notification` (SECURITY DEFINER) and every user consumes

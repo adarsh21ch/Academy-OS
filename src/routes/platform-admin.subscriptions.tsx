@@ -123,7 +123,7 @@ function Row({ t, onMarkPaid, busy }: { t: TenantRow; onMarkPaid: () => void; bu
   const amount = t.monthly_price ?? 0;
   const phone = (t.whatsapp || t.phone || "").replace(/[^\d]/g, "");
   const waMsg = encodeURIComponent(
-    `Hi ${t.name} team 👋\n\nGentle reminder — your Academy OS subscription of ₹${amount.toLocaleString("en-IN")} for this month is pending.\n\nPlease pay via UPI when convenient and reply here once done. Thank you!`,
+    `Hi ${t.name} team 👋\n\nGentle reminder — your Cricket Academy OS subscription of ₹${amount.toLocaleString("en-IN")} for this month is pending.\n\nPlease pay via UPI when convenient and reply here once done. Thank you!`,
   );
   const waHref = phone
     ? `https://wa.me/${phone.length === 10 ? "91" + phone : phone}?text=${waMsg}`

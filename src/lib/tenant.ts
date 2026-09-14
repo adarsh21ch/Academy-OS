@@ -23,7 +23,15 @@ export function getFeatures(t: Tenant | null | undefined): TenantFeatures {
  * and which — when hit as a bare subdomain of a platform base domain —
  * should render the platform marketing site instead of a tenant.
  */
-export const RESERVED_HOSTS = new Set(["academy", "academyos", "www", "app", "api", "admin", "flow"]);
+export const RESERVED_HOSTS = new Set([
+  "academy",
+  "academyos",
+  "www",
+  "app",
+  "api",
+  "admin",
+  "flow",
+]);
 
 /** Base domains we own. Anything ending in one of these is "our" host. */
 const DEFAULT_PLATFORM_HOSTS = [
@@ -95,13 +103,21 @@ export function resolveTenantHint(input: {
   if (isReservedPlatformHost(hostname, input.platformHosts)) return null;
 
   // Subdomain: {slug}.platform.tld (only when the base host is a known platform host)
-  const isPlatformHost = platformHosts.some((h) => 
-    hostname === h || 
-    (hostname.endsWith("." + h) && !hostname.endsWith(".nevorai.com") && !hostname.endsWith(".lovableproject.com"))
+  const isPlatformHost = platformHosts.some(
+    (h) =>
+      hostname === h ||
+      (hostname.endsWith("." + h) &&
+        !hostname.endsWith(".nevorai.com") &&
+        !hostname.endsWith(".lovableproject.com")),
   );
   if (isPlatformHost) {
     const parts = hostname.split(".");
-    if (parts.length > 2 && !parts[0].includes("--") && !parts[0].startsWith("id-preview") && parts[0].length !== 36) {
+    if (
+      parts.length > 2 &&
+      !parts[0].includes("--") &&
+      !parts[0].startsWith("id-preview") &&
+      parts[0].length !== 36
+    ) {
       const first = parts[0];
       if (first && !RESERVED_HOSTS.has(first) && first !== "www") {
         return { mode: "slug", value: first };

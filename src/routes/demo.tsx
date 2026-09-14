@@ -1,25 +1,19 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { seo } from "@/lib/seo";
 import { useState } from "react";
 import { z } from "zod";
 import { toast } from "sonner";
 import { CheckCircle2 } from "lucide-react";
 
 export const Route = createFileRoute("/demo")({
-  head: () => ({
-    meta: [
-      { title: "Book a demo · AcademyOS" },
-      {
-        name: "description",
-        content: "Book a 20-minute walkthrough of AcademyOS for your sports academy.",
-      },
-      { property: "og:title", content: "Book an AcademyOS demo" },
-      {
-        property: "og:description",
-        content: "See how AcademyOS runs an academy end-to-end. 20 minutes, live.",
-      },
-      { property: "og:type", content: "website" },
-    ],
-  }),
+  head: () =>
+    seo({
+      title: "Book a Free Demo — Cricket Academy OS",
+      description:
+        "See Cricket Academy OS run a real cricket academy end to end. A 20-minute live walkthrough with our team — admissions, fees, attendance and match centre.",
+      path: "/demo",
+      keywords: "cricket academy software demo, academy management software demo India",
+    }),
   component: DemoPage,
 });
 
@@ -48,10 +42,10 @@ function DemoPage() {
     }
     // Post to a general demo webhook via WhatsApp deep-link fallback (no backend endpoint yet).
     const body = encodeURIComponent(
-      `New AcademyOS demo request:\n\nName: ${parsed.data.name}\nEmail: ${parsed.data.email}\nPhone: ${parsed.data.phone}\nAcademy: ${parsed.data.academy ?? "-"}\nSport: ${parsed.data.sport ?? "-"}\nMessage: ${parsed.data.message ?? "-"}`,
+      `New Cricket Academy OS demo request:\n\nName: ${parsed.data.name}\nEmail: ${parsed.data.email}\nPhone: ${parsed.data.phone}\nAcademy: ${parsed.data.academy ?? "-"}\nSport: ${parsed.data.sport ?? "-"}\nMessage: ${parsed.data.message ?? "-"}`,
     );
     // Open a mailto so the user's client sends it (no backend key needed for launch).
-    window.location.href = `mailto:hello@nevorai.com?subject=AcademyOS%20demo%20request&body=${body}`;
+    window.location.href = `mailto:hello@nevorai.com?subject=Cricket Academy OS%20demo%20request&body=${body}`;
     setSent(true);
     setBusy(false);
   }
@@ -61,7 +55,7 @@ function DemoPage() {
       <header className="border-b">
         <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
           <Link to="/" className="font-semibold tracking-tight">
-            AcademyOS
+            Cricket Academy OS
           </Link>
           <nav className="flex items-center gap-4 text-sm">
             <Link to="/features" className="text-muted-foreground hover:text-foreground">
@@ -130,7 +124,7 @@ function DemoPage() {
       </section>
 
       <footer className="border-t py-8 text-center text-sm text-muted-foreground">
-        © {new Date().getFullYear()} AcademyOS
+        © {new Date().getFullYear()} Cricket Academy OS
       </footer>
     </div>
   );

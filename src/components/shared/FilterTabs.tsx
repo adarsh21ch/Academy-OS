@@ -3,7 +3,7 @@ import { cn } from "@/lib/utils";
 
 /**
  * Universal Segmented Control / Filter Tabs — the single visual language for
- * every segmented picker across Academy OS (Students, Attendance, Fees,
+ * every segmented picker across Cricket Academy OS (Students, Attendance, Fees,
  * Communications, Staff, Reports, Match Center…).
  *
  * Rules enforced by this component:

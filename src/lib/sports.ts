@@ -1,5 +1,5 @@
 /**
- * Sports catalog for AcademyOS — the Sports Operating System.
+ * Sports catalog for Cricket Academy OS — the Sports Operating System.
  *
  * A tenant's sport is stored in `tenants.features.sport` (jsonb, no schema
  * change required). The catalog below is the single source of truth for

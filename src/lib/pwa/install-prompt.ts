@@ -1,6 +1,6 @@
 /**
  * Captures the `beforeinstallprompt` event so we can trigger the install UI
- * later (e.g. from a "Install AcademyOS" button in the parent portal).
+ * later (e.g. from a "Install Cricket Academy OS" button in the parent portal).
  *
  * Call `captureInstallPrompt()` once from the client entry (root effect).
  * Call `showInstallPrompt()` from a user gesture handler to prompt.

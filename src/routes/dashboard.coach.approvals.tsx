@@ -23,7 +23,7 @@ import { supabase } from "@/integrations/supabase/client";
 export const Route = createFileRoute("/dashboard/coach/approvals")({
   head: () => ({
     meta: [
-      { title: "Coach Approvals · AcademyOS" },
+      { title: "Coach Approvals · Cricket Academy OS" },
       { name: "robots", content: "noindex" },
     ],
   }),

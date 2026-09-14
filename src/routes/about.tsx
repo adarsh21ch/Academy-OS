@@ -1,4 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
+import { isPlatformRequest, seo } from "@/lib/seo";
 import { useQuery } from "@tanstack/react-query";
 import { CheckCircle2, ArrowRight, Users, Trophy } from "lucide-react";
 import { TenantGate } from "@/components/site/TenantGate";
@@ -7,7 +8,14 @@ import { useTenant } from "@/lib/tenant-context";
 import { sectionOne, sectionsBy, siteContentQuery } from "@/lib/site-queries";
 
 export const Route = createFileRoute("/about")({
-  head: () => ({ meta: [{ title: "About" }, { name: "description", content: "About us" }] }),
+  head: () =>
+    seo({
+      title: "About the Academy — Coaches, Facilities & Achievements",
+      description:
+        "Who we are, the coaches behind every athlete, our facilities and what our players have achieved.",
+      path: "/about",
+      index: !isPlatformRequest(),
+    }),
   component: () => (
     <TenantGate>
       <AboutContent />
@@ -25,7 +33,8 @@ function AboutContent() {
 
   return (
     <>
-      <PageHero pageKey="about"
+      <PageHero
+        pageKey="about"
         eyebrow={`About ${tenant.name}`}
         title={about?.heading ?? `About ${tenant.name}`}
         subtitle={about?.body ?? undefined}

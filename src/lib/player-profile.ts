@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Player Profile data layer.
+ * Cricket Academy OS V2 — Player Profile data layer.
  *
  * Thin composition of frozen modules (Attendance, Match Center). No new
  * business logic — just typed queries scoped to a single student/athlete.

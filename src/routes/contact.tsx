@@ -1,4 +1,5 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { isPlatformRequest, seo } from "@/lib/seo";
 import { useState } from "react";
 import {
   Phone,
@@ -17,7 +18,14 @@ import { supabase } from "@/integrations/supabase/client";
 import { checkRateLimit } from "@/lib/bulk-ops";
 
 export const Route = createFileRoute("/contact")({
-  head: () => ({ meta: [{ title: "Contact" }, { name: "description", content: "Get in touch" }] }),
+  head: () =>
+    seo({
+      title: "Contact the Academy — Call, WhatsApp & Ground Location",
+      description:
+        "Get in touch with the academy — phone, WhatsApp, email and ground location. We usually reply the same day.",
+      path: "/contact",
+      index: !isPlatformRequest(),
+    }),
   component: () => (
     <TenantGate>
       <ContactContent />
@@ -34,7 +42,8 @@ function ContactContent() {
 
   return (
     <>
-      <PageHero pageKey="contact"
+      <PageHero
+        pageKey="contact"
         eyebrow="Get in touch"
         title="Contact us"
         subtitle="Have questions? Reach out — we usually reply the same day."

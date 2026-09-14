@@ -1,12 +1,12 @@
 /// <reference lib="webworker" />
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /**
- * Custom service worker for AcademyOS.
+ * Custom service worker for Cricket Academy OS.
  *
  * Two responsibilities:
  *  1. Precache the built app shell so it survives refresh + offline nav.
  *  2. Handle Web Push (`push` + `notificationclick`) so notifications rendered
- *     by the browser deep-link into the correct AcademyOS page.
+ *     by the browser deep-link into the correct Cricket Academy OS page.
  *
  * Registered only from `src/lib/pwa/register.ts` in production, non-iframe,
  * non-lovable-preview contexts.

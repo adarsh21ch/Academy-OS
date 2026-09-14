@@ -407,7 +407,7 @@ const appHelpSchema = {
 export const appHelpTool: AnyToolDef = {
   name: "app_help",
   description:
-    "Look up how to use a feature of AcademyOS: where to click, which screen to open, step-by-step guides. Use this for ANY 'how do I / where is / kaise / help me / mujhe X karna hai' style question about the app itself (uploading photos, creating a match, collecting a fee, sending a reminder, editing website, etc.). Returns a topic with steps and a canonical route. Never invent routes — always cite the returned route in your ::actions button.",
+    "Look up how to use a feature of Cricket Academy OS: where to click, which screen to open, step-by-step guides. Use this for ANY 'how do I / where is / kaise / help me / mujhe X karna hai' style question about the app itself (uploading photos, creating a match, collecting a fee, sending a reminder, editing website, etc.). Returns a topic with steps and a canonical route. Never invent routes — always cite the returned route in your ::actions button.",
   category: "help",
   parameters: appHelpSchema,
   async execute(input, _ctx): Promise<ToolResult> {

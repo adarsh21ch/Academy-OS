@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Realtime channel registry.
+ * Cricket Academy OS V2 — Realtime channel registry.
  *
  * Single hook + shared registry to prevent duplicate Supabase Realtime
  * subscriptions when multiple components/tabs listen to the same channel.

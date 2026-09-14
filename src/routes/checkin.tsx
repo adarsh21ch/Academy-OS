@@ -1,5 +1,5 @@
 /**
- * AcademyOS — Student self check-in / check-out (QR + GPS).
+ * Cricket Academy OS — Student self check-in / check-out (QR + GPS).
  *
  * The printed academy poster encodes `<academy-domain>/checkin?t=<token>`.
  * A student scans it with their phone camera, this page reads their location
@@ -29,7 +29,7 @@ export const Route = createFileRoute("/checkin")({
   }),
   head: () => ({
     meta: [
-      { title: "Academy check-in · AcademyOS" },
+      { title: "Academy check-in · Cricket Academy OS" },
       {
         name: "description",
         content: "Scan the academy QR code to check in or check out of today's session.",

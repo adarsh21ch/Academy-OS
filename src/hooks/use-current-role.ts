@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Role model.
+ * Cricket Academy OS V2 — Role model.
  *
  * The database currently stores `profiles.role` as `"owner" | "coach"`.
  * The V2 UI presents three roles: Owner, Admin, Student.

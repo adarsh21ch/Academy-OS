@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Attendance data layer.
+ * Cricket Academy OS V2 — Attendance data layer.
  *
  * All attendance reads/writes go through this module. Never call
  * `supabase.from("attendance_marks")` directly from a component.

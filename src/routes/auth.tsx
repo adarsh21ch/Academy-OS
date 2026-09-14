@@ -28,7 +28,7 @@ export const Route = createFileRoute("/auth")({
   }),
   head: () => ({
     meta: [
-      { title: "Member portal sign in · Academy OS" },
+      { title: "Member portal sign in · Cricket Academy OS" },
       {
         name: "description",
         content: "Sign in to your academy member portal — students, parents and academy staff.",

@@ -1,5 +1,5 @@
 /**
- * AcademyOS — QR check-in setup (owner/admin).
+ * Cricket Academy OS — QR check-in setup (owner/admin).
  *
  * Pins the academy location, sets the allowed radius, generates the printable
  * QR poster and shows a live audit of every scan attempt (accepted and
@@ -62,7 +62,7 @@ import {
 export const Route = createFileRoute("/dashboard/attendance-qr")({
   head: () => ({
     meta: [
-      { title: "QR check-in setup · AcademyOS" },
+      { title: "QR check-in setup · Cricket Academy OS" },
       {
         name: "description",
         content:

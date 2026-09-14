@@ -1,5 +1,5 @@
 /**
- * AcademyOS V2 — Parent Portal data layer (Phase 02.9).
+ * Cricket Academy OS V2 — Parent Portal data layer (Phase 02.9).
  *
  * Thin composition of frozen modules. Reuses Student App fetchers by
  * building an equivalent `ChildContext` (same shape as `StudentContext`).
