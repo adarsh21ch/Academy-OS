@@ -1,19 +1,26 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import { Check, Sparkles } from "lucide-react";
-import { PLANS, formatPrice, TRIAL_DAYS } from "@/lib/pricing";
+import { Sparkles } from "lucide-react";
+import { useQuery } from "@tanstack/react-query";
+import {
+  DEFAULT_PLATFORM_SETTINGS,
+  fetchPlatformSettings,
+  platformSettingsKey,
+  waHref,
+} from "@/lib/platform-settings";
 
 export const Route = createFileRoute("/pricing")({
   head: () => ({
     meta: [
-      { title: "Pricing · AcademyOS — Sports Operating System" },
+      { title: "Pricing · AcademyOS" },
       {
         name: "description",
-        content: `Simple, transparent pricing for sports academies. Start with a ${TRIAL_DAYS}-day free trial. From ₹999/month.`,
+        content:
+          "AcademyOS pricing is part of your Nevorai subscription. Talk to us to find the right fit for your academy.",
       },
       { property: "og:title", content: "AcademyOS Pricing" },
       {
         property: "og:description",
-        content: "Plans for solo coaches to multi-branch academies. Start free.",
+        content: "Talk to our team to find the right plan for your academy.",
       },
       { property: "og:type", content: "website" },
       { name: "twitter:card", content: "summary_large_image" },
@@ -22,28 +29,37 @@ export const Route = createFileRoute("/pricing")({
   component: PricingPage,
 });
 
+const ENQUIRY_MSG = "Hi, I'd like to know more about AcademyOS pricing for my academy.";
+
 function PricingPage() {
+  const { data: settings = DEFAULT_PLATFORM_SETTINGS } = useQuery({
+    queryKey: platformSettingsKey,
+    queryFn: fetchPlatformSettings,
+    staleTime: 60_000,
+  });
+  const whatsappUrl = waHref(settings.contact_whatsapp, ENQUIRY_MSG);
+  const emailUrl = `mailto:${settings.contact_email}?subject=${encodeURIComponent("AcademyOS — pricing enquiry")}`;
+
   return (
-    <div className="min-h-dvh bg-background">
-      <header className="border-b">
-        <div className="max-w-6xl mx-auto px-4 py-4 flex items-center justify-between">
-          <Link to="/" className="font-semibold tracking-tight">
+    <div className="min-h-dvh bg-white text-slate-900">
+      <header className="border-b border-slate-200">
+        <div className="mx-auto flex max-w-6xl items-center justify-between px-5 py-4 sm:px-8">
+          <Link to="/" className="text-lg font-semibold tracking-tight">
             AcademyOS
           </Link>
-          <nav className="flex items-center gap-4 text-sm">
-            <Link to="/features" className="text-muted-foreground hover:text-foreground">
-              Features
+          <nav className="flex items-center gap-6 text-sm">
+            <Link to="/" className="text-slate-600 hover:text-slate-900">
+              Home
             </Link>
-            <Link to="/pricing" className="font-medium">
+            <Link to="/pricing" className="font-medium text-slate-900">
               Pricing
             </Link>
-            <Link to="/demo" className="text-muted-foreground hover:text-foreground">
+            <Link to="/demo" className="text-slate-600 hover:text-slate-900">
               Book a demo
             </Link>
             <Link
               to="/auth"
-              className="rounded-lg px-3 py-1.5 text-sm font-medium"
-              style={{ background: "var(--brand)", color: "var(--brand-foreground, white)" }}
+              className="rounded-lg bg-slate-900 px-4 py-2 text-sm font-semibold text-white hover:bg-slate-800"
             >
               Sign in
             </Link>
@@ -51,142 +67,106 @@ function PricingPage() {
         </div>
       </header>
 
-      <section className="max-w-6xl mx-auto px-4 py-16 text-center">
-        <p
-          className="inline-flex items-center gap-1.5 text-xs font-medium mb-4 px-3 py-1 rounded-full"
-          style={{
-            color: "var(--brand)",
-            background: "color-mix(in oklab, var(--brand) 10%, transparent)",
-          }}
-        >
-          <Sparkles className="size-3.5" /> {TRIAL_DAYS}-day free trial · No card required
+      <section className="mx-auto max-w-3xl px-5 py-20 text-center sm:px-8">
+        <p className="mb-4 inline-flex items-center gap-1.5 rounded-full bg-emerald-50 px-3 py-1 text-xs font-medium text-emerald-700">
+          <Sparkles className="size-3.5" /> Set up in a day, not weeks
         </p>
-        <h1 className="text-4xl md:text-5xl font-semibold tracking-tight">
-          Pricing that grows with your academy
+        <h1 className="text-4xl font-semibold tracking-tight sm:text-5xl">
+          Pricing that fits your academy
         </h1>
-        <p className="mt-3 text-lg text-muted-foreground max-w-2xl mx-auto">
-          One flat monthly fee. All modules. No per-coach charges. Cancel anytime.
+        <p className="mx-auto mt-4 max-w-xl text-lg text-slate-600">
+          AcademyOS is one of the tools in your Nevorai subscription — priced around the size of
+          your academy and the modules you actually need. Talk to us and we'll put together a
+          plan together, no card required upfront.
         </p>
-      </section>
 
-      <section className="max-w-6xl mx-auto px-4 pb-16 grid gap-6 md:grid-cols-2 lg:grid-cols-4">
-        {PLANS.map((plan) => (
-          <div
-            key={plan.key}
-            className="rounded-2xl border bg-card p-6 flex flex-col relative"
-            style={
-              plan.popular
-                ? {
-                    borderColor: "var(--brand)",
-                    boxShadow: "0 0 0 1px var(--brand)",
-                  }
-                : undefined
-            }
+        <div className="mt-10 flex flex-wrap items-center justify-center gap-4">
+          <a
+            href={whatsappUrl}
+            target="_blank"
+            rel="noreferrer"
+            className="inline-flex items-center gap-2 rounded-lg bg-slate-900 px-6 py-3.5 text-sm font-semibold text-white hover:bg-slate-800"
           >
-            {plan.popular && (
-              <div
-                className="absolute -top-3 left-1/2 -translate-x-1/2 text-xs font-medium px-2.5 py-0.5 rounded-full"
-                style={{ background: "var(--brand)", color: "var(--brand-foreground, white)" }}
-              >
-                Most popular
-              </div>
-            )}
-            <h3 className="text-lg font-semibold">{plan.name}</h3>
-            <p className="text-sm text-muted-foreground mt-1 min-h-[40px]">{plan.tagline}</p>
-            <div className="mt-4 flex items-baseline gap-1">
-              <span className="text-3xl font-semibold">{formatPrice(plan)}</span>
-              {plan.priceMonthly != null && (
-                <span className="text-sm text-muted-foreground">/ month</span>
-              )}
-            </div>
-            <p className="text-xs text-muted-foreground mt-1">
-              {plan.studentsIncluded == null
-                ? "Unlimited students"
-                : `Up to ${plan.studentsIncluded} students`}
-            </p>
-
-            <ul className="mt-5 space-y-2 text-sm flex-1">
-              {plan.features.map((f) => (
-                <li key={f} className="flex gap-2">
-                  <Check className="size-4 shrink-0 mt-0.5" style={{ color: "var(--brand)" }} />
-                  <span>{f}</span>
-                </li>
-              ))}
-            </ul>
-
-            <Link
-              to={plan.key === "custom" ? "/demo" : "/auth"}
-              className="mt-6 rounded-lg py-2 text-center text-sm font-medium"
-              style={
-                plan.popular
-                  ? { background: "var(--brand)", color: "var(--brand-foreground, white)" }
-                  : { border: "1px solid var(--border)" }
-              }
-            >
-              {plan.cta}
-            </Link>
-          </div>
-        ))}
+            Chat with us on WhatsApp
+          </a>
+          <a
+            href={emailUrl}
+            className="inline-flex items-center gap-2 rounded-lg border border-slate-300 px-6 py-3.5 text-sm font-semibold text-slate-700 hover:border-slate-400 hover:bg-slate-50"
+          >
+            Email the team
+          </a>
+        </div>
       </section>
 
-      <section className="max-w-3xl mx-auto px-4 py-16 border-t">
-        <h2 className="text-2xl font-semibold text-center">Frequently asked</h2>
+      <section className="mx-auto max-w-4xl px-5 pb-20 sm:px-8">
+        <div className="grid gap-6 rounded-2xl border border-slate-200 bg-slate-50 p-8 sm:grid-cols-3 sm:p-10">
+          <PricingPoint
+            title="Sized to your academy"
+            body="Solo coaches and multi-branch academies pay differently — we scope it to your student count and modules."
+          />
+          <PricingPoint
+            title="One Nevorai subscription"
+            body="AcademyOS billing runs through your Nevorai account, alongside any other Nevorai tools you use."
+          />
+          <PricingPoint
+            title="No long-term lock-in"
+            body="Cancel any time, and we'll help you export your student and fee data."
+          />
+        </div>
+      </section>
+
+      <section className="mx-auto max-w-3xl border-t border-slate-200 px-5 py-16 sm:px-8">
+        <h2 className="text-center text-2xl font-semibold">Frequently asked</h2>
         <div className="mt-8 space-y-6">
           {[
             {
-              q: "Is there really a free trial?",
-              a: `Yes — ${TRIAL_DAYS} days, all features unlocked. No card required. Pick a plan when you're ready.`,
+              q: "How is AcademyOS priced?",
+              a: "There's no fixed public price list — it depends on your academy's size and which modules you need. Talk to us and we'll quote a plan that fits.",
             },
             {
-              q: "Can I switch plans later?",
-              a: "Anytime. Upgrades are prorated; downgrades apply from the next billing cycle.",
+              q: "How does billing actually work?",
+              a: "AcademyOS is billed as part of your Nevorai subscription, not as a separate standalone charge.",
+            },
+            {
+              q: "Can the plan change as my academy grows?",
+              a: "Yes — talk to us any time your student count or needs change and we'll adjust the plan.",
             },
             {
               q: "Do you support sports other than cricket?",
-              a: "Cricket is fully live. Badminton, football, volleyball, basketball, tennis, swimming and gym flows are on the roadmap and enable the shared modules today (attendance, billing, website, portals).",
-            },
-            {
-              q: "How does billing work?",
-              a: "Monthly, invoiced by AcademyOS. Enterprise plans can be billed annually.",
+              a: "Cricket is fully live. Badminton, football, volleyball, basketball, tennis, swimming and gym flows are on the roadmap and already work with the shared modules (attendance, fees, website, portals).",
             },
           ].map((row) => (
             <div key={row.q}>
               <h3 className="font-medium">{row.q}</h3>
-              <p className="text-sm text-muted-foreground mt-1">{row.a}</p>
+              <p className="mt-1 text-sm text-slate-600">{row.a}</p>
             </div>
           ))}
         </div>
       </section>
 
-      <footer className="border-t py-8 text-center text-sm text-muted-foreground">
-        <div className="max-w-6xl mx-auto px-4 flex flex-wrap justify-center gap-4">
-          <Link to="/" className="hover:text-foreground">
+      <footer className="border-t border-slate-200 py-8 text-center text-sm text-slate-500">
+        <div className="mx-auto flex max-w-6xl flex-wrap justify-center gap-4 px-5 sm:px-8">
+          <Link to="/" className="hover:text-slate-900">
             Home
           </Link>
-          <Link to="/features" className="hover:text-foreground">
-            Features
-          </Link>
-          <Link to="/pricing" className="hover:text-foreground">
+          <Link to="/pricing" className="hover:text-slate-900">
             Pricing
           </Link>
-          <Link to="/demo" className="hover:text-foreground">
+          <Link to="/demo" className="hover:text-slate-900">
             Book demo
           </Link>
-          <Link to="/faq" className="hover:text-foreground">
-            FAQ
-          </Link>
-          <Link to="/contact" className="hover:text-foreground">
-            Contact
-          </Link>
-          <Link to="/privacy" className="hover:text-foreground">
-            Privacy
-          </Link>
-          <Link to="/terms" className="hover:text-foreground">
-            Terms
-          </Link>
         </div>
-        <p className="mt-4">© {new Date().getFullYear()} AcademyOS. The Sports Operating System.</p>
+        <p className="mt-4">© {new Date().getFullYear()} AcademyOS by Nevorai.</p>
       </footer>
+    </div>
+  );
+}
+
+function PricingPoint({ title, body }: { title: string; body: string }) {
+  return (
+    <div>
+      <h3 className="text-sm font-semibold text-slate-900">{title}</h3>
+      <p className="mt-1.5 text-sm leading-relaxed text-slate-600">{body}</p>
     </div>
   );
 }
