@@ -23,7 +23,7 @@ export function getFeatures(t: Tenant | null | undefined): TenantFeatures {
  * and which — when hit as a bare subdomain of a platform base domain —
  * should render the platform marketing site instead of a tenant.
  */
-export const RESERVED_HOSTS = new Set(["academy", "www", "app", "api", "admin", "flow"]);
+export const RESERVED_HOSTS = new Set(["academy", "academyos", "www", "app", "api", "admin", "flow"]);
 
 /** Base domains we own. Anything ending in one of these is "our" host. */
 const DEFAULT_PLATFORM_HOSTS = [
