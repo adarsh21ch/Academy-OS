@@ -133,7 +133,12 @@ function StumpsMark({ className = "" }: { className?: string }) {
         strokeWidth="2"
         strokeLinecap="round"
       />
-      <path d="M4.5 6.2h7M12.5 6.2h7" stroke="currentColor" strokeWidth="1.6" strokeLinecap="round" />
+      <path
+        d="M4.5 6.2h7M12.5 6.2h7"
+        stroke="currentColor"
+        strokeWidth="1.6"
+        strokeLinecap="round"
+      />
     </svg>
   );
 }
@@ -296,8 +301,8 @@ function Hero({ whatsappUrl, emailUrl }: { whatsappUrl: string; emailUrl: string
             transition={{ ...reveal.transition, delay: 0.12 }}
             className="max-w-xl text-lg leading-relaxed text-white/70"
           >
-            Admissions, fees, attendance and ball-by-ball match scoring in one place — plus your
-            own academy website and a WhatsApp assistant that answers enquiries while you're on
+            Admissions, fees, attendance and ball-by-ball match scoring in one place — plus your own
+            academy website and Nev AI answering parent enquiries on WhatsApp while you are on
             the ground.
           </motion.p>
 
@@ -443,7 +448,7 @@ function EnquiryCard() {
     >
       <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
         <WhatsAppIcon />
-        New enquiry · auto-replied
+        New enquiry · answered by Nev AI
       </div>
       <p className="mt-2.5 text-sm leading-snug text-slate-700">
         "Morning batch ke liye admission open hai?"
@@ -526,7 +531,7 @@ function WhatItSaves() {
     "Every student, fee and receipt in one dashboard",
     "Overdue reminders sent automatically on WhatsApp",
     "Attendance tapped in from the coach's phone",
-    "Enquiries auto-answered the moment they arrive",
+    "Enquiries answered by Nev AI the moment they arrive",
     "Live scoreboard parents follow from home",
     "Your own branded academy website, live from day one",
   ];
@@ -580,7 +585,12 @@ function WhatItSaves() {
             <div className="flex items-center gap-2.5">
               <span className="grid h-8 w-8 place-items-center rounded-full bg-emerald-500/20 text-emerald-300">
                 <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor">
-                  <path strokeWidth="2.4" strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                  <path
+                    strokeWidth="2.4"
+                    strokeLinecap="round"
+                    strokeLinejoin="round"
+                    d="M5 13l4 4L19 7"
+                  />
                 </svg>
               </span>
               <h3 className="text-base font-semibold">With Cricket Academy OS</h3>
@@ -610,7 +620,7 @@ function WhatItSaves() {
         />
         <SaveCard
           title="Enquiries that convert"
-          body="Every parent who messages gets an instant reply — even at 6 AM during practice."
+          body="Nev AI replies the moment a parent messages — even at 6 AM when you are on the ground."
           icon={<WhatsAppIcon />}
         />
       </div>
@@ -618,15 +628,7 @@ function WhatItSaves() {
   );
 }
 
-function SaveCard({
-  title,
-  body,
-  icon,
-}: {
-  title: string;
-  body: string;
-  icon: React.ReactNode;
-}) {
+function SaveCard({ title, body, icon }: { title: string; body: string; icon: React.ReactNode }) {
   return (
     <motion.div
       {...reveal}
@@ -659,8 +661,8 @@ function Features() {
       icon: <CalendarIcon />,
     },
     {
-      title: "WhatsApp assistant",
-      body: "Enquiries get answered instantly and land in one inbox instead of your personal chats.",
+      title: "Nev AI assistant",
+      body: "Answers parent enquiries on WhatsApp instantly, and answers your own questions about your academy's numbers.",
       icon: <WhatsAppIcon />,
     },
     {
@@ -716,7 +718,11 @@ function Features() {
 
 function MatchCentre() {
   return (
-    <section id="match-centre" className="relative overflow-hidden" style={{ background: INK_SOFT }}>
+    <section
+      id="match-centre"
+      className="relative overflow-hidden"
+      style={{ background: INK_SOFT }}
+    >
       <PitchBackdrop />
       <div
         aria-hidden
@@ -736,9 +742,9 @@ function MatchCentre() {
             Match day, scored properly.
           </h2>
           <p className="mt-5 max-w-lg text-lg leading-relaxed text-white/70">
-            Score ball-by-ball from a phone at the ground. Parents who couldn't come watch the
-            score update live on your academy's own website — and every innings quietly builds
-            each player's batting and bowling record.
+            Score ball-by-ball from a phone at the ground. Parents who couldn't come watch the score
+            update live on your academy's own website — and every innings quietly builds each
+            player's batting and bowling record.
           </p>
           <ul className="mt-8 space-y-3.5">
             {[
@@ -750,7 +756,12 @@ function MatchCentre() {
               <li key={t} className="flex gap-3 text-[15px] leading-relaxed text-white/80">
                 <span className="mt-1.5 shrink-0 text-emerald-400">
                   <svg viewBox="0 0 24 24" className="h-4 w-4" fill="none" stroke="currentColor">
-                    <path strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round" d="M5 13l4 4L19 7" />
+                    <path
+                      strokeWidth="2.5"
+                      strokeLinecap="round"
+                      strokeLinejoin="round"
+                      d="M5 13l4 4L19 7"
+                    />
                   </svg>
                 </span>
                 {t}
@@ -987,6 +998,10 @@ const FAQ_GROUPS: FaqGroup[] = [
         q: "Will my coaches actually use it?",
         a: "Attendance is the only thing they touch daily, and it's a few taps per batch on their own phone — no training session needed, no laptop.",
       },
+      {
+        q: "There's AI in it — will it get something wrong?",
+        a: "You stay in control. Nev AI helps with parent enquiries and answering questions about your academy's own numbers — it isn't left to run your academy on its own. We'll show you exactly what it does and doesn't touch on the demo call.",
+      },
     ],
   },
   {
@@ -1106,7 +1121,12 @@ function Faq({ whatsappUrl }: { whatsappUrl: string }) {
                     style={isOpen ? { background: BALL } : undefined}
                     aria-hidden
                   >
-                    <svg viewBox="0 0 24 24" className="h-3.5 w-3.5" fill="none" stroke="currentColor">
+                    <svg
+                      viewBox="0 0 24 24"
+                      className="h-3.5 w-3.5"
+                      fill="none"
+                      stroke="currentColor"
+                    >
                       <path strokeWidth="2.5" strokeLinecap="round" d="M12 5v14M5 12h14" />
                     </svg>
                   </span>
@@ -1176,8 +1196,8 @@ function ClosingCTA({ whatsappUrl, emailUrl }: { whatsappUrl: string; emailUrl: 
             Get your evenings back this season.
           </h2>
           <p className="mx-auto mt-5 max-w-xl text-[17px] leading-relaxed text-white/70">
-            Send us one message about your academy. We'll show you the live product, answer
-            whatever you want to ask, and quote a price — no pitch deck, no pressure.
+            Send us one message about your academy. We'll show you the live product, answer whatever
+            you want to ask, and quote a price — no pitch deck, no pressure.
           </p>
           <div className="mt-9 flex flex-wrap items-center justify-center gap-3.5">
             <a
@@ -1238,15 +1258,7 @@ function Footer() {
 
 /* ═══════════════════════ Bits ═══════════════════════ */
 
-function SectionHead({
-  eyebrow,
-  title,
-  body,
-}: {
-  eyebrow: string;
-  title: string;
-  body?: string;
-}) {
+function SectionHead({ eyebrow, title, body }: { eyebrow: string; title: string; body?: string }) {
   return (
     <div className="flex flex-col gap-4">
       <div className="flex items-center gap-2.5">
