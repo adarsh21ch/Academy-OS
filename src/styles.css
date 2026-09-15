@@ -165,13 +165,25 @@
   --score-over-track: oklch(0.9 0 0);
   --score-over-fill: oklch(0.62 0.18 155);
 
-  /* Member-portal (auth) palette — deep navy, always dark regardless of theme. */
-  --auth-bg: oklch(0.18 0.035 255);
-  --auth-surface: oklch(0.23 0.04 255);
-  --auth-elevated: oklch(0.26 0.045 255 / 82%);
+  /* Brand palette — SINGLE SOURCE OF TRUTH for the navy + cricket-ball red
+     used by the marketing site (academyos.nevorai.com). Every member-facing
+     surface pins to these, so the portal and the website can no longer drift
+     apart. Mirrored as JS constants in components/site/TenantPlaceholder.tsx
+     (INK / INK_SOFT / BALL) for inline styles — keep the two in sync. */
+  --site-ink: oklch(0.2 0.04 258);         /* #0A1628 */
+  --site-ink-soft: oklch(0.241 0.052 260); /* #101F38 */
+  --site-ball: oklch(0.571 0.171 32);      /* #C8452F cricket-ball red */
+  --site-ball-soft: oklch(0.653 0.159 33); /* #E0654D lighter tint */
+
+  /* Member-portal (auth) palette — deep navy, always dark regardless of theme.
+     Pinned to the brand tokens above. The accent is the cricket-ball red, never
+     blue: the portal must read as the same product as the marketing site. */
+  --auth-bg: var(--site-ink);
+  --auth-surface: var(--site-ink-soft);
+  --auth-elevated: oklch(0.27 0.055 260 / 82%);
   --auth-foreground: oklch(1 0 0);
-  --auth-muted: oklch(0.78 0.02 255);
-  --auth-subtle: oklch(0.64 0.02 255);
+  --auth-muted: oklch(0.78 0.02 259);
+  --auth-subtle: oklch(0.64 0.02 259);
   --auth-border: oklch(1 0 0 / 12%);
   --auth-danger: oklch(0.68 0.19 22);
 

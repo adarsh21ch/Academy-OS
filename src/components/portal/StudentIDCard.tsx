@@ -23,7 +23,7 @@ interface StudentIDCardProps {
 
 export const StudentIDCard = React.forwardRef<HTMLDivElement, StudentIDCardProps>(
   ({ student, side = "front" }, ref) => {
-    const brandColor = student.primary_color || "#0f172a";
+    const brandColor = student.primary_color || "#0A1628";
 
     const formatDate = (dateStr?: string | null) => {
       if (!dateStr) return "—";

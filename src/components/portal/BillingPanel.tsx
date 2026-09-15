@@ -214,7 +214,7 @@ function InvoiceCard({
               }
             },
             modal: { ondismiss: () => reject(new Error("Payment cancelled")) },
-            theme: { color: "#6366f1" },
+            theme: { color: "#C8452F" },
           });
           rzp.open();
         });
