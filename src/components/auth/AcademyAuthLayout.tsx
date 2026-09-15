@@ -88,7 +88,7 @@ export function AcademyAuthLayout({ children }: { children: ReactNode }) {
   const hasArt = brand.heroImages.length > 0;
 
   return (
-    <div className="relative flex min-h-dvh w-full flex-col overflow-x-hidden bg-auth-bg text-auth-foreground">
+    <div className="auth-surface relative flex min-h-dvh w-full flex-col overflow-x-hidden bg-auth-bg text-auth-foreground">
       {hasArt ? (
         <div className="pointer-events-none absolute inset-0 -z-10">
           {/* Desaturated on purpose: whatever photograph an academy uploads, the

@@ -9,8 +9,11 @@ interface BaseProps extends Omit<InputHTMLAttributes<HTMLInputElement>, "classNa
 }
 
 /**
- * Member-portal text field: 54px surface with icon slot, accessible label,
- * 16px text (prevents iOS Safari auto-zoom) and a brand-tinted focus ring.
+ * Member-portal text field: a single underline, no container fill and no focus
+ * ring. A filled, rounded box here reads as a box-within-a-box once Safari
+ * paints its own autofill rectangle on the inner <input> — see the
+ * .auth-surface autofill reset in styles.css, which the two must be kept
+ * together. Keeps 16px text so iOS Safari does not auto-zoom on focus.
  */
 export const AuthInput = forwardRef<HTMLInputElement, BaseProps>(function AuthInput(
   { label, icon, error, hint, id, ...rest },
@@ -29,10 +32,8 @@ export const AuthInput = forwardRef<HTMLInputElement, BaseProps>(function AuthIn
         {label}
       </label>
       <div
-        className={`group flex h-[54px] items-center gap-2.5 rounded-2xl border bg-auth-elevated px-3.5 backdrop-blur transition-all duration-200 focus-within:ring-4 ${
-          error
-            ? "border-auth-danger focus-within:ring-[color-mix(in_oklab,var(--auth-danger)_25%,transparent)]"
-            : "border-auth-border focus-within:border-auth-foreground focus-within:ring-[color-mix(in_oklab,var(--auth-foreground)_18%,transparent)]"
+        className={`group flex h-[52px] items-center gap-3 border-b bg-transparent transition-colors duration-200 ${
+          error ? "border-auth-danger" : "border-auth-border focus-within:border-auth-foreground"
         }`}
       >
         {icon ? <span className="shrink-0 text-auth-subtle">{icon}</span> : null}
@@ -78,10 +79,8 @@ export function PasswordInput({
         {label}
       </label>
       <div
-        className={`group flex h-[54px] items-center gap-2.5 rounded-2xl border bg-auth-elevated px-3.5 backdrop-blur transition-all duration-200 focus-within:ring-4 ${
-          error
-            ? "border-auth-danger focus-within:ring-[color-mix(in_oklab,var(--auth-danger)_25%,transparent)]"
-            : "border-auth-border focus-within:border-auth-foreground focus-within:ring-[color-mix(in_oklab,var(--auth-foreground)_18%,transparent)]"
+        className={`group flex h-[52px] items-center gap-3 border-b bg-transparent transition-colors duration-200 ${
+          error ? "border-auth-danger" : "border-auth-border focus-within:border-auth-foreground"
         }`}
       >
         {icon ? <span className="shrink-0 text-auth-subtle">{icon}</span> : null}

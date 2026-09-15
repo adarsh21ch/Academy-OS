@@ -541,6 +541,22 @@
 }
 
 /* Global mobile ergonomics: kill 300ms tap delay, remove tap highlight, prevent iOS text auto-zoom. */
+/* Member portal: stop Safari/Chrome painting their own autofill background on
+   the <input>. Without this the browser draws a lighter filled rectangle inside
+   the field, which reads as a second box nested in the first — the exact thing
+   the flat underline fields are there to avoid. The huge transition delay is
+   the standard trick: the UA background is never actually reached. */
+.auth-surface input:-webkit-autofill,
+.auth-surface input:-webkit-autofill:hover,
+.auth-surface input:-webkit-autofill:focus,
+.auth-surface input:-webkit-autofill:active {
+  -webkit-text-fill-color: var(--auth-foreground);
+  -webkit-box-shadow: 0 0 0 1000px transparent inset;
+  box-shadow: 0 0 0 1000px transparent inset;
+  caret-color: var(--auth-foreground);
+  transition: background-color 9999s ease-in-out 0s;
+}
+
 html {
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;

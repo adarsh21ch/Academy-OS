@@ -297,7 +297,7 @@ function AuthPage() {
               </div>
             </div>
 
-            <Button asChild variant="outline" className="h-[54px] w-full rounded-2xl border-auth-border bg-auth-elevated text-[15px] font-semibold text-auth-foreground hover:bg-auth-border/40">
+            <Button asChild variant="outline" className="h-[54px] w-full rounded-xl border-auth-border bg-transparent text-[15px] font-semibold tracking-tight text-auth-foreground hover:bg-auth-foreground/5">
               <Link to="/register">Create an account</Link>
             </Button>
           </form>
@@ -306,7 +306,7 @@ function AuthPage() {
         {mode === "forgot" &&
           (sentTo ? (
             <div className="mt-6 space-y-4">
-              <div className="rounded-2xl border border-auth-border bg-auth-elevated p-4 backdrop-blur">
+              <div className="rounded-xl border border-auth-border p-4">
                 <div className="flex items-center gap-2 text-[15px] font-semibold">
                   <ShieldCheck className="size-4 text-auth-foreground" aria-hidden />
                   Check your email
