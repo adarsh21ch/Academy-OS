@@ -1,4 +1,9 @@
-import { useMemo, type ReactNode } from "react";
+import { useEffect, useMemo, useState, type ReactNode } from "react";
+import {
+  readStoredThemeMode,
+  resolveTheme,
+  setStoredThemeMode,
+} from "@/components/dashboard/ThemeToggle";
 import { Link } from "@tanstack/react-router";
 import { motion } from "framer-motion";
 import { getPageHeroImages } from "@/lib/page-hero-images";
@@ -19,8 +24,6 @@ export interface AcademyBrand {
   heroImages: string[];
   resolved: boolean;
 }
-
-const DISPLAY_FONT = "'Bebas Neue', 'Bricolage Grotesque', sans-serif";
 
 /** Resolves brand identity for the auth surface from the current tenant (hostname-based). */
 export function useAcademyBrand(): AcademyBrand {
@@ -72,203 +75,121 @@ export function useAcademyBrand(): AcademyBrand {
 }
 
 /**
- * Full-screen member-portal shell.
- * Mobile: single column, safe-area aware, 100dvh so the keyboard never traps the CTA.
- * Desktop: academy brand panel (owner-uploaded login artwork) + form panel.
+ * Member-portal shell — single centred column on a full-bleed ground.
+ *
+ * Deliberately monochrome and deliberately flat: no split screen, no marketing
+ * panel, no raised card behind the form. The form sits directly on the page.
+ * Colour is carried entirely by --auth-* tokens, which are zero-chroma and flip
+ * with the Light/Dark switch in the header, so this surface is only ever
+ * white-on-black or black-on-white.
  */
 export function AcademyAuthLayout({ children }: { children: ReactNode }) {
   const brand = useAcademyBrand();
   const hasArt = brand.heroImages.length > 0;
 
   return (
-    <div
-      className="relative min-h-dvh w-full overflow-x-hidden bg-auth-bg text-auth-foreground"
-      style={
-        {
-          "--brand-accent-auth": brand.accent,
-          "--brand-ink-auth": brand.ink,
-          "--brand-surface-auth": brand.surface,
-          "--brand-highlight-auth": brand.brandAccent,
-        } as React.CSSProperties
-      }
-    >
-      {/* Ambient brand wash behind everything */}
-      <div className="pointer-events-none absolute inset-0 -z-10">
-        <div
-          className="absolute inset-0"
-          style={{
-            background: `radial-gradient(120% 80% at 50% -10%, color-mix(in oklab, var(--brand-accent-auth) 32%, transparent), transparent 60%), linear-gradient(180deg, var(--brand-ink-auth), rgba(4,10,24,0.98))`,
-          }}
-        />
-        <div
-          className="absolute inset-0 opacity-[0.10]"
-          style={{
-            backgroundImage:
-              "linear-gradient(to right,#fff 1px,transparent 1px),linear-gradient(to bottom,#fff 1px,transparent 1px)",
-            backgroundSize: "56px 56px",
-            maskImage: "radial-gradient(ellipse at 50% 0%, black 30%, transparent 75%)",
-          }}
-        />
-      </div>
-
-      <div className="mx-auto grid min-h-dvh w-full lg:grid-cols-[1.05fr_1fr]">
-        <BrandPanel brand={brand} hasArt={hasArt} />
-        <main className="relative flex min-h-dvh w-full flex-col justify-center px-5 pb-[max(2rem,var(--app-safe-bottom))] pt-[max(2rem,var(--app-safe-top))] sm:px-8">
-          {/* Mobile-only academy artwork band, kept behind a heavy scrim */}
-          {hasArt ? (
-            <div className="pointer-events-none absolute inset-x-0 top-0 h-[38dvh] overflow-hidden lg:hidden">
-              <HeroCarousel paths={brand.heroImages} scrim={false} intervalMs={6500} />
-              <div className="absolute inset-0 bg-[linear-gradient(180deg,rgba(4,10,24,0.55),rgba(4,10,24,0.92)_70%,var(--auth-bg))]" />
-            </div>
-          ) : null}
-
-          <motion.div
-            initial={{ opacity: 0, y: 14 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
-            className="relative mx-auto w-full max-w-[420px]"
-          >
-            {/* Compact brand lockup — mobile only */}
-            <div className="mb-6 flex items-center justify-between lg:hidden">
-              <div className="flex items-center gap-3">
-                <AcademyLogo
-                  path={brand.logoPath}
-                  name={brand.name}
-                  initials={brand.initials}
-                  accent={brand.accent}
-                  className="size-12"
-                />
-                <div className="min-w-0">
-                  <p
-                    className="truncate text-[19px] leading-tight tracking-wide"
-                    style={{ fontFamily: DISPLAY_FONT }}
-                  >
-                    {brand.name}
-                  </p>
-                  <p className="text-[10px] font-semibold uppercase tracking-[0.22em] text-auth-subtle">
-                    Member portal
-                  </p>
-                </div>
-              </div>
-              <Link
-                to="/register"
-                className="rounded-full bg-[var(--brand-accent-auth)] px-4 py-1.5 text-[11px] font-bold uppercase tracking-wider text-white shadow-lg transition-transform active:scale-95"
-              >
-                Apply
-              </Link>
-            </div>
-
-            <div className="rounded-3xl border border-auth-border bg-[color-mix(in_oklab,var(--auth-surface)_70%,transparent)] p-5 shadow-[0_30px_80px_-40px_rgba(0,0,0,0.9)] backdrop-blur-xl sm:p-6 lg:border-transparent lg:bg-transparent lg:p-0 lg:shadow-none lg:backdrop-blur-none">
-              {children}
-            </div>
-
-            <div className="mt-6 text-center">
-              <Link
-                to="/"
-                className="text-xs text-auth-subtle transition-colors hover:text-auth-foreground"
-              >
-                ← Back to {brand.resolved ? "academy website" : "home"}
-              </Link>
-            </div>
-          </motion.div>
-        </main>
-      </div>
-    </div>
-  );
-}
-
-function BrandPanel({ brand, hasArt }: { brand: AcademyBrand; hasArt: boolean }) {
-  return (
-    <aside className="relative hidden flex-col justify-between overflow-hidden p-12 lg:flex">
+    <div className="relative flex min-h-dvh w-full flex-col overflow-x-hidden bg-auth-bg text-auth-foreground">
       {hasArt ? (
-        <>
-          <HeroCarousel paths={brand.heroImages} scrim={false} intervalMs={6500} />
-          <div className="pointer-events-none absolute inset-0 bg-[linear-gradient(105deg,rgba(4,10,24,0.92),rgba(4,10,24,0.62)_55%,rgba(4,10,24,0.95))]" />
-        </>
-      ) : (
-        <>
-          <div
-            className="pointer-events-none absolute -left-24 top-1/3 h-[420px] w-[420px] rounded-full opacity-[0.45] blur-[140px]"
-            style={{ backgroundColor: brand.accent }}
-          />
-          <div
-            className="pointer-events-none absolute -right-12 bottom-1/4 h-[280px] w-[280px] rounded-full opacity-[0.25] blur-[100px]"
-            style={{ backgroundColor: brand.brandAccent }}
-          />
-        </>
-      )}
+        <div className="pointer-events-none absolute inset-0 -z-10">
+          {/* Desaturated on purpose: whatever photograph an academy uploads, the
+              surface stays strictly black and white. */}
+          <div className="absolute inset-0 grayscale">
+            <HeroCarousel paths={brand.heroImages} scrim={false} intervalMs={7000} />
+          </div>
+          {/* Single flat scrim in the page's own ground colour — this is what
+              keeps the type legible, instead of a panel behind the form. */}
+          <div className="absolute inset-0 bg-[color-mix(in_oklab,var(--auth-bg)_88%,transparent)]" />
+        </div>
+      ) : null}
 
-      <div className="relative flex items-center justify-between">
-        <Link to="/" className="flex items-center gap-3">
+      <header className="relative flex items-center justify-between gap-4 px-5 pt-[max(1.5rem,var(--app-safe-top))] sm:px-8">
+        <Link to="/" className="flex min-w-0 items-center gap-3">
           <AcademyLogo
             path={brand.logoPath}
             name={brand.name}
             initials={brand.initials}
-            accent={brand.accent}
-            className="size-12"
+            accent="var(--auth-foreground)"
+            className="size-9"
           />
-          <span>
-            <span
-              className="block text-[22px] leading-tight tracking-wide"
-              style={{ fontFamily: DISPLAY_FONT }}
-            >
+          <span className="min-w-0">
+            <span className="block truncate text-[15px] font-semibold tracking-tight">
               {brand.name}
             </span>
-            <span className="block text-[10px] font-semibold uppercase tracking-[0.28em] text-auth-subtle">
+            <span className="block text-[10px] font-medium uppercase tracking-[0.18em] text-auth-subtle">
               Member portal
             </span>
           </span>
         </Link>
+        <ThemeSwitch />
+      </header>
+
+      <main className="relative flex flex-1 items-center justify-center px-5 py-10 sm:px-8 sm:py-14">
+        <motion.div
+          initial={{ opacity: 0, y: 10 }}
+          animate={{ opacity: 1, y: 0 }}
+          transition={{ duration: 0.4, ease: [0.22, 1, 0.36, 1] }}
+          className="w-full max-w-[400px]"
+        >
+          {children}
+        </motion.div>
+      </main>
+
+      <footer className="relative px-5 pb-[max(1.5rem,var(--app-safe-bottom))] text-center sm:px-8">
         <Link
-          to="/register"
-          className="rounded-full bg-[var(--brand-accent-auth)] px-5 py-2 text-[12px] font-bold uppercase tracking-wider text-white shadow-xl transition-all hover:brightness-110 active:scale-95"
+          to="/"
+          className="text-[12px] text-auth-subtle transition-colors hover:text-auth-foreground"
         >
-          Register / Apply
+          ← Back to {brand.resolved ? "academy website" : "home"}
         </Link>
-      </div>
+      </footer>
+    </div>
+  );
+}
 
-      <motion.div
-        initial={{ opacity: 0, y: 18 }}
-        animate={{ opacity: 1, y: 0 }}
-        transition={{ duration: 0.55, ease: [0.22, 1, 0.36, 1], delay: 0.05 }}
-        className="relative max-w-md"
-      >
-        <span
-          className="inline-flex items-center gap-2 rounded-full border border-auth-border bg-auth-elevated px-3 py-1 text-[10px] font-semibold uppercase tracking-[0.24em] text-auth-muted backdrop-blur"
-          style={{ color: brand.accent }}
-        >
-          {brand.tagline ?? "Where champions are made"}
-        </span>
-        <h2
-          className="mt-5 text-[64px] leading-[0.92] tracking-wide"
-          style={{ fontFamily: DISPLAY_FONT }}
-        >
-          Train.
-          <br />
-          Track.
-          <span style={{ color: brand.accent }}> Improve.</span>
-        </h2>
-        <p className="mt-4 text-[15px] leading-relaxed text-auth-muted">
-          Your academy, performance and progress — all in one place.
-        </p>
-        <ul className="mt-8 flex flex-wrap gap-2">
-          {["Training", "Attendance", "Matches", "Performance"].map((f, i) => (
-            <motion.li
-              key={f}
-              initial={{ opacity: 0, y: 8 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.35, delay: 0.15 + i * 0.06 }}
-              className="rounded-full border border-auth-border bg-auth-elevated px-3 py-1.5 text-xs font-medium text-auth-muted backdrop-blur"
-            >
-              {f}
-            </motion.li>
-          ))}
-        </ul>
-      </motion.div>
+/**
+ * Light/Dark switch. Two explicit choices, no "system" — the owner asked for a
+ * straight pair. Writes through the app's existing theme engine (ThemeToggle),
+ * so the choice persists and matches the rest of the product rather than
+ * introducing a second theme system.
+ */
+function ThemeSwitch() {
+  // SSR renders a stable value; the stored preference is applied on mount.
+  const [mode, setMode] = useState<"light" | "dark">("dark");
 
-      <p className="relative text-[10px] uppercase tracking-[0.28em] text-auth-subtle">
-        Students · Parents · Academy staff
-      </p>
-    </aside>
+  useEffect(() => {
+    setMode(resolveTheme(readStoredThemeMode()));
+  }, []);
+
+  function choose(next: "light" | "dark") {
+    setMode(next);
+    setStoredThemeMode(next);
+  }
+
+  return (
+    <div
+      role="group"
+      aria-label="Colour theme"
+      className="inline-flex shrink-0 items-center rounded-full border border-auth-border p-0.5"
+    >
+      {(["light", "dark"] as const).map((opt) => {
+        const active = mode === opt;
+        return (
+          <button
+            key={opt}
+            type="button"
+            onClick={() => choose(opt)}
+            aria-pressed={active}
+            className="rounded-full px-3 py-1 text-[11px] font-medium capitalize transition-colors"
+            style={
+              active
+                ? { background: "var(--auth-foreground)", color: "var(--auth-bg)" }
+                : { color: "var(--auth-subtle)" }
+            }
+          >
+            {opt}
+          </button>
+        );
+      })}
+    </div>
   );
 }

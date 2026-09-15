@@ -175,21 +175,33 @@
   --site-ball: oklch(0.571 0.171 32);      /* #C8452F cricket-ball red */
   --site-ball-soft: oklch(0.653 0.159 33); /* #E0654D lighter tint */
 
-  /* Member-portal (auth) palette — deep navy, always dark regardless of theme.
-     Pinned to the brand tokens above. The accent is the cricket-ball red, never
-     blue: the portal must read as the same product as the marketing site. */
-  --auth-bg: var(--site-ink);
-  --auth-surface: var(--site-ink-soft);
-  --auth-elevated: oklch(0.27 0.055 260 / 82%);
-  --auth-foreground: oklch(1 0 0);
-  --auth-muted: oklch(0.78 0.02 259);
-  --auth-subtle: oklch(0.64 0.02 259);
-  --auth-border: oklch(1 0 0 / 12%);
-  --auth-danger: oklch(0.68 0.19 22);
+  /* Member-portal (auth) palette — MONOCHROME, and the only surface in the app
+     that flips with the light/dark toggle on the page itself. Deliberately zero
+     chroma: white ground + black type in light, black ground + white type in
+     dark. No accent hue here, ever — the premium read comes from type and
+     space, not colour. Dark overrides live in the .dark block below. */
+  --auth-bg: oklch(1 0 0);
+  --auth-surface: oklch(0.97 0 0);
+  --auth-elevated: oklch(0.94 0 0 / 70%);
+  --auth-foreground: oklch(0.14 0 0);
+  --auth-muted: oklch(0.44 0 0);
+  --auth-subtle: oklch(0.58 0 0);
+  --auth-border: oklch(0.14 0 0 / 14%);
+  --auth-danger: oklch(0.52 0.19 25);
 
 }
 
 .dark {
+  /* Member portal, dark: black ground, white type. Mirror of the :root block. */
+  --auth-bg: oklch(0.11 0 0);
+  --auth-surface: oklch(0.16 0 0);
+  --auth-elevated: oklch(0.2 0 0 / 72%);
+  --auth-foreground: oklch(1 0 0);
+  --auth-muted: oklch(0.72 0 0);
+  --auth-subtle: oklch(0.55 0 0);
+  --auth-border: oklch(1 0 0 / 16%);
+  --auth-danger: oklch(0.7 0.17 25);
+
   /* Premium glossy near-black + crisp white type. */
   --background: oklch(0.115 0 0);
   --foreground: oklch(0.985 0 0);

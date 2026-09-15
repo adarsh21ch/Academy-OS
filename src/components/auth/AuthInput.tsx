@@ -32,7 +32,7 @@ export const AuthInput = forwardRef<HTMLInputElement, BaseProps>(function AuthIn
         className={`group flex h-[54px] items-center gap-2.5 rounded-2xl border bg-auth-elevated px-3.5 backdrop-blur transition-all duration-200 focus-within:ring-4 ${
           error
             ? "border-auth-danger focus-within:ring-[color-mix(in_oklab,var(--auth-danger)_25%,transparent)]"
-            : "border-auth-border focus-within:border-[var(--brand-accent-auth)] focus-within:ring-[color-mix(in_oklab,var(--brand-accent-auth)_22%,transparent)]"
+            : "border-auth-border focus-within:border-auth-foreground focus-within:ring-[color-mix(in_oklab,var(--auth-foreground)_18%,transparent)]"
         }`}
       >
         {icon ? <span className="shrink-0 text-auth-subtle">{icon}</span> : null}
@@ -81,7 +81,7 @@ export function PasswordInput({
         className={`group flex h-[54px] items-center gap-2.5 rounded-2xl border bg-auth-elevated px-3.5 backdrop-blur transition-all duration-200 focus-within:ring-4 ${
           error
             ? "border-auth-danger focus-within:ring-[color-mix(in_oklab,var(--auth-danger)_25%,transparent)]"
-            : "border-auth-border focus-within:border-[var(--brand-accent-auth)] focus-within:ring-[color-mix(in_oklab,var(--brand-accent-auth)_22%,transparent)]"
+            : "border-auth-border focus-within:border-auth-foreground focus-within:ring-[color-mix(in_oklab,var(--auth-foreground)_18%,transparent)]"
         }`}
       >
         {icon ? <span className="shrink-0 text-auth-subtle">{icon}</span> : null}

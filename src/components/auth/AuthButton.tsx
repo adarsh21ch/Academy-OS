@@ -20,11 +20,12 @@ export function AuthButton({
       {...rest}
       disabled={disabled || loading}
       aria-busy={loading}
-      className="flex h-[56px] w-full items-center justify-center gap-2 rounded-2xl text-[15px] font-semibold tracking-wide text-white transition-all duration-200 hover:brightness-110 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-60 motion-reduce:transition-none motion-reduce:active:scale-100"
+      className="flex h-[54px] w-full items-center justify-center gap-2 rounded-xl text-[15px] font-semibold tracking-tight transition-all duration-200 hover:opacity-90 active:scale-[0.99] disabled:cursor-not-allowed disabled:opacity-40 motion-reduce:transition-none motion-reduce:active:scale-100"
       style={{
-        background:
-          "linear-gradient(135deg, var(--brand-accent-auth), color-mix(in oklab, var(--brand-accent-auth) 72%, black))",
-        boxShadow: "0 12px 30px -14px color-mix(in oklab, var(--brand-accent-auth) 80%, transparent)",
+        // Solid, flat, monochrome: the button is the foreground colour and its
+        // label is the page ground, so it inverts correctly in both themes.
+        background: "var(--auth-foreground)",
+        color: "var(--auth-bg)",
       }}
     >
       {loading ? (

@@ -242,13 +242,10 @@ function AuthPage() {
         animate={{ opacity: 1, y: 0 }}
         transition={{ duration: 0.28, ease: "easeOut" }}
       >
-        <h1
-          className="text-[38px] leading-[1.02] tracking-wide sm:text-[44px]"
-          style={{ fontFamily: "'Bebas Neue', 'Bricolage Grotesque', sans-serif" }}
-        >
+        <h1 className="text-[30px] font-semibold leading-[1.1] tracking-tight sm:text-[34px]">
           {title}
         </h1>
-        <p className="mt-2 text-[14px] leading-relaxed text-auth-muted">{subtitle}</p>
+        <p className="mt-2.5 text-[14px] leading-relaxed text-auth-muted">{subtitle}</p>
 
         {/* Moved Register CTA to the pill in the layout header per Task C */}
         
@@ -311,7 +308,7 @@ function AuthPage() {
             <div className="mt-6 space-y-4">
               <div className="rounded-2xl border border-auth-border bg-auth-elevated p-4 backdrop-blur">
                 <div className="flex items-center gap-2 text-[15px] font-semibold">
-                  <ShieldCheck className="size-4" style={{ color: brand.accent }} aria-hidden />
+                  <ShieldCheck className="size-4 text-auth-foreground" aria-hidden />
                   Check your email
                 </div>
                 <p className="mt-1.5 text-[13px] leading-relaxed text-auth-muted">
