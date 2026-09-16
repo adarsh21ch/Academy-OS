@@ -1,6 +1,7 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { BellRing, ArrowLeft } from "lucide-react";
 import { Card } from "@/components/ds/Card";
+import { EnablePushCard } from "@/components/notifications/EnablePushCard";
 
 export const Route = createFileRoute("/dashboard/notifications")({
   head: () => ({
@@ -53,6 +54,8 @@ function NotificationsEntry() {
           </div>
         </div>
       </Card>
+
+      <EnablePushCard />
     </div>
   );
 }

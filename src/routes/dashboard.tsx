@@ -9,6 +9,7 @@ import { DashboardProvider, useDashboard } from "@/lib/dashboard-context";
 import { DashboardShell } from "@/components/dashboard/DashboardShell";
 import { LanguageProvider } from "@/lib/i18n";
 import { isCoach } from "@/lib/roles";
+import { PushDeviceRegistrar } from "@/components/notifications/PushDeviceRegistrar";
 
 export const Route = createFileRoute("/dashboard")({
   head: () => ({
@@ -43,6 +44,7 @@ function DashboardLayout() {
   return (
     <LanguageProvider>
       <DashboardProvider>
+        <PushDeviceRegistrar />
         <CoachIndexRedirect>
           <DashboardShell>
             <Outlet />
