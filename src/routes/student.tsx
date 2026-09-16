@@ -179,9 +179,6 @@ function StudentLayout() {
   return (
     <div className="min-h-dvh bg-gradient-to-b from-background to-muted/30 pb-24">
       <PWAInstallBanner />
-      {/* 
-        Do not make any visual modifications. The phrases I write are commands to understand what I want, not to be written down. Understand their content well, then execute what is required.
-      */}
       {gateQ.data?.pendingReg || (gateQ.data?.lifecycle && isPendingApproval(gateQ.data.lifecycle)) ? (
 
         <div className="bg-amber-500 text-white px-4 py-2 text-center text-[13px] font-medium sticky top-0 z-60 flex items-center justify-center gap-2 shadow-sm animate-in fade-in slide-in-from-top duration-300">

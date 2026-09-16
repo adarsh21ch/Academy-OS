@@ -69,28 +69,6 @@ export async function listParentLinksForAcademy(academyId: string): Promise<MCPa
   return data ?? [];
 }
 
-export async function createParentLink(input: {
-  academyId: string;
-  parentUserId: string;
-  studentId: string;
-  relationship?: string;
-  isPrimary?: boolean;
-}): Promise<MCParentLink> {
-  const { data, error } = await supabase
-    .from("mc_parent_links")
-    .insert({
-      academy_id: input.academyId,
-      parent_user_id: input.parentUserId,
-      student_id: input.studentId,
-      relationship: input.relationship ?? "guardian",
-      is_primary: input.isPrimary ?? false,
-    })
-    .select("*")
-    .single();
-  if (error) throw error;
-  return data;
-}
-
 export async function deleteParentLink(id: string): Promise<void> {
   const { error } = await supabase.from("mc_parent_links").delete().eq("id", id);
   if (error) throw error;
