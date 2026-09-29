@@ -128,6 +128,22 @@ print(f"   {n_users} logins in the old project; {len(idmap)} matched an existing
 if present != n_users:
     sys.exit("Some logins did not arrive; stopping before any academy data is touched.")
 
+# Nevorai OS join list (decision B, 2026-09-30): every login that came over joins Academy OS (same id, or the existing
+# Nevorai OS login with the same email). Done HERE because the temporary login copy (academy_stage) is removed when
+# this script ends, so a later SQL step cannot see it. Skipped if the join list is not installed.
+psql("""do $$ begin
+  if to_regclass('platform.app_users') is not null then
+    insert into platform.app_users (user_id, app_key, joined_via)
+    select distinct u.id, 'academy', 'academy_move'
+    from academy_stage.users s
+    join auth.users u on u.id = s.id or (s.email is not null and lower(u.email) = lower(s.email))
+    on conflict do nothing;
+  end if;
+end $$;""")
+joined = psql("select case when to_regclass('platform.app_users') is null then 'join list not installed' else "
+              "(select count(*) from platform.app_users where app_key = 'academy')::text || ' people have joined Academy OS' end", tuples=True)
+print(f"   {joined}")
+
 # ── 2 · academy data file (schema renamed, ids swapped, only inside COPY blocks) ──
 print("2/5 preparing the data file")
 txt = open(os.path.join(DUMP, "public_data.sql")).read()

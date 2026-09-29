@@ -58,3 +58,12 @@ Vercel prod env back to the old values (remove VITE_DB_SCHEMA and VITE_STORAGE_B
 ## Open decisions (Adarsh)
 - Automation (automation-tick, dispatch-campaigns, nevorai-brief): not scheduled before or after; 153 events pending.
 - Fee reminders return at cutover as before (they were failing with HTTP 500 on the old URL).
+
+## Rehearsal progress (2026-09-30, 00:10 to 01:30 IST)
+- `dump` 00:09 (structure check flagged 5 view grants tightened on live: harmless, academy_0001 refreshed, now IDENTICAL) and `load`: 58/58 logins, all counts match, 176 FKs no orphans, receipt counter 14.
+- Join list (decision B) installed in Nevorai OS: platform.app_users + has_app/join_app/enforce_app_join (~/nevorai-kaizen migration 0003); academy_0003_join.sql + 0004 stragglers run: 58 members, 104 tables + academy-assets bucket require joining; academy.join_self (service_role only).
+  Why 53 first: this script drops academy_stage at exit, so the SQL's stage-based join was skipped. FIXED: `load` now joins every login itself (prints "N people have joined Academy OS").
+- `files`: 191/191 files, 51.7 MB, count + size verified (run by Claude). Keys are now fetched with the logged-in Supabase CLI (both `files` and `env`): nothing to paste. The DB-password prompts of dump/load are unchanged.
+- Localhost test (`env` + `dev`, by Claude): public site /?tenant=saisportsacademy renders from Nevorai OS; 30/30 photos load from academy-assets.
+- Sign-up + staff invite are server-side now (src/lib/auth/join.functions.ts), joining is a no-op on the old project, so the branch can go to main before cutover.
+- Still to do: owner login test on localhost; stranger-check.sql (expect stranger = 0 everywhere in academy); Nevorai OS Auth URL config allows https://*.nevorai.com/**; merge to main (his OK); cutover. At cutover `load` joins everyone; re-running academy_0003_join.sql is harmless but not needed.
