@@ -12,7 +12,7 @@ import { z } from "zod";
 export async function joinAcademy(userId: string, via: string): Promise<void> {
   // Only Nevorai OS has a join list; on the old standalone project (schema `public`) this is a no-op.
   const { DB_SCHEMA } = await import("@/lib/db-schema");
-  if (DB_SCHEMA !== "academy") return;
+  if ((DB_SCHEMA as string) !== "academy") return;
   const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
   const { error } = await supabaseAdmin.rpc("join_self" as never, { p_user: userId, p_via: via } as never);
   if (error) throw new Error(`Could not join Academy OS: ${error.message}`);
