@@ -20,6 +20,7 @@
  *     queryClient.invalidateQueries({ queryKey: ["match", matchId] });
  *   });
  */
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { useEffect } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import type { RealtimeChannel } from "@supabase/supabase-js";
@@ -56,7 +57,7 @@ function acquire(matchId: string, listener: Listener): () => void {
       const filter = table === "mc_matches" ? `id=eq.${matchId}` : `match_id=eq.${matchId}`;
       channel.on(
         "postgres_changes" as never,
-        { event: "*", schema: "public", table, filter },
+        { event: "*", schema: DB_SCHEMA, table, filter },
         (payload: { eventType: MatchLiveEvent["eventType"] }) => {
           const evt: MatchLiveEvent = { table, eventType: payload.eventType };
           for (const cb of listeners) {

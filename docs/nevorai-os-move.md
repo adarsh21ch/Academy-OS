@@ -25,4 +25,5 @@ Why: DB is in Tokyo but users and the Vercel app are in India (faster in Mumbai)
 6. Paying tenant: rehearsal on a Vercel preview, cutover in a quiet window (early morning IST), rollback = env values.
 
 ## Status
-Recon done, branch created. Nothing built yet.
+- DONE (commit on this branch, typecheck clean): src/lib/db-schema.ts (`VITE_DB_SCHEMA`, default public; `VITE_STORAGE_BUCKET`, default tenant-assets); all 7 client creations + 17 realtime subscriptions + 3 bucket uses read it. types.ts left as-is (same shape).
+- TODO: (a) install postgresql@17 (`brew install postgresql@17`) so pg_dump 17 can dump the live `public` schema; (b) build supabase/nevorai-os/academy_0001_schema.sql from that dump (public->academy, storage policies -> bucket academy-assets, cron jobs created PAUSED, pointing at the Vercel host with a NEW secret); (c) scripts/migrate-academy-data.py (users same id+password, 104 tables in FK order, 191 files); (d) edge function approve-job-application; (e) rehearsal on a Vercel preview; (f) cutover in a quiet window.

@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 import { requireCronAuth } from "@/lib/cron-auth.server";
@@ -18,7 +19,7 @@ export const Route = createFileRoute("/api/public/hooks/dispatch-campaigns")({
         const supabase = createClient(
           process.env.SUPABASE_URL!,
           process.env.SUPABASE_SERVICE_ROLE_KEY!,
-          { auth: { persistSession: false, autoRefreshToken: false } },
+          { db: { schema: DB_SCHEMA }, auth: { persistSession: false, autoRefreshToken: false } },
         );
         const { data: due, error } = await supabase
           .from("comm_campaigns")

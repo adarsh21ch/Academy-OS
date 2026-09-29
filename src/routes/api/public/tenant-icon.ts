@@ -1,3 +1,4 @@
+import { DB_SCHEMA, STORAGE_BUCKET } from "@/lib/db-schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 
@@ -9,7 +10,7 @@ type TenantIconRow = {
   status: string | null;
 };
 
-const BUCKET = "tenant-assets";
+const BUCKET = STORAGE_BUCKET;
 const PUBLIC_COLS = "id, slug, custom_domain, logo_url, status";
 
 function contentTypeFor(path: string, fallback = "image/png") {
@@ -121,7 +122,7 @@ export const Route = createFileRoute("/api/public/tenant-icon")({
             process.env.SUPABASE_PUBLISHABLE_KEY ?? process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
           if (!supabaseUrl || !supabaseKey) return fallback();
 
-          const supabase = createClient(supabaseUrl, supabaseKey, { auth: { persistSession: false } });
+          const supabase = createClient(supabaseUrl, supabaseKey, { db: { schema: DB_SCHEMA }, auth: { persistSession: false } });
           const { data: tenantRow } = await (supabase.from("tenants_public_directory") as any)
             .select(PUBLIC_COLS)
             .eq("slug", tenant)

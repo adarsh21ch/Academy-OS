@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { createFileRoute, Link } from "@tanstack/react-router";
 import { useEffect, useMemo } from "react";
 import { useQuery } from "@tanstack/react-query";
@@ -128,14 +129,14 @@ function ScorebookPage() {
       .channel(`scorebook-${matchId}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "mc_ball_events", filter: `match_id=eq.${matchId}` },
+        { event: "*", schema: DB_SCHEMA, table: "mc_ball_events", filter: `match_id=eq.${matchId}` },
         () => {
           eventsQ.refetch();
         },
       )
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "mc_innings", filter: `match_id=eq.${matchId}` },
+        { event: "*", schema: DB_SCHEMA, table: "mc_innings", filter: `match_id=eq.${matchId}` },
         () => {
           inningsQ.refetch();
         },
