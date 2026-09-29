@@ -8,6 +8,7 @@
  * table re-renders automatically when any match finalizes.
  * ================================================================ */
 
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { Fragment, useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -96,7 +97,7 @@ export function PointsTable({ tournamentId }: Props) {
         "postgres_changes",
         {
           event: "*",
-          schema: "public",
+          schema: DB_SCHEMA,
           table: "mc_matches",
           filter: `tournament_id=eq.${tournamentId}`,
         },
@@ -109,7 +110,7 @@ export function PointsTable({ tournamentId }: Props) {
         "postgres_changes",
         {
           event: "*",
-          schema: "public",
+          schema: DB_SCHEMA,
           table: "mc_tournament_teams",
           filter: `tournament_id=eq.${tournamentId}`,
         },

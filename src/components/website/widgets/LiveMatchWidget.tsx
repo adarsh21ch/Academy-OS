@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
 import { WidgetCard, EmptyLine } from "./WidgetCard";
@@ -33,7 +34,7 @@ export function LiveMatchWidget({ liveMatchSlug }: Props) {
     void load();
     const channel = supabase
       .channel(`site-live-${liveMatchSlug}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "mc_ball_events" }, () => {
+      .on("postgres_changes", { event: "*", schema: DB_SCHEMA, table: "mc_ball_events" }, () => {
         void load();
       })
       .subscribe();

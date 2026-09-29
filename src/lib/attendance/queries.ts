@@ -13,6 +13,7 @@
  *  - Realtime: subscribe once per tenant via `useRealtimeChannel`.
  */
 
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { useMemo } from "react";
 import { useMutation, useQuery, useQueryClient, type QueryClient } from "@tanstack/react-query";
 import { format } from "date-fns";
@@ -321,7 +322,7 @@ export function useAttendanceRealtime(tenantId: string | null | undefined, qc: Q
           "postgres_changes",
           {
             event: "*",
-            schema: "public",
+            schema: DB_SCHEMA,
             table: "attendance_marks",
             filter: `tenant_id=eq.${tenantId}`,
           },
@@ -331,7 +332,7 @@ export function useAttendanceRealtime(tenantId: string | null | undefined, qc: Q
           "postgres_changes",
           {
             event: "*",
-            schema: "public",
+            schema: DB_SCHEMA,
             table: "attendance_sessions",
             filter: `tenant_id=eq.${tenantId}`,
           },

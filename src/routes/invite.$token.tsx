@@ -5,6 +5,7 @@ import { useServerFn } from "@tanstack/react-start";
 import { toast } from "sonner";
 import { supabase } from "@/integrations/supabase/client";
 import { getInvitationByToken, acceptInvitation } from "@/lib/staff/staff.functions";
+import { signUpForInvite } from "@/lib/auth/join.functions";
 import { ROLE_LABELS } from "@/lib/staff/queries";
 import { Card } from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
@@ -94,11 +95,15 @@ function InvitePage() {
         if (!inv.email) throw new Error("Phone-only invitations require sign-up assistance");
         if (!password || password.length < 8) throw new Error("Password must be at least 8 characters");
         if (mode === "signup") {
-          const { error } = await supabase.auth.signUp({
-            email: inv.email,
-            password,
-            options: { emailRedirectTo: `${window.location.origin}/invite/${token}` },
-          });
+          const acct = await signUpForInvite({ data: { token, password } });
+          if (!acct.ok) {
+            throw new Error(
+              acct.reason === "email_in_use"
+                ? "This email already has a Nevorai account. Enter that account's password (or choose Sign in)."
+                : acct.message || "Could not create your account",
+            );
+          }
+          const { error } = await supabase.auth.signInWithPassword({ email: inv.email, password });
           if (error) throw error;
         } else {
           const { error } = await supabase.auth.signInWithPassword({

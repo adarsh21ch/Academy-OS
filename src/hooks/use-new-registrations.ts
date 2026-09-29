@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { useEffect, useId } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -45,7 +46,7 @@ export function useNewRegistrationsCount(tenantId: string): number {
         "postgres_changes",
         {
           event: "*",
-          schema: "public",
+          schema: DB_SCHEMA,
           table: "registrations",
           filter: `tenant_id=eq.${tenantId}`,
         },

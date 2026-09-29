@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { createFileRoute, useNavigate, Link } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -79,7 +80,7 @@ function AdminsPage() {
       .channel(`admins-${tenant.id}`)
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "user_roles", filter: `tenant_id=eq.${tenant.id}` },
+        { event: "*", schema: DB_SCHEMA, table: "user_roles", filter: `tenant_id=eq.${tenant.id}` },
         () => qc.invalidateQueries({ queryKey: ["admins", "members", tenant.id] }),
       )
       .subscribe();

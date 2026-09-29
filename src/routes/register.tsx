@@ -23,6 +23,7 @@ import { attachPhoneToApplicant } from "@/lib/registration/attach-phone.function
 import { cleanupOrphanedApplicant } from "@/lib/registration/cleanup.functions";
 import { cn } from "@/lib/utils";
 import { INDIAN_STATES } from "@/lib/location";
+import { registerApplicantAccount } from "@/lib/auth/join.functions";
 
 // Policies that must be accepted before registration submits (if the academy
 // has published them). Missing policies are silently skipped — never block
@@ -521,24 +522,27 @@ function RegisterContent() {
 
     let applicantUserId: string | null = null;
     if (!existingReg) {
-      // 1) Create the applicant's auth account (browser → Supabase Auth directly;
-      // password never touches our servers).
-      const { data: authData, error: authErr } = await supabase.auth.signUp({
+      // 1) Create the applicant's login on the server (Nevorai OS keeps browser sign-ups off;
+      // the server also records that this person joined Academy OS).
+      const acct = await registerApplicantAccount({
+        data: { email: emailTrim, password: form.password, fullName: form.name.trim(), tenantSlug: tenant.slug },
+      });
+      if (!acct.ok) {
+        setSaving(false);
+        if (acct.reason === "email_in_use") {
+          toast.error("This email already has a Nevorai account. Enter that account's password here, or sign in first, then submit.");
+        } else {
+          toast.error(acct.message || "Could not create your account. Please try again.");
+        }
+        return;
+      }
+      const { data: authData, error: authErr } = await supabase.auth.signInWithPassword({
         email: emailTrim,
         password: form.password,
-        options: {
-          emailRedirectTo: `${window.location.origin}/auth`,
-          data: { full_name: form.name.trim(), tenant_slug: tenant.slug },
-        },
       });
       if (authErr) {
         setSaving(false);
-        const msg = authErr.message || "";
-        if (/already|registered|exist/i.test(msg)) {
-          toast.error("This email is already registered. Please sign in first, then submit.");
-        } else {
-          toast.error(msg || "Could not create your account. Please try again.");
-        }
+        toast.error(authErr.message || "Account created, but sign-in failed. Please sign in and submit again.");
         return;
       }
       applicantUserId = authData.user?.id ?? null;

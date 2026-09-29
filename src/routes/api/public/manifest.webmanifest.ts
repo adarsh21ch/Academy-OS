@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { createClient } from "@supabase/supabase-js";
 
@@ -33,6 +34,7 @@ export const Route = createFileRoute("/api/public/manifest/webmanifest")({
 
         try {
           const supabase = createClient(supabaseUrl, supabaseKey, {
+            db: { schema: DB_SCHEMA },
             auth: { persistSession: false },
           });
 

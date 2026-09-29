@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useState } from "react";
 import { supabase } from "@/integrations/supabase/client";
@@ -56,7 +57,7 @@ function PublicMatchPage() {
     void load();
     const channel = supabase
       .channel(`public-match-${slug}`)
-      .on("postgres_changes", { event: "*", schema: "public", table: "mc_ball_events" }, () => {
+      .on("postgres_changes", { event: "*", schema: DB_SCHEMA, table: "mc_ball_events" }, () => {
         void load();
       })
       .subscribe();

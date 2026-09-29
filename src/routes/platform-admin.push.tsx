@@ -1,3 +1,4 @@
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { createFileRoute } from "@tanstack/react-router";
 import { useEffect, useMemo, useState } from "react";
 import { useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
@@ -89,12 +90,12 @@ function useLiveRefetch(queryKeys: string[][]) {
       .channel("platform-admin-push")
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "automation_deliveries" },
+        { event: "*", schema: DB_SCHEMA, table: "automation_deliveries" },
         () => queryKeys.forEach((k) => qc.invalidateQueries({ queryKey: k })),
       )
       .on(
         "postgres_changes",
-        { event: "*", schema: "public", table: "push_devices" },
+        { event: "*", schema: DB_SCHEMA, table: "push_devices" },
         () => queryKeys.forEach((k) => qc.invalidateQueries({ queryKey: k })),
       )
       .subscribe();

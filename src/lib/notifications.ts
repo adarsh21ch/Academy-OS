@@ -5,6 +5,7 @@
  * via `publish_notification` (SECURITY DEFINER) and every user consumes
  * from `notifications`. One shared React Query cache keyed by user id.
  */
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { useEffect, useMemo, useRef } from "react";
 import { queryOptions, useMutation, useQuery, useQueryClient } from "@tanstack/react-query";
 import { supabase } from "@/integrations/supabase/client";
@@ -199,7 +200,7 @@ export function useNotificationsRealtime(userId: string | null) {
           "postgres_changes",
           {
             event: "*",
-            schema: "public",
+            schema: DB_SCHEMA,
             table: "notifications",
             filter: `recipient_user_id=eq.${userId}`,
           },

@@ -8,6 +8,7 @@
  * Realtime: refreshes whenever a match in the tournament changes
  * lock/score state via a scoped Supabase channel.
  */
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { useEffect, useMemo, useState } from "react";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import {
@@ -74,7 +75,7 @@ export function TournamentStatistics({ tournamentId }: { tournamentId: string })
         "postgres_changes",
         {
           event: "*",
-          schema: "public",
+          schema: DB_SCHEMA,
           table: "mc_matches",
           filter: `tournament_id=eq.${tournamentId}`,
         },

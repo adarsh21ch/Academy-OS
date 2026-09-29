@@ -6,6 +6,7 @@
  * Prevents the "N components subscribe to the same match" fan-out that
  * previously showed up in `match.$slug`, `live-scorecard`, and `mobile-scorer`.
  */
+import { DB_SCHEMA } from "@/lib/db-schema";
 import { useEffect } from "react";
 import type { RealtimeChannel } from "@supabase/supabase-js";
 import { supabase } from "@/integrations/supabase/client";
@@ -26,7 +27,7 @@ function acquire(matchId: string, listener: () => void): () => void {
         "postgres_changes",
         {
           event: "*",
-          schema: "public",
+          schema: DB_SCHEMA,
           table: "mc_ball_events",
           filter: `match_id=eq.${matchId}`,
         },
@@ -38,7 +39,7 @@ function acquire(matchId: string, listener: () => void): () => void {
         "postgres_changes",
         {
           event: "*",
-          schema: "public",
+          schema: DB_SCHEMA,
           table: "mc_innings",
           filter: `match_id=eq.${matchId}`,
         },

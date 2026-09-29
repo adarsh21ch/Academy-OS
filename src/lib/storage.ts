@@ -1,6 +1,7 @@
+import { STORAGE_BUCKET } from "@/lib/db-schema";
 import { supabase } from "@/integrations/supabase/client";
 
-const BUCKET = "tenant-assets";
+const BUCKET = STORAGE_BUCKET;
 
 const COMPRESS_MAX_DIM = 1600;
 const COMPRESS_MIN_BYTES = 300 * 1024;

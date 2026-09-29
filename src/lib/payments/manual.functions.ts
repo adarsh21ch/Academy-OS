@@ -10,6 +10,7 @@
  *   parent submitManualPayment → row status='pending' → owner approveManualPayment
  *   posts to billing_payments and emits payment.approved + fee.payment_received.
  */
+import { STORAGE_BUCKET } from "@/lib/db-schema";
 import { createServerFn } from "@tanstack/react-start";
 import { requireSupabaseAuth } from "@/integrations/supabase/auth-middleware";
 import { z } from "zod";
@@ -367,7 +368,7 @@ export const signManualPaymentScreenshot = createServerFn({ method: "POST" })
     if (error || !row?.screenshot_path) return { url: null as string | null };
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { data: signed } = await supabaseAdmin.storage
-      .from("tenant-assets")
+      .from(STORAGE_BUCKET)
       .createSignedUrl(row.screenshot_path, 60 * 30);
     return { url: signed?.signedUrl ?? null };
   });
