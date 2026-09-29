@@ -2,14 +2,16 @@
 # Academy OS -> Nevorai OS move: ONE command per step. Passwords and keys are typed hidden and never saved anywhere
 # (the only secret that lands on disk is the daily-jobs secret, in your private folder, readable only by you).
 #
-#   bash scripts/academy-move.sh dump     copy the OLD project's data into ~/academy-move-private (the old project is only READ)
-#   bash scripts/academy-move.sh schema   install the academy tables + the 5 daily jobs (paused) into Nevorai OS
-#   bash scripts/academy-move.sh check    is the academy area reachable through the Nevorai OS API? (no password needed)
-#   bash scripts/academy-move.sh load     empty the academy copy in Nevorai OS and fill it again from the dump files
-#   bash scripts/academy-move.sh files    copy the uploaded photos and documents (old bucket -> academy-assets)
-#   bash scripts/academy-move.sh env      save the Nevorai OS service key for the localhost test (hidden typing)
-#   bash scripts/academy-move.sh dev      run Academy OS on this Mac against the Nevorai OS copy (the localhost test)
-#   bash scripts/academy-move.sh lock     AFTER the cutover works: locks dump/schema/load/files so they can never wipe live data
+#   bash scripts/academy-move.sh dump      copy the OLD project's data into ~/academy-move-private (the old project is only READ)
+#   bash scripts/academy-move.sh schema    install the academy tables + the 5 daily jobs (paused) into Nevorai OS
+#   bash scripts/academy-move.sh check     is the academy area reachable through the Nevorai OS API? (no password needed)
+#   bash scripts/academy-move.sh load      empty the academy copy in Nevorai OS and fill it again from the dump files
+#   bash scripts/academy-move.sh files     copy the uploaded photos and documents (old bucket -> academy-assets)
+#   bash scripts/academy-move.sh env       save the Nevorai OS service key for the localhost test (hidden typing)
+#   bash scripts/academy-move.sh dev       run Academy OS on this Mac against the Nevorai OS copy (the localhost test)
+#   bash scripts/academy-move.sh switch    THE CUTOVER (after a fresh 'load'): new files copied, live site pointed at Nevorai OS, published, locked
+#   bash scripts/academy-move.sh rollback  EMERGENCY ONLY: point the live site back at the OLD project
+#   bash scripts/academy-move.sh lock      locks dump/schema/load/files so they can never wipe live data ('switch' does this itself)
 set -euo pipefail
 cd "$(dirname "$0")/.."
 export PATH="/opt/homebrew/opt/postgresql@17/bin:$HOME/.bun/bin:$PATH" LC_ALL=en_US.UTF-8
@@ -59,6 +61,45 @@ ensure_secret() {
   if [ ! -s "$DUMP_DIR/cron_secret.txt" ]; then
     ( umask 077; openssl rand -hex 32 > "$DUMP_DIR/cron_secret.txt" )
   fi
+}
+
+cli_key() {  # $1 project ref, $2 anon|service_role: that project's API key, fetched with the logged-in Supabase CLI (never shown)
+  supabase projects api-keys --project-ref "$1" -o json 2>/dev/null \
+    | W="$2" python3 -c 'import json,os,sys; d=json.load(sys.stdin); d=d if isinstance(d,list) else d.get("keys",[]); print(next((k["api_key"] for k in d if k.get("name")==os.environ["W"] and str(k.get("api_key","")).startswith("eyJ")), ""))' 2>/dev/null || true
+}
+
+key_is() {  # $1 key, $2 role, $3 project ref: is it really that project's key of that kind?
+  K="$1" R="$2" P="$3" python3 -c 'import base64,json,os,sys
+try:
+    p = os.environ["K"].split(".")[1]
+    c = json.loads(base64.urlsafe_b64decode(p + "=" * (-len(p) % 4)))
+    sys.exit(0 if (c.get("role"), c.get("ref")) == (os.environ["R"], os.environ["P"]) else 1)
+except Exception:
+    sys.exit(1)'
+}
+
+vercel_ready() {
+  command -v vercel >/dev/null || die "the Vercel command is not installed on this Mac. Nothing was changed."
+  grep -q '"projectName":"academyos"' .vercel/project.json 2>/dev/null || die "this folder is not linked to the Vercel project academyos. Nothing was changed."
+  vercel whoami >/dev/null 2>&1 || die "Vercel is not logged in on this Mac. Nothing was changed."
+}
+
+vset() {  # $1 name, $2 value, $3 --sensitive|--no-sensitive: a fresh Production setting owned by you (not by the old Supabase link)
+  vercel env rm "$1" production --yes >/dev/null 2>&1 || true
+  if ! printf '%s' "$2" | vercel env add "$1" production --yes "$3" >"$DUMP_DIR/.vercel.out" 2>&1; then
+    die "Vercel refused the setting $1: $(grep -v '^Vercel CLI' "$DUMP_DIR/.vercel.out" | tail -n 2 | tr '\n' ' ')
+The live site is NOT affected by this (settings only apply when a new version is published). Do not publish anything; tell Claude."
+  fi
+  rm -f "$DUMP_DIR/.vercel.out"
+  echo "   $1"
+}
+
+prod_deploy() {  # "url state" of the newest Production deployment; $1 = a commit (only its deployments) or READY (only live-able ones)
+  local filter=()
+  case "${1:-}" in READY) filter=(-s READY) ;; ?*) filter=(-m "githubCommitSha=$1") ;; esac
+  vercel ls academyos --format json "${filter[@]}" 2>/dev/null | python3 -c 'import json,sys
+d = sorted((x for x in json.load(sys.stdin).get("deployments", []) if x.get("target") == "production"), key=lambda x: -x.get("createdAt", 0))
+print(d[0]["url"] + " " + d[0]["state"] if d else "")' 2>/dev/null || true
 }
 
 step="${1:-}"
@@ -146,7 +187,7 @@ case "$step" in
   env)
     ensure_secret
     # fetched with the logged-in Supabase CLI (nothing to type); asked only if that fails
-    svc="$(supabase projects api-keys --project-ref "$NEW_REF" -o json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); d=d if isinstance(d,list) else d.get("keys",[]); print(next((k["api_key"] for k in d if k.get("name")=="service_role" and str(k.get("api_key","")).startswith("eyJ")), ""))' 2>/dev/null || true)"
+    svc="$(cli_key "$NEW_REF" service_role)"
     if [ -n "$svc" ]; then
       echo "fetched the Nevorai OS key with the Supabase CLI (not shown)"
     else
@@ -180,6 +221,109 @@ EOF
     exec bun run dev
     ;;
 
+  switch)
+    # before this: a fresh 'load' taken while the old project's daily jobs were paused, so the copy is complete
+    not_after_cutover
+    vercel_ready
+    [ "$(git rev-parse --abbrev-ref HEAD)" = main ] || die "this folder is not on the main branch. Nothing was changed."
+    git diff --quiet -- .env || die ".env has edits nobody saved. Nothing was changed. Tell Claude."
+    [ -s "$DUMP_DIR/cron_secret.txt" ] || die "the daily-jobs secret is missing from $DUMP_DIR. Nothing was changed. Tell Claude."
+    svc="$(cli_key "$NEW_REF" service_role)"
+    key_is "$svc" service_role "$NEW_REF" || die "could not fetch the Nevorai OS service key with the Supabase CLI. Nothing was changed."
+    key_is "$NEW_ANON" anon "$NEW_REF" || die "the Nevorai OS public key in this script is wrong. Nothing was changed. Tell Claude."
+    echo "This moves the LIVE Academy OS site to Nevorai OS. Everyone signs in once more afterwards (same passwords)."
+    read -r -p "Type yes to switch: " a
+    [ "$a" = yes ] || die "not confirmed; nothing was changed"
+
+    echo; echo "1/4 copying photos and documents added since the last copy ..."
+    python3 scripts/copy-academy-files.py
+
+    echo; echo "2/4 pointing the live site's settings at Nevorai OS ..."
+    vset SUPABASE_URL "$NEW_URL" --no-sensitive
+    vset SUPABASE_PUBLISHABLE_KEY "$NEW_ANON" --no-sensitive
+    vset SUPABASE_SERVICE_ROLE_KEY "$svc" --sensitive
+    vset VITE_SUPABASE_URL "$NEW_URL" --no-sensitive
+    vset VITE_SUPABASE_PUBLISHABLE_KEY "$NEW_ANON" --no-sensitive
+    vset VITE_DB_SCHEMA academy --no-sensitive
+    vset VITE_STORAGE_BUCKET academy-assets --no-sensitive
+    vset CRON_SECRET "$(cat "$DUMP_DIR/cron_secret.txt")" --sensitive
+    gone=0
+    for v in SUPABASE_ANON_KEY SUPABASE_SECRET_KEY SUPABASE_JWT_SECRET NEXT_PUBLIC_SUPABASE_URL NEXT_PUBLIC_SUPABASE_ANON_KEY \
+             NEXT_PUBLIC_SUPABASE_PUBLISHABLE_KEY POSTGRES_URL POSTGRES_PRISMA_URL POSTGRES_URL_NON_POOLING POSTGRES_USER \
+             POSTGRES_HOST POSTGRES_PASSWORD POSTGRES_DATABASE; do   # unused by the code; they only pointed at the old project
+      if vercel env rm "$v" production --yes >/dev/null 2>&1; then gone=$((gone + 1)); fi
+    done
+    echo "   removed $gone unused settings that pointed at the old project"
+
+    echo; echo "3/4 publishing ..."
+    NEW_URL="$NEW_URL" NEW_ANON="$NEW_ANON" NEW_REF="$NEW_REF" python3 - <<'PY'
+import os, re
+e = os.environ
+want = {"SUPABASE_PROJECT_ID": e["NEW_REF"], "SUPABASE_PUBLISHABLE_KEY": e["NEW_ANON"], "SUPABASE_URL": e["NEW_URL"],
+        "VITE_SUPABASE_PROJECT_ID": e["NEW_REF"], "VITE_SUPABASE_PUBLISHABLE_KEY": e["NEW_ANON"], "VITE_SUPABASE_URL": e["NEW_URL"],
+        "VITE_DB_SCHEMA": "academy", "VITE_STORAGE_BUCKET": "academy-assets"}
+out, seen = [], set()
+for line in open(".env").read().splitlines():
+    m = re.match(r"([A-Z_0-9]+)=", line)
+    if m and m.group(1) in want:
+        out.append(f'{m.group(1)}="{want[m.group(1)]}"'); seen.add(m.group(1))
+    else:
+        out.append(line)
+out += [f'{k}="{v}"' for k, v in want.items() if k not in seen]
+open(".env", "w").write("\n".join(out) + "\n")
+PY
+    ! grep -q "$OLD_REF" .env || die ".env still mentions the old project. Tell Claude."
+    git add .env
+    git diff --cached --quiet || git commit -q -m "Academy OS runs on Nevorai OS: .env points at the academy area and the academy-assets bucket" \
+      -m "Co-Authored-By: Claude Opus 5.5 <noreply@anthropic.com>"
+    git push -q origin main || die "the push to GitHub failed. The live site still runs the OLD version, so nothing is broken. Tell Claude."
+    sha="$(git rev-parse HEAD)"
+
+    echo; printf '4/4 Vercel is building the new version (usually 2-4 minutes) '
+    d=""
+    for _ in $(seq 1 60); do
+      d="$(prod_deploy "$sha")"
+      case "$d" in *" READY"|*" ERROR"|*" CANCELED") break ;; esac
+      printf '.'; sleep 10
+    done
+    echo
+    case "$d" in
+      *" READY") ;;
+      "") die "Vercel had not started building after 10 minutes. The live site still runs the OLD version, so nothing is broken. Tell Claude." ;;
+      *) die "the new version did not build (${d#* }). The live site still runs the OLD version, so nothing is broken. Tell Claude." ;;
+    esac
+    date > "$DUMP_DIR/CUTOVER_DONE"
+    echo
+    echo "DONE: the live site now runs on Nevorai OS (${d%% *})."
+    echo "Locked: dump / schema / load / files will refuse to run from now on."
+    echo "Next: run the daily-jobs SQL Claude gave you in Nevorai OS, then sign in and check."
+    ;;
+
+  rollback)
+    # EMERGENCY ONLY. The old project must still exist. Anything saved in Nevorai OS after the switch is NOT copied back.
+    vercel_ready
+    old_anon="$(cli_key "$OLD_REF" anon)"
+    old_svc="$(cli_key "$OLD_REF" service_role)"
+    { key_is "$old_anon" anon "$OLD_REF" && key_is "$old_svc" service_role "$OLD_REF"; } \
+      || die "could not fetch the OLD project's keys (is it deleted or paused?). Nothing was changed."
+    live="$(prod_deploy READY)"
+    [ -n "$live" ] || die "could not find the live version on Vercel. Nothing was changed."
+    echo "This points the LIVE site back at the OLD project. Anything saved since the switch stays only in Nevorai OS."
+    read -r -p "Type rollback to go on: " a
+    [ "$a" = rollback ] || die "not confirmed; nothing was changed"
+    vset SUPABASE_URL "https://${OLD_REF}.supabase.co" --no-sensitive
+    vset SUPABASE_PUBLISHABLE_KEY "$old_anon" --no-sensitive
+    vset SUPABASE_SERVICE_ROLE_KEY "$old_svc" --sensitive
+    vset VITE_SUPABASE_URL "https://${OLD_REF}.supabase.co" --no-sensitive
+    vset VITE_SUPABASE_PUBLISHABLE_KEY "$old_anon" --no-sensitive
+    vset VITE_DB_SCHEMA public --no-sensitive
+    vset VITE_STORAGE_BUCKET tenant-assets --no-sensitive
+    echo "rebuilding the live version with the old settings (2-4 minutes) ..."
+    vercel redeploy "${live%% *}" --target production >/dev/null || die "the rebuild failed. Tell Claude."
+    if [ -e "$DUMP_DIR/CUTOVER_DONE" ]; then mv "$DUMP_DIR/CUTOVER_DONE" "$DUMP_DIR/ROLLED_BACK_$(date +%Y%m%d-%H%M)"; fi
+    echo "DONE: the live site runs on the OLD project again. Tell Claude now: the daily jobs must be switched back too."
+    ;;
+
   lock)
     read -r -p "Type yes ONLY if Academy OS now runs on Nevorai OS in production and you have tested it: " a
     [ "$a" = yes ] || die "not confirmed"
@@ -188,7 +332,7 @@ EOF
     ;;
 
   *)
-    sed -n "2,12p" "$0"
+    awk 'NR > 1 { if (/^#/) print; else exit }' "$0"
     exit 1
     ;;
 esac

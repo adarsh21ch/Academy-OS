@@ -67,3 +67,11 @@ Vercel prod env back to the old values (remove VITE_DB_SCHEMA and VITE_STORAGE_B
 - Localhost test (`env` + `dev`, by Claude): public site /?tenant=saisportsacademy renders from Nevorai OS; 30/30 photos load from academy-assets.
 - Sign-up + staff invite are server-side now (src/lib/auth/join.functions.ts), joining is a no-op on the old project, so the branch can go to main before cutover.
 - Still to do: owner login test on localhost; stranger-check.sql (expect stranger = 0 everywhere in academy); Nevorai OS Auth URL config allows https://*.nevorai.com/**; merge to main (his OK); cutover. At cutover `load` joins everyone; re-running academy_0003_join.sql is harmless but not needed.
+
+## Cutover = one command (added 2026-09-30, 02:00 IST)
+
+After a fresh `dump` + `load` taken with the old project's daily jobs paused, run `bash scripts/academy-move.sh switch`.
+It copies any new files, replaces the Vercel Production settings with Nevorai OS ones (fresh variables owned by the
+team, not by the old Supabase link; unused old-project variables removed), rewrites `.env`, commits, pushes `main`,
+waits for the Production build to be READY, then sets the lock. Any failure before READY leaves the live site on the
+old version. Then: turn the `academy-%` cron jobs on in Nevorai OS. Emergency path: `bash scripts/academy-move.sh rollback`.
