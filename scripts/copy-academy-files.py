@@ -35,8 +35,9 @@ def key_from_cli(project_ref):
                 if it.get("name") == "service_role" and it.get("api_key"):
                     return it["api_key"]
             for it in items:
-                if str(it.get("api_key", "")).startswith("sb_secret_"):
-                    return it["api_key"]
+                v = str(it.get("api_key", ""))
+                if v.startswith("sb_secret_") and all(c.isalnum() or c in "_-" for c in v):
+                    return v
         except ValueError:
             for line in r.stdout.splitlines():
                 cells = [c.strip() for c in line.split("|")]
@@ -74,12 +75,14 @@ def check_key(label, key, project_ref):
 
 
 def ask_key(label, env_name, project_ref):
-    key = os.environ.get(env_name) or getpass.getpass(f"{label} (hidden). Press Enter with nothing typed to fetch it automatically: ").strip()
+    """Fetch the key with the logged-in Supabase CLI (nothing to type). Only if that fails, ask for it."""
+    key = os.environ.get(env_name)
     if not key:
-        print(f"   {label}: fetching it with the Supabase CLI ...")
         key = key_from_cli(project_ref)
-        if not key:
-            sys.exit(f"STOPPED - {label}: could not fetch it with the Supabase CLI (run `supabase login`, then try again).")
+        if key:
+            print(f"   {label}: fetched with the Supabase CLI (not shown)")
+    if not key:
+        key = getpass.getpass(f"{label}: could not fetch it automatically. Paste the project's service_role API key (hidden): ").strip()
     check_key(label, key, project_ref)
     return key
 

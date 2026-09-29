@@ -140,7 +140,14 @@ case "$step" in
 
   env)
     ensure_secret
-    svc="$(ask_hidden 'Nevorai OS service_role key (Supabase -> Settings -> API Keys -> Legacy tab; typing is hidden; press Enter): ')"
+    # fetched with the logged-in Supabase CLI (nothing to type); asked only if that fails
+    svc="$(supabase projects api-keys --project-ref "$NEW_REF" -o json 2>/dev/null | python3 -c 'import json,sys; d=json.load(sys.stdin); d=d if isinstance(d,list) else d.get("keys",[]); print(next((k["api_key"] for k in d if k.get("name")=="service_role" and str(k.get("api_key","")).startswith("eyJ")), ""))' 2>/dev/null || true)"
+    if [ -n "$svc" ]; then
+      echo "fetched the Nevorai OS key with the Supabase CLI (not shown)"
+    else
+      svc="$(ask_hidden 'Nevorai OS service_role API key (NOT the database password; typing is hidden; press Enter): ')"
+    fi
+    case "$svc" in eyJ*|sb_secret_*) ;; *) die "that is not an API key (API keys start with eyJ). Nothing was saved." ;; esac
     ( umask 077
       cat > "$DUMP_DIR/rehearsal.env" <<EOF
 SUPABASE_URL=$NEW_URL
