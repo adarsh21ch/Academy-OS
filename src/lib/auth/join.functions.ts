@@ -47,8 +47,8 @@ export async function createOrJoinAccount(opts: {
     return { ok: false, reason: "auth_error", message: createErr?.message };
   }
   // Existing Nevorai login: only their own password lets them into Academy.
-  const url = process.env.SUPABASE_URL;
-  const anon = process.env.SUPABASE_PUBLISHABLE_KEY;
+  const url = process.env.SUPABASE_URL || process.env.VITE_SUPABASE_URL;
+  const anon = process.env.SUPABASE_PUBLISHABLE_KEY || process.env.VITE_SUPABASE_PUBLISHABLE_KEY;
   if (!url || !anon) return { ok: false, reason: "auth_error", message: "server not configured" };
   const { createClient } = await import("@supabase/supabase-js");
   const verifier = createClient(url, anon, { auth: { persistSession: false, autoRefreshToken: false } });

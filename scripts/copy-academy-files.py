@@ -140,15 +140,19 @@ print("listing the old bucket ...")
 old_files = dict(walk(OLD_URL, old_key, OLD_BUCKET))
 print(f"   {len(old_files)} files, {sum(s or 0 for s in old_files.values()) / 1048576:.1f} MB")
 
+already = {} if os.environ.get("FULL_COPY") == "1" else dict(walk(NEW_URL, new_key, NEW_BUCKET))
+todo = [p for p in old_files if not (p in already and already[p] == old_files[p])]
+print(f"   {len(old_files) - len(todo)} already in the new bucket (same size), copying {len(todo)}")
+
 copied = 0
-for path in old_files:
+for path in todo:
     resp = call(OLD_URL, old_key, "GET", f"/storage/v1/object/authenticated/{OLD_BUCKET}/{q(path)}")
     blob, ctype = resp.read(), resp.headers.get("Content-Type", "application/octet-stream")
     call(NEW_URL, new_key, "POST", f"/storage/v1/object/{NEW_BUCKET}/{q(path)}", blob,
          {"x-upsert": "true", "Content-Type": ctype}, raw=True)
     copied += 1
     if copied % 25 == 0:
-        print(f"   copied {copied}/{len(old_files)}")
+        print(f"   copied {copied}/{len(todo)}")
 
 print("checking the new bucket ...")
 new_files = dict(walk(NEW_URL, new_key, NEW_BUCKET))
