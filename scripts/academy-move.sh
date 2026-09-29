@@ -43,6 +43,11 @@ ask_hidden() {  # prompt on the screen, typing hidden, value returned on stdout
 new_db() {
   PGPASSWORD="$(ask_hidden 'Nevorai OS database password (typing is hidden; press Enter): ')"
   export PGPASSWORD PGHOST="$NEW_HOST" PGPORT=5432 PGUSER="postgres.${NEW_REF}" PGDATABASE=postgres PGSSLMODE=require
+  if ! psql -X -q -A -t -w -c "select 1" >/dev/null 2>"$DUMP_DIR/.err" && grep -q "password authentication failed" "$DUMP_DIR/.err"; then
+    # right after a password reset, Supabase's connection gateway sometimes refuses the new password once
+    echo "   the gateway refused the password once (common right after a reset); trying again in 10 seconds ..."
+    sleep 10
+  fi
   if ! psql -X -q -A -t -w -c "select 1" >/dev/null 2>"$DUMP_DIR/.err"; then
     die "could not log in to Nevorai OS ($(head -c 200 "$DUMP_DIR/.err")). If the password was wrong, check it ONCE before trying again: several wrong tries in a row make Supabase block this Mac for a while. Nothing was changed."
   fi
