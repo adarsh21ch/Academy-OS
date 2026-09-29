@@ -15,13 +15,39 @@ if os.path.exists(os.path.join(DUMP, "CUTOVER_DONE")) and os.environ.get("I_KNOW
 
 OLD_URL, OLD_BUCKET = "https://dhxkvceqcupkuwblfeue.supabase.co", "tenant-assets"
 NEW_URL, NEW_BUCKET = "https://wxgfaaaboftzsazknbvl.supabase.co", "academy-assets"
-old_key = os.environ.get("OLD_SERVICE_KEY") or getpass.getpass("OLD Academy OS project: service_role key (hidden): ").strip()
-new_key = os.environ.get("NEW_SERVICE_KEY") or getpass.getpass("Nevorai OS project: service_role key (hidden): ").strip()
-if not old_key or not new_key:
-    sys.exit("Both keys are needed.")
+def key_from_cli(project_ref):
+    """Ask the logged-in Supabase CLI for the project's secret key (kept in memory only, never printed)."""
+    import shutil, subprocess
+    if not shutil.which("supabase"):
+        return None
+    for extra in (["-o", "json"], []):
+        try:
+            r = subprocess.run(["supabase", "projects", "api-keys", "--project-ref", project_ref] + extra,
+                               capture_output=True, text=True, timeout=90)
+        except Exception:
+            continue
+        if r.returncode != 0 or not r.stdout.strip():
+            continue
+        try:
+            items = json.loads(r.stdout)
+            items = items if isinstance(items, list) else items.get("keys", [])
+            for it in items:
+                if it.get("name") == "service_role" and it.get("api_key"):
+                    return it["api_key"]
+            for it in items:
+                if str(it.get("api_key", "")).startswith("sb_secret_"):
+                    return it["api_key"]
+        except ValueError:
+            for line in r.stdout.splitlines():
+                cells = [c.strip() for c in line.split("|")]
+                if len(cells) > 1 and cells[0].lower() == "service_role" and cells[1]:
+                    return cells[1]
+                for c in cells:
+                    if c.startswith("sb_secret_"):
+                        return c
+    return None
 
 
-# ── check what was typed BEFORE any request (never prints the key, only what kind it is) ──
 def check_key(label, key, project_ref):
     n = len(key)
     if key.startswith("eyJ"):
@@ -43,11 +69,23 @@ def check_key(label, key, project_ref):
         sys.exit(f"STOPPED - {label}: this is the publishable key. This step needs the SECRET key (service_role / sb_secret_...).")
     else:
         sys.exit(f"STOPPED - {label}: {n} characters typed, and it does not look like an API key (API keys start with eyJ or sb_secret_). "
-                 "It looks like a password. This step needs the API key from Project Settings -> API Keys, NOT the database password.")
+                 "It looks like a password. This step needs the API key, NOT the database password. "
+                 "Easiest: run this step again and just press Enter at the prompt; the script then fetches the key by itself.")
 
 
-check_key("OLD Academy OS key", old_key, "dhxkvceqcupkuwblfeue")
-check_key("Nevorai OS key", new_key, "wxgfaaaboftzsazknbvl")
+def ask_key(label, env_name, project_ref):
+    key = os.environ.get(env_name) or getpass.getpass(f"{label} (hidden). Press Enter with nothing typed to fetch it automatically: ").strip()
+    if not key:
+        print(f"   {label}: fetching it with the Supabase CLI ...")
+        key = key_from_cli(project_ref)
+        if not key:
+            sys.exit(f"STOPPED - {label}: could not fetch it with the Supabase CLI (run `supabase login`, then try again).")
+    check_key(label, key, project_ref)
+    return key
+
+
+old_key = ask_key("OLD Academy OS project key", "OLD_SERVICE_KEY", "dhxkvceqcupkuwblfeue")
+new_key = ask_key("Nevorai OS project key", "NEW_SERVICE_KEY", "wxgfaaaboftzsazknbvl")
 
 
 def call(base, key, method, path, body=None, headers=None, raw=False):
