@@ -7,7 +7,7 @@ They are asked for here with hidden typing; never paste them in chat. (Or set OL
 Safe to run twice: existing files are overwritten with identical bytes. Run once for the rehearsal, once at cutover.
 After cutover (CUTOVER_DONE stamp) it refuses to run: it could overwrite newer uploads with the old copies.
 """
-import getpass, json, os, sys, time, urllib.error, urllib.parse, urllib.request
+import base64, getpass, json, os, sys, time, urllib.error, urllib.parse, urllib.request
 
 DUMP = os.path.expanduser(os.environ.get("DUMP_DIR", "~/academy-move-private"))
 if os.path.exists(os.path.join(DUMP, "CUTOVER_DONE")) and os.environ.get("I_KNOW_ACADEMY_IS_LIVE") != "yes":
@@ -21,10 +21,40 @@ if not old_key or not new_key:
     sys.exit("Both keys are needed.")
 
 
+# ── check what was typed BEFORE any request (never prints the key, only what kind it is) ──
+def check_key(label, key, project_ref):
+    n = len(key)
+    if key.startswith("eyJ"):
+        try:
+            part = key.split(".")[1]
+            claims = json.loads(base64.urlsafe_b64decode(part + "=" * (-len(part) % 4)))
+        except Exception:
+            sys.exit(f"STOPPED - {label}: {n} characters typed. It starts like an API key but is cut off or has extra characters. "
+                     "Copy it again with the copy icon (do not select the text by hand).")
+        role, ref = claims.get("role"), claims.get("ref")
+        if role != "service_role":
+            sys.exit(f"STOPPED - {label}: this is the '{role}' key. This step needs the secret key that is labelled service_role.")
+        if ref != project_ref:
+            sys.exit(f"STOPPED - {label}: this key belongs to a different project ({ref}). It must be the key of project {project_ref}.")
+        print(f"   {label}: OK (service_role key, project {ref}, {n} characters)")
+    elif key.startswith("sb_secret_"):
+        print(f"   {label}: OK (new-style secret key, {n} characters)")
+    elif key.startswith("sb_publishable_"):
+        sys.exit(f"STOPPED - {label}: this is the publishable key. This step needs the SECRET key (service_role / sb_secret_...).")
+    else:
+        sys.exit(f"STOPPED - {label}: {n} characters typed, and it does not look like an API key (API keys start with eyJ or sb_secret_). "
+                 "It looks like a password. This step needs the API key from Project Settings -> API Keys, NOT the database password.")
+
+
+check_key("OLD Academy OS key", old_key, "dhxkvceqcupkuwblfeue")
+check_key("Nevorai OS key", new_key, "wxgfaaaboftzsazknbvl")
+
+
 def call(base, key, method, path, body=None, headers=None, raw=False):
     data = None if body is None else (body if raw else json.dumps(body).encode())
     req = urllib.request.Request(base + path, method=method, data=data)
-    req.add_header("Authorization", f"Bearer {key}")
+    if not key.startswith("sb_secret_"):  # new-style secret keys are not JWTs: apikey header only
+        req.add_header("Authorization", f"Bearer {key}")
     req.add_header("apikey", key)
     req.add_header("User-Agent", "nevorai-academy-move/1.0")
     if body is not None and not raw:
