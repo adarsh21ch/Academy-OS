@@ -15613,8 +15613,8 @@ GRANT ALL ON TABLE academy.attendance_sessions TO service_role;
 -- Name: TABLE attendance_today; Type: ACL; Schema: public; Owner: -
 --
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.attendance_today TO anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.attendance_today TO authenticated;
+GRANT SELECT,MAINTAIN ON TABLE academy.attendance_today TO anon;
+GRANT SELECT,MAINTAIN ON TABLE academy.attendance_today TO authenticated;
 GRANT ALL ON TABLE academy.attendance_today TO service_role;
 
 
@@ -15622,8 +15622,8 @@ GRANT ALL ON TABLE academy.attendance_today TO service_role;
 -- Name: TABLE attendance_visits; Type: ACL; Schema: public; Owner: -
 --
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.attendance_visits TO anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.attendance_visits TO authenticated;
+GRANT SELECT,MAINTAIN ON TABLE academy.attendance_visits TO anon;
+GRANT SELECT,MAINTAIN ON TABLE academy.attendance_visits TO authenticated;
 GRANT ALL ON TABLE academy.attendance_visits TO service_role;
 
 
@@ -16072,8 +16072,8 @@ GRANT ALL ON TABLE academy.students TO service_role;
 -- Name: TABLE mc_public_squad_players; Type: ACL; Schema: public; Owner: -
 --
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.mc_public_squad_players TO anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.mc_public_squad_players TO authenticated;
+GRANT SELECT,MAINTAIN ON TABLE academy.mc_public_squad_players TO anon;
+GRANT SELECT,MAINTAIN ON TABLE academy.mc_public_squad_players TO authenticated;
 GRANT ALL ON TABLE academy.mc_public_squad_players TO service_role;
 
 
@@ -16450,8 +16450,8 @@ GRANT ALL ON TABLE academy.student_status_history TO service_role;
 -- Name: TABLE students_scorer_view; Type: ACL; Schema: public; Owner: -
 --
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.students_scorer_view TO anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.students_scorer_view TO authenticated;
+GRANT SELECT,MAINTAIN ON TABLE academy.students_scorer_view TO anon;
+GRANT SELECT,MAINTAIN ON TABLE academy.students_scorer_view TO authenticated;
 GRANT ALL ON TABLE academy.students_scorer_view TO service_role;
 
 
@@ -16459,8 +16459,8 @@ GRANT ALL ON TABLE academy.students_scorer_view TO service_role;
 -- Name: TABLE students_scoring_directory; Type: ACL; Schema: public; Owner: -
 --
 
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.students_scoring_directory TO anon;
-GRANT SELECT, INSERT, UPDATE, DELETE ON TABLE academy.students_scoring_directory TO authenticated;
+GRANT SELECT,MAINTAIN ON TABLE academy.students_scoring_directory TO anon;
+GRANT SELECT,MAINTAIN ON TABLE academy.students_scoring_directory TO authenticated;
 GRANT ALL ON TABLE academy.students_scoring_directory TO service_role;
 
 
