@@ -49,6 +49,12 @@ Academy OS is its own product; it has nothing to do with Metrol.
 ## ROLLBACK
 Vercel prod env back to the old values (remove VITE_DB_SCHEMA and VITE_STORAGE_BUCKET), redeploy; the old project's cron jobs back on (`active := true`), Nevorai OS `academy-*` jobs paused. Data written after cutover lives only in Nevorai OS. Login sessions are per project: everyone signs in again once, both ways.
 
+## Rehearsal progress + blockers found (2026-09-29, late)
+- DONE: `schema` step ran on Nevorai OS (104 tables, 218 rules, 9 storage rules, bucket private, 9 realtime tables, 5 jobs PAUSED, Vault secret). `academy` added to Exposed schemas; `check` = OK. Structure fingerprint of the INSTALLED copy = live project on all 11 checks.
+- BLOCKER 1 (before `load`): in Nevorai OS every Creator OS table allowed ANY login (`using (true)`), API keys included, and 4 Creator OS edge functions accept any login (scrape-watchlist: anyone with the anon key). Loading Academy's 58 people would give them all that. Fix belongs to the Creator OS chat (owner-only rules + function owner checks + deploy). Re-run `scripts/stranger-check.sql` afterwards: a stranger must see 0 rows outside Academy's public tables. Connect and public were already clean.
+- BLOCKER 2 (before cutover): Nevorai OS login settings differ from the old project: sign-ups OFF (old: on) and Confirm email ON (old: off); phone login is off in BOTH. Academy creates accounts from the browser in two places (src/routes/register.tsx:526 and src/routes/invite.$token.tsx:97, `supabase.auth.signUp`), which would fail. Plan: keep Nevorai OS locked and move both to server functions using `supabaseAdmin.auth.admin.createUser({ email_confirm: true })` (same pattern as src/lib/tenant-owner.functions.ts and admissions/activation.functions.ts), validating the tenant/invite server-side, then sign in. Build + test on localhost against the rehearsal copy.
+- CHECK (before cutover): password reset (src/routes/auth.tsx:196) and register emails redirect to `${origin}/auth`: Nevorai OS -> Authentication -> URL Configuration must allow `https://*.nevorai.com/**` (and any custom tenant domain). Reset emails will use Nevorai OS's shared email settings/templates.
+
 ## Open decisions (Adarsh)
 - Automation (automation-tick, dispatch-campaigns, nevorai-brief): not scheduled before or after; 153 events pending.
 - Fee reminders return at cutover as before (they were failing with HTTP 500 on the old URL).
