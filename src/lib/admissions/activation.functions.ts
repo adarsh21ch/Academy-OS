@@ -147,6 +147,8 @@ export const claimActivation = createServerFn({ method: "POST" })
       return { ok: false as const, reason: "auth_error" as const, message: createErr.message };
     }
     if (!userId) return { ok: false as const, reason: "auth_error" as const };
+    const { joinAcademy } = await import("@/lib/auth/join.functions");
+    await joinAcademy(userId, "student_activation");
 
     // Best-effort phone attach so the student can also sign in with their mobile.
     if (phoneE164) {

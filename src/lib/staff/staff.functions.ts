@@ -174,6 +174,10 @@ export const acceptInvitation = createServerFn({ method: "POST" })
       throw new Error("This invitation was sent to a different email address");
     }
 
+    // Nevorai OS join list: the invited person joins Academy OS (the database hides Academy data from non-members).
+    const { joinAcademy } = await import("@/lib/auth/join.functions");
+    await joinAcademy(context.userId, "staff_invite");
+
     // Upsert profile with tenant + legacy role hint.
     const legacyRole = (inv.invited_role === "admin" || inv.invited_role === "coach") ? "coach" : null;
     const { error: profErr } = await supabaseAdmin.from("profiles").upsert(

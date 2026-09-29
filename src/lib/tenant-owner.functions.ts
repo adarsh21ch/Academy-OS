@@ -64,6 +64,8 @@ export const createTenantOwner = createServerFn({ method: "POST" })
     }
 
     if (!userId) throw new Error("Failed to resolve user id");
+    const { joinAcademy } = await import("@/lib/auth/join.functions");
+    await joinAcademy(userId, "tenant_owner");
 
     // Role in user_roles is the SOURCE OF TRUTH (checked by routeAfterLogin /
     // my_post_login_route). Mirror the dual-write pattern in staff.functions.ts:
