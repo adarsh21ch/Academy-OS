@@ -1,15 +1,23 @@
 -- Academy OS · join list (decision B). Run in Nevorai OS AFTER platform 0003 and AFTER `load`.
 -- 1) everyone who already has an Academy role/profile/student login has joined Academy;
 -- 2) every Academy table + the academy-assets bucket now requires having joined Academy.
--- Safe to re-run.
+-- Safe to re-run. Run it after every `load`.
+-- Every login that came over from the old Academy project has joined Academy OS
+-- (matched by id, or by email when the person already had a Nevorai OS login), plus anyone the
+-- Academy tables already point at. academy_stage.users is left behind by the `load` step.
 insert into platform.app_users (user_id, app_key, joined_via)
-select distinct u.user_id, 'academy', 'academy_move' from (
+select distinct u.id, 'academy', 'academy_move'
+from academy_stage.users s
+join auth.users u on u.id = s.id or (s.email is not null and lower(u.email) = lower(s.email))
+on conflict do nothing;
+
+insert into platform.app_users (user_id, app_key, joined_via)
+select distinct t.user_id, 'academy', 'academy_move' from (
   select user_id from academy.profiles
   union select user_id from academy.user_roles
   union select user_id from academy.students where user_id is not null
   union select user_id from academy.platform_admins
-) u
-join auth.users a on a.id = u.user_id
+) t join auth.users a on a.id = t.user_id
 on conflict do nothing;
 
 select platform.enforce_app_join('academy', 'academy-assets');
