@@ -318,19 +318,23 @@ PY
     [ -e "$DUMP_DIR/CUTOVER_DONE" ] || die "this step is only for after the switch."
     old_anon="$(cli_key "$OLD_REF" anon)"
     key_is "$old_anon" anon "$OLD_REF" || die "could not fetch the OLD project's public key with the Supabase CLI. Nothing was changed."
-    # 406 = that project's API no longer serves its 'public' area at all
-    api_code() { curl -s -m 20 -o /dev/null -w '%{http_code}' -H "apikey: $2" -H "Authorization: Bearer $2" -H "Accept-Profile: public" \
-                   "https://$1.supabase.co/rest/v1/_nevorai_move_probe?limit=1" || true; }
-    [ "$(api_code "$NEW_REF" "$NEW_ANON")" != 406 ] || die "Nevorai OS no longer serves its 'public' area: the WRONG project was changed.
-In Supabase open Nevorai OS -> Project Settings -> Data API -> Exposed schemas -> add 'public' back -> Save, right now
-(Tasks, Kaizen and the other apps need it). Nothing was changed."
-    code="$(api_code "$OLD_REF" "$old_anon")"
-    [ "$code" != 000 ] || die "could not reach the OLD project over the internet. Nothing was changed."
-    if [ "$code" != 406 ]; then
-      die "the OLD project still answers the old app version (answer $code), so a phone that was not reloaded can keep saving there.
-First, in Supabase open the OLD Academy OS project (the top bar must say Academy OS, NOT Nevorai OS) -> Project Settings ->
-Data API -> Exposed schemas -> remove 'public' (keep graphql_public) -> Save. Then run this step again. Nothing was changed."
-    fi
+    public_state() {  # $1 ref, $2 key: does that project's API still serve its 'public' area? open | closed | unreachable
+      local a
+      a="$(curl -s -m 20 -w ' HTTP%{http_code}' -H "apikey: $2" -H "Authorization: Bearer $2" -H "Accept-Profile: public" \
+             "https://$1.supabase.co/rest/v1/_nevorai_move_probe?limit=1" || true)"
+      case "$a" in *" HTTP000"|"") echo unreachable ;; *PGRST205*|*" HTTP2"??) echo open ;; *) echo closed ;; esac
+    }
+    case "$(public_state "$NEW_REF" "$NEW_ANON")" in
+      closed) die "Nevorai OS no longer serves its 'public' area: the WRONG project was changed.
+Put 'public' back into Nevorai OS's Exposed schemas right now (Tasks, Kaizen and the other apps need it). Nothing was changed." ;;
+      unreachable) die "could not reach Nevorai OS over the internet. Nothing was changed." ;;
+    esac
+    case "$(public_state "$OLD_REF" "$old_anon")" in
+      open) die "the OLD project still answers the old app version, so a phone that was not reloaded can keep saving there.
+First close it: https://supabase.com/dashboard/project/${OLD_REF}/integrations/data_api/overview -> turn Enable Data API OFF
+(that link opens the OLD project only). Wait one minute, then run this step again. Nothing was changed." ;;
+      unreachable) die "could not reach the OLD project over the internet. Nothing was changed." ;;
+    esac
     echo "Good: the old project no longer answers the old app version, so nothing new can land there."
     old_db
     echo "rows the OLD project saved after the copy:"
@@ -362,7 +366,7 @@ Data API -> Exposed schemas -> remove 'public' (keep graphql_public) -> Save. Th
     vercel redeploy "${live%% *}" --target production >/dev/null || die "the rebuild failed. Tell Claude."
     if [ -e "$DUMP_DIR/CUTOVER_DONE" ]; then mv "$DUMP_DIR/CUTOVER_DONE" "$DUMP_DIR/ROLLED_BACK_$(date +%Y%m%d-%H%M)"; fi
     echo "DONE: the live site runs on the OLD project again. Tell Claude now: the daily jobs must be switched back too, and in the"
-    echo "OLD project 'public' must go back into Project Settings -> Data API -> Exposed schemas (plus: grant usage on schema public to anon, authenticated;)."
+    echo "OLD project: turn Enable Data API back ON (Integrations -> Data API), plus run: grant usage on schema public to anon, authenticated;"
     ;;
 
   lock)
