@@ -10,6 +10,7 @@
 #   bash scripts/academy-move.sh env       save the Nevorai OS service key for the localhost test (hidden typing)
 #   bash scripts/academy-move.sh dev       run Academy OS on this Mac against the Nevorai OS copy (the localhost test)
 #   bash scripts/academy-move.sh switch    THE CUTOVER (after a fresh 'load'): new files copied, live site pointed at Nevorai OS, published, locked
+#   bash scripts/academy-move.sh delta     AFTER the switch: rows the OLD project saved after the copy -> Nevorai OS (safe to repeat)
 #   bash scripts/academy-move.sh rollback  EMERGENCY ONLY: point the live site back at the OLD project
 #   bash scripts/academy-move.sh lock      locks dump/schema/load/files so they can never wipe live data ('switch' does this itself)
 set -euo pipefail
@@ -42,19 +43,31 @@ ask_hidden() {  # prompt on the screen, typing hidden, value returned on stdout
   printf '%s' "$v"
 }
 
-new_db() {
-  PGPASSWORD="$(ask_hidden 'Nevorai OS database password (typing is hidden; press Enter): ')"
-  export PGPASSWORD PGHOST="$NEW_HOST" PGPORT=5432 PGUSER="postgres.${NEW_REF}" PGDATABASE=postgres PGSSLMODE=require
+login_check() {  # the PG* settings are exported; $1 = which project, for the message
   if ! psql -X -q -A -t -w -c "select 1" >/dev/null 2>"$DUMP_DIR/.err" && grep -q "password authentication failed" "$DUMP_DIR/.err"; then
     # right after a password reset, Supabase's connection gateway sometimes refuses the new password once
     echo "   the gateway refused the password once (common right after a reset); trying again in 10 seconds ..."
     sleep 10
   fi
   if ! psql -X -q -A -t -w -c "select 1" >/dev/null 2>"$DUMP_DIR/.err"; then
-    die "could not log in to Nevorai OS ($(head -c 200 "$DUMP_DIR/.err")). If the password was wrong, check it ONCE before trying again: several wrong tries in a row make Supabase block this Mac for a while. Nothing was changed."
+    die "could not log in to $1 ($(head -c 200 "$DUMP_DIR/.err")). If the password was wrong, check it ONCE before trying again: several wrong tries in a row make Supabase block this Mac for a while. Nothing was changed."
   fi
   rm -f "$DUMP_DIR/.err"
+}
+
+new_db() {
+  PGPASSWORD="$(ask_hidden 'Nevorai OS database password (typing is hidden; press Enter): ')"
+  export PGPASSWORD PGHOST="$NEW_HOST" PGPORT=5432 PGUSER="postgres.${NEW_REF}" PGDATABASE=postgres PGSSLMODE=require
+  login_check "Nevorai OS"
   [ "$(psql -X -q -A -t -c "select to_regnamespace('platform') is not null")" = t ] || die "this is not the Nevorai OS database (no platform area). Nothing was changed."
+}
+
+old_db() {
+  PGPASSWORD="$(ask_hidden 'OLD Academy OS database password (typing is hidden; press Enter): ')"
+  export PGPASSWORD PGHOST="$OLD_HOST" PGPORT=5432 PGUSER="postgres.${OLD_REF}" PGDATABASE=postgres PGSSLMODE=require
+  login_check "the OLD Academy OS project"
+  [ "$(psql -X -q -A -t -c "select to_regclass('public.attendance_marks') is not null and to_regnamespace('platform') is null")" = t ] \
+    || die "this is not the OLD Academy OS database. Nothing was changed."
 }
 
 ensure_secret() {
@@ -299,6 +312,33 @@ PY
     echo "Next: run the daily-jobs SQL Claude gave you in Nevorai OS, then sign in and check."
     ;;
 
+  delta)
+    # AFTER the switch: rows the OLD project saved after the copy (phones and tabs still on the old version) go into
+    # Nevorai OS. An old row only replaces an OLDER Nevorai OS row; nothing is deleted; safe to repeat.
+    [ -e "$DUMP_DIR/CUTOVER_DONE" ] || die "this step is only for after the switch."
+    old_anon="$(cli_key "$OLD_REF" anon)"
+    key_is "$old_anon" anon "$OLD_REF" || die "could not fetch the OLD project's public key with the Supabase CLI. Nothing was changed."
+    # 406 = that project's API no longer serves its 'public' area at all
+    api_code() { curl -s -m 20 -o /dev/null -w '%{http_code}' -H "apikey: $2" -H "Authorization: Bearer $2" -H "Accept-Profile: public" \
+                   "https://$1.supabase.co/rest/v1/_nevorai_move_probe?limit=1" || true; }
+    [ "$(api_code "$NEW_REF" "$NEW_ANON")" != 406 ] || die "Nevorai OS no longer serves its 'public' area: the WRONG project was changed.
+In Supabase open Nevorai OS -> Project Settings -> Data API -> Exposed schemas -> add 'public' back -> Save, right now
+(Tasks, Kaizen and the other apps need it). Nothing was changed."
+    code="$(api_code "$OLD_REF" "$old_anon")"
+    [ "$code" != 000 ] || die "could not reach the OLD project over the internet. Nothing was changed."
+    if [ "$code" != 406 ]; then
+      die "the OLD project still answers the old app version (answer $code), so a phone that was not reloaded can keep saving there.
+First, in Supabase open the OLD Academy OS project (the top bar must say Academy OS, NOT Nevorai OS) -> Project Settings ->
+Data API -> Exposed schemas -> remove 'public' (keep graphql_public) -> Save. Then run this step again. Nothing was changed."
+    fi
+    echo "Good: the old project no longer answers the old app version, so nothing new can land there."
+    old_db
+    echo "rows the OLD project saved after the copy:"
+    python3 scripts/copy-academy-delta.py export "$DUMP_DIR/delta.json"
+    new_db
+    python3 scripts/copy-academy-delta.py apply "$DUMP_DIR/delta.json"
+    ;;
+
   rollback)
     # EMERGENCY ONLY. The old project must still exist. Anything saved in Nevorai OS after the switch is NOT copied back.
     vercel_ready
@@ -321,7 +361,8 @@ PY
     echo "rebuilding the live version with the old settings (2-4 minutes) ..."
     vercel redeploy "${live%% *}" --target production >/dev/null || die "the rebuild failed. Tell Claude."
     if [ -e "$DUMP_DIR/CUTOVER_DONE" ]; then mv "$DUMP_DIR/CUTOVER_DONE" "$DUMP_DIR/ROLLED_BACK_$(date +%Y%m%d-%H%M)"; fi
-    echo "DONE: the live site runs on the OLD project again. Tell Claude now: the daily jobs must be switched back too."
+    echo "DONE: the live site runs on the OLD project again. Tell Claude now: the daily jobs must be switched back too, and in the"
+    echo "OLD project 'public' must go back into Project Settings -> Data API -> Exposed schemas (plus: grant usage on schema public to anon, authenticated;)."
     ;;
 
   lock)
