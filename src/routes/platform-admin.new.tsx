@@ -197,9 +197,11 @@ function Wizard() {
       if (pendingLogo) {
         try {
           const path = await uploadTenantFile(t.id, "logo", pendingLogo);
-          await supabase.from("tenants").update({ logo_url: path }).eq("id", t.id);
+          const { error: logoErr } = await supabase.from("tenants").update({ logo_url: path }).eq("id", t.id);
+          if (logoErr) throw logoErr;
         } catch (e) {
           console.warn("logo upload failed", e);
+          toast.warning("Academy created, but the logo did not upload. Add it from the academy's settings.");
         }
         delete (window as any).__pendingLogo;
       }
@@ -256,12 +258,13 @@ function Wizard() {
       await createOwner({ data: { email: owner.email, password: owner.password, tenantId: t.id } });
 
       // 6) Initial price change log entry
-      await supabase.from("tenant_price_changes").insert({
+      const { error: priceLogErr } = await supabase.from("tenant_price_changes").insert({
         tenant_id: t.id,
         old_price: 0,
         new_price: parseInt(pricing.monthly_price || "0", 10),
         note: "Initial price set on onboarding",
       });
+      if (priceLogErr) toast.warning("Academy created, but the starting price was not logged in the price history.");
 
       setCreatedSlug(t.slug);
       setCreatedTenantId(t.id);
@@ -272,11 +275,15 @@ function Wizard() {
       const msg = e instanceof Error ? e.message : String(e);
       
       if (insertedTenantId) {
-        await supabase
+        const { error: suspendErr } = await supabase
           .from("tenants")
           .update({ status: "suspended" })
           .eq("id", insertedTenantId);
-        toast.error(`Tenant created but owner setup failed — it's been suspended so it isn't publicly live. Retry owner creation from the tenant's admin page, or contact support.`);
+        toast.error(
+          suspendErr
+            ? `Tenant created but owner setup failed (${msg}), and it could NOT be suspended: it may be publicly live without an owner. Suspend it from the tenant's admin page now.`
+            : `Tenant created but owner setup failed (${msg}). It has been suspended so it isn't publicly live. Retry owner creation from the tenant's admin page.`,
+        );
       } else {
         toast.error(msg);
       }

@@ -34,10 +34,12 @@ registerRoute(
   new NetworkFirst({ cacheName: "html-shell", networkTimeoutSeconds: 4 }),
 );
 
-// Same-origin hashed static assets: cache-first (they're immutable per build).
+// Same-origin hashed build files only (/assets/*): cache-first, they never change per URL.
+// Logos, tenant icons and other un-hashed images must always come from the network.
 registerRoute(
   ({ url, request }) =>
     url.origin === self.location.origin &&
+    url.pathname.startsWith("/assets/") &&
     ["script", "style", "image", "font"].includes(request.destination),
   new CacheFirst({ cacheName: "static-v1" }),
 );

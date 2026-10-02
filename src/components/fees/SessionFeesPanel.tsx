@@ -108,7 +108,14 @@ export function SessionFeesPanel({ showCoaches = true }: { showCoaches?: boolean
     mutationFn: async (b: { id: string; fee_plan_id?: string | null }) => {
       const { error } = await supabase.from("batches").delete().eq("id", b.id);
       if (error) throw error;
-      if (b.fee_plan_id) await supabase.from("fee_plans").delete().eq("id", b.fee_plan_id);
+      if (b.fee_plan_id) {
+        // A plan that payments already point at cannot be deleted: hide it instead of failing silently.
+        const { error: planErr } = await supabase.from("fee_plans").delete().eq("id", b.fee_plan_id);
+        if (planErr) {
+          const { error: hideErr } = await supabase.from("fee_plans").update({ active: false }).eq("id", b.fee_plan_id);
+          if (hideErr) throw hideErr;
+        }
+      }
     },
     onSuccess: () => {
       toast.success("Session deleted");
@@ -387,7 +394,8 @@ function SessionDialog({ initial, onClose }: { initial: SessionForm; onClose: ()
       } else if (feePlanId) {
 
         // Fee cleared → hide the plan from the public page but keep history intact.
-        await supabase.from("fee_plans").update({ active: false }).eq("id", feePlanId);
+        const { error: hideErr } = await supabase.from("fee_plans").update({ active: false }).eq("id", feePlanId);
+        if (hideErr) throw hideErr;
         feePlanId = null;
       }
 

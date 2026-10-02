@@ -15,6 +15,17 @@ export const mockWhatsAppAdapter: WhatsAppAdapter = {
   label: "Mock (simulated delivery)",
   ready: true,
   async send(input) {
+    // In production a "delivered" status from this adapter would be a lie: nothing leaves the server.
+    // Fail loudly so the owner sees "not sent" instead. Set ALLOW_MOCK_DELIVERY=1 to test the pipeline.
+    if (process.env.NODE_ENV === "production" && process.env.ALLOW_MOCK_DELIVERY !== "1") {
+      return {
+        ok: false,
+        adapter: "mock",
+        status: "failed",
+        error: "WhatsApp is not connected yet, so this message was NOT sent.",
+        retryable: false,
+      };
+    }
     if (!input.to || input.to.trim().length < 6) {
       return {
         ok: false,

@@ -21,6 +21,10 @@ export default defineConfig({
       VitePWA({
         strategies: "injectManifest",
         srcDir: "src",
+        // Without this the worker was written to dist/, which nothing serves: /sw.js answered 404 in
+        // production, so web push and the PWA never started. Writing it into public/ lets the host
+        // copy it to the site root whatever the deploy target is (generated file, git-ignored).
+        outDir: "public",
         filename: "sw.ts",
         registerType: "autoUpdate",
         injectRegister: null,
@@ -29,7 +33,9 @@ export default defineConfig({
         manifest: false,
         devOptions: { enabled: false },
         injectManifest: {
-          globPatterns: ["**/*.{js,css,html,ico,png,svg,webp}"],
+          // No precache: pages are server-rendered (no static shell to cache) and the build holds
+          // ~1,200 files / 23 MB of lazy chunks that must not be downloaded on the first visit.
+          globPatterns: [],
           maximumFileSizeToCacheInBytes: 5 * 1024 * 1024,
         },
       }),

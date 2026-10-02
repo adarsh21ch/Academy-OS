@@ -23,6 +23,21 @@ export const signInWithUsername = createServerFn({ method: "POST" })
   .handler(async ({ data }) => {
     const { supabaseAdmin } = await import("@/integrations/supabase/client.server");
     const { createClient } = await import("@supabase/supabase-js");
+    const { getRequest } = await import("@tanstack/react-start/server");
+
+    // Slow down password guessing: every sign-in here comes from the server's own address, so the
+    // auth service cannot tell one visitor from another. Limit per username and per visitor address.
+    const ip = (getRequest()?.headers.get("x-forwarded-for") ?? "").split(",")[0].trim() || "unknown";
+    const [{ data: userOk }, { data: ipOk }] = await Promise.all([
+      supabaseAdmin.rpc("check_rate_limit", { _key: `login:u:${data.username}`, _max_hits: 8, _window_seconds: 600 }),
+      supabaseAdmin.rpc("check_rate_limit", { _key: `login:ip:${ip}`, _max_hits: 40, _window_seconds: 600 }),
+    ]);
+    if (userOk === false || ipOk === false) {
+      return {
+        ok: false as const,
+        error: "Too many sign-in attempts. Please wait a few minutes and try again.",
+      };
+    }
 
     const { data: row } = await supabaseAdmin
       .from("user_usernames")

@@ -152,6 +152,22 @@ export const verifyClientPayment = createServerFn({ method: "POST" })
       .maybeSingle();
     if (error || !tx) throw new Error("Transaction not found");
 
+    // Only the person who started this payment, the academy's own staff or a platform admin may
+    // verify it. Without this, anyone signed in could send a made-up signature and mark another
+    // family's payment "failed".
+    const startedBy = (tx.metadata as { user_id?: string } | null)?.user_id;
+    let allowed = startedBy === context.userId;
+    if (!allowed) {
+      const [{ data: isMember }, { data: isPlatform }] = await Promise.all([
+        tx.tenant_id
+          ? context.supabase.rpc("is_tenant_member", { _uid: context.userId, _tenant: tx.tenant_id })
+          : Promise.resolve({ data: false }),
+        context.supabase.rpc("is_platform_admin", { _uid: context.userId }),
+      ]);
+      allowed = !!isMember || !!isPlatform;
+    }
+    if (!allowed) throw new Error("Forbidden: this payment does not belong to you");
+
     // Fetch config for provider
     let cq = supabaseAdmin
       .from("payment_provider_configs")
@@ -181,10 +197,14 @@ export const verifyClientPayment = createServerFn({ method: "POST" })
     );
 
     if (!verified.ok) {
-      await supabaseAdmin
-        .from("payment_transactions")
-        .update({ status: "failed", error_message: verified.error ?? "Signature mismatch" })
-        .eq("id", tx.id);
+      // A bad signature must never flip a payment that already succeeded.
+      if (tx.status !== "success") {
+        const { error: failErr } = await supabaseAdmin
+          .from("payment_transactions")
+          .update({ status: "failed", error_message: verified.error ?? "Signature mismatch" })
+          .eq("id", tx.id);
+        if (failErr) console.error("[payments] could not mark transaction failed", tx.id, failErr.message);
+      }
       if (tx.tenant_id) {
         await supabaseAdmin.from("automation_events").insert({
           tenant_id: tx.tenant_id,
@@ -198,15 +218,17 @@ export const verifyClientPayment = createServerFn({ method: "POST" })
     }
 
     // Mark success + allocate to invoice (if any)
-    await supabaseAdmin
+    const { error: okErr } = await supabaseAdmin
       .from("payment_transactions")
       .update({
         status: "success",
         provider_payment_id: data.providerPaymentId,
       })
       .eq("id", tx.id);
+    if (okErr) throw new Error(`Payment received but could not be saved: ${okErr.message}`);
 
     let billingPaymentId: string | null = null;
+    let ledgerError: string | null = null;
     if (tx.ref_type === "invoice" && tx.ref_id && tx.tenant_id) {
       const amountMajor = Number(tx.amount_paise) / 100;
       // Find student for the invoice
@@ -231,6 +253,18 @@ export const verifyClientPayment = createServerFn({ method: "POST" })
           _status: "succeeded",
         });
         if (!rerr) billingPaymentId = pid as string;
+        else ledgerError = rerr.message;
+      } else {
+        ledgerError = "Invoice not found";
+      }
+      if (ledgerError) {
+        // The gateway has the money but the fee ledger does not: leave a trace the owner can find
+        // instead of silently reporting a clean success.
+        console.error("[payments] ledger write failed", tx.id, ledgerError);
+        await supabaseAdmin
+          .from("payment_transactions")
+          .update({ error_code: "ledger_pending", error_message: ledgerError })
+          .eq("id", tx.id);
       }
     }
 
@@ -263,7 +297,7 @@ export const verifyClientPayment = createServerFn({ method: "POST" })
       ]);
     }
 
-    return { ok: true, billingPaymentId };
+    return { ok: true, billingPaymentId, ledgerRecorded: ledgerError === null };
   });
 
 /** List transactions for the parent's / owner's / platform's scope. */
