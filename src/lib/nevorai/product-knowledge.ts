@@ -336,11 +336,11 @@ export const PRODUCT_KNOWLEDGE: ProductKnowledgeTopic[] = [
   },
   {
     id: "nevorai-help",
-    title: "Using NevorAI",
+    title: "Using Kaizen",
     screens: ["/dashboard/nevorai"],
     keywords: ["nevorai", "ai", "chat", "assistant", "how do i use ai"],
     summary:
-      "NevorAI is your AI Academy Manager. Ask business questions in Hindi/English/Hinglish — collections, pending fees, attendance, cricket stats, or 'how do I…' questions. NevorAI never changes data without your approval.",
+      "Kaizen is your AI Academy Manager. Ask business questions in Hindi/English/Hinglish — collections, pending fees, attendance, cricket stats, or 'how do I…' questions. NevorAI never changes data without your approval.",
   },
 ];
 

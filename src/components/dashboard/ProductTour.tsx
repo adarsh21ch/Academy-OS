@@ -65,7 +65,7 @@ const STOPS: Stop[] = [
   {
     id: "nevorai",
     target: "nevorai",
-    title: "Ask NevorAI",
+    title: "Ask Kaizen",
     body: "Ask anything about your academy — fees, attendance, player stats — in plain English or Hindi.",
   },
   {

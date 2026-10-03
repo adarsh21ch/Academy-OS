@@ -131,14 +131,14 @@ export function ChatPanel({
         case "SERVER_MISCONFIGURED":
         case "AI_HANDLER_FAILED":
           return { code: code!, category: "provider", retryable: true,
-            title: "NevorAI couldn't respond", message: "Something went wrong on our side. Please try again in a moment." };
+            title: "Kaizen couldn't respond", message: "Something went wrong on our side. Please try again in a moment." };
       }
       if (looksNetwork) {
         return { code: "NETWORK", category: "network", retryable: true,
           title: "Connection issue", message: "I couldn't connect. Please check your internet and try again." };
       }
       return { code: "UNKNOWN", category: "unknown", retryable: true,
-        title: "NevorAI couldn't respond", message: "Something went wrong. Please try again." };
+        title: "Kaizen couldn't respond", message: "Something went wrong. Please try again." };
     },
     [],
   );
@@ -161,7 +161,7 @@ export function ChatPanel({
           const ct = res.headers.get("content-type") ?? "";
           if (!res.ok || (!ct.includes("event-stream") && !ct.includes("text/plain"))) {
             let code: string | undefined;
-            let message = "NevorAI is temporarily unavailable.";
+            let message = "Kaizen is temporarily unavailable.";
             if (ct.includes("application/json")) {
               try {
                 const body = (await res.clone().json()) as {
@@ -335,7 +335,7 @@ export function ChatPanel({
   }, []);
 
   const handleExport = useCallback(() => {
-    const md = messagesToMarkdown(conversationTitle || "NevorAI Conversation", messages);
+    const md = messagesToMarkdown(conversationTitle || "Kaizen Conversation", messages);
     downloadMarkdown(`nevorai-${(conversationTitle || "conversation").slice(0, 40)}`, md);
   }, [conversationTitle, messages]);
 
@@ -364,7 +364,7 @@ export function ChatPanel({
               </div>
               <div>
                 <div className="text-2xl font-semibold tracking-tight sm:text-3xl">
-                  Hi, I&apos;m NevorAI
+                  Hi, I&apos;m Kaizen
                 </div>
                 <p className="mx-auto mt-2 max-w-md text-sm text-muted-foreground">
                   Your AI Academy Manager. Ask anything about attendance, fees,
@@ -507,7 +507,7 @@ export function ChatPanel({
             ref={textareaRef}
             value={input}
             onChange={(e) => setInput(e.currentTarget.value)}
-            placeholder="Ask NevorAI about attendance, fees, admissions…"
+            placeholder="Ask Kaizen about attendance, fees, admissions…"
           />
           <PromptInputFooter className="justify-between">
             <div className="flex items-center gap-1">

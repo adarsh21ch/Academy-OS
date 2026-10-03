@@ -40,7 +40,7 @@ const nav = [
   { to: "/platform-admin/sports", label: "Sports catalog", icon: Plus },
   { to: "/platform-admin/flags", label: "Feature flags", icon: Sparkles },
   { to: "/platform-admin/support", label: "Support inbox", icon: LifeBuoy },
-  { to: "/platform-admin/nevorai", label: "NevorAI debug", icon: Activity },
+  { to: "/platform-admin/nevorai", label: "Kaizen debug", icon: Activity },
   { to: "/platform-admin/payment-settings", label: "Payment gateway", icon: CreditCard },
   { to: "/platform-admin/settings", label: "Platform config", icon: Settings },
 ];

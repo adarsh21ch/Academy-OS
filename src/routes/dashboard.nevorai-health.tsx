@@ -11,7 +11,7 @@ import { getNevorAIHealth, type HealthEntry } from "@/lib/nevorai/health.functio
 export const Route = createFileRoute("/dashboard/nevorai-health")({
   head: () => ({
     meta: [
-      { title: "NevorAI Health · Diagnostics" },
+      { title: "Kaizen Health · Diagnostics" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -40,9 +40,9 @@ function HealthPage() {
     <div className="mx-auto max-w-4xl p-6 space-y-4">
       <div className="flex items-center justify-between">
         <div>
-          <h1 className="text-2xl font-semibold">NevorAI Health</h1>
+          <h1 className="text-2xl font-semibold">Kaizen Health</h1>
           <p className="text-sm text-muted-foreground">
-            Live status of every NevorAI runtime dependency.
+            Live status of every Kaizen runtime dependency.
           </p>
         </div>
         <Button variant="outline" size="sm" onClick={() => q.refetch()} disabled={q.isFetching}>

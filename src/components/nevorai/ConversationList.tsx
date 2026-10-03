@@ -109,7 +109,7 @@ export function ConversationList({ activeId, onSelect }: Props) {
           </div>
         ) : filtered.length === 0 ? (
           <div className="p-4 text-center text-xs text-muted-foreground">
-            {search ? "No matches." : "No conversations yet. Ask NevorAI to get started."}
+            {search ? "No matches." : "No conversations yet. Ask Kaizen to get started."}
           </div>
         ) : (
           <ul className="space-y-0.5">

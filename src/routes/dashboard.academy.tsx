@@ -175,7 +175,7 @@ const OWNER_GROUPS: Group[] = [
       },
       {
         to: "/dashboard/nevorai",
-        label: "NevorAI Assistant",
+        label: "Kaizen Assistant",
         hint: "AI manager for attendance, fees & insights",
         icon: Sparkles,
         keywords: ["ai", "assistant", "nevorai", "help", "insights", "chat"],

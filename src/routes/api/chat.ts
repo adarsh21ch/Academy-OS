@@ -89,7 +89,7 @@ export const Route = createFileRoute("/api/chat")({
         // ------------------ auth ------------------
         const authHeader = request.headers.get("authorization");
         if (!authHeader?.startsWith("Bearer ")) {
-          return jsonError("UNAUTHENTICATED", "Please sign in to chat with NevorAI.", 401);
+          return jsonError("UNAUTHENTICATED", "Please sign in to chat with Kaizen.", 401);
         }
         const token = authHeader.slice("Bearer ".length);
 
@@ -102,7 +102,7 @@ export const Route = createFileRoute("/api/chat")({
         if (!LOVABLE_API_KEY) {
           return jsonError(
             "AI_PROVIDER_UNCONFIGURED",
-            "NevorAI is not connected to an AI provider. Please add LOVABLE_API_KEY.",
+            "Kaizen is not connected to an AI provider. Please add LOVABLE_API_KEY.",
           );
         }
 
@@ -134,8 +134,8 @@ export const Route = createFileRoute("/api/chat")({
             return jsonError(
               "RATE_LIMITED",
               hourOk === false
-                ? "You've reached NevorAI's hourly limit (60 messages). Please try again in a bit."
-                : "You've reached NevorAI's daily limit (500 messages). Please try again tomorrow.",
+                ? "You've reached Kaizen's hourly limit (60 messages). Please try again in a bit."
+                : "You've reached Kaizen's daily limit (500 messages). Please try again tomorrow.",
               429,
             );
           }
@@ -394,7 +394,7 @@ export const Route = createFileRoute("/api/chat")({
         });
         } catch (e) {
           console.error("[nevorai] handler crashed", e);
-          return jsonError("AI_HANDLER_FAILED", "NevorAI couldn't complete that request. Please try again in a moment.");
+          return jsonError("AI_HANDLER_FAILED", "Kaizen couldn't complete that request. Please try again in a moment.");
         }
       },
     },

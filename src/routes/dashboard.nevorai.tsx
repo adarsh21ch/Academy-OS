@@ -26,11 +26,11 @@ const LAST_CONV_KEY = "nevorai:lastConversationId";
 export const Route = createFileRoute("/dashboard/nevorai")({
   head: () => ({
     meta: [
-      { title: "NevorAI · AI Academy Manager" },
+      { title: "Kaizen · AI Academy Manager" },
       {
         name: "description",
         content:
-          "Chat with NevorAI — your AI academy manager for attendance, fees, admissions, and reports.",
+          "Chat with Kaizen — your AI academy manager for attendance, fees, admissions, and reports.",
       },
       { name: "robots", content: "noindex" },
     ],
@@ -163,7 +163,7 @@ function NevorAIPage() {
             >
               <Sparkles className="size-4 text-white" />
             </span>
-            <span className="truncate text-sm font-semibold">NevorAI</span>
+            <span className="truncate text-sm font-semibold">Kaizen</span>
             <span className="hidden truncate text-xs text-muted-foreground sm:inline">
               · AI Academy Manager
             </span>

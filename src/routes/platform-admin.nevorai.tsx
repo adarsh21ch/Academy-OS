@@ -9,7 +9,7 @@ import { Sparkles, Zap, Timer, Wallet, Building2, Users, Wrench, MessageSquare }
 export const Route = createFileRoute("/platform-admin/nevorai")({
   head: () => ({
     meta: [
-      { title: "NevorAI Intelligence · Platform" },
+      { title: "Kaizen Intelligence · Platform" },
       { name: "robots", content: "noindex" },
     ],
   }),
@@ -44,7 +44,7 @@ function FounderAIPage() {
     <div className="space-y-6">
       <header className="flex flex-wrap items-end justify-between gap-3">
         <div>
-          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">NevorAI Intelligence</h1>
+          <h1 className="text-2xl md:text-3xl font-bold tracking-tight">Kaizen Intelligence</h1>
           <p className="text-sm text-neutral-400">
             AI usage across every academy · last 30 days. Reuses existing analytics — no new engine.
           </p>

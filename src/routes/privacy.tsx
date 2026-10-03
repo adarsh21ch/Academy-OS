@@ -49,11 +49,11 @@ function Privacy() {
         advertising, and do not use it to train third-party AI models.
       </p>
 
-      <h2>Nev AI</h2>
+      <h2>Kaizen</h2>
       <p>
-        When an academy uses the Nev AI assistant, the question asked and the relevant academy
+        When an academy uses the Kaizen assistant, the question asked and the relevant academy
         records needed to answer it are sent to our AI provider to generate that answer. They are
-        not used to train that provider's models. Nev AI can only read data the asking user is
+        not used to train that provider's models. Kaizen can only read data the asking user is
         already permitted to see.
       </p>
 
@@ -77,7 +77,7 @@ function Privacy() {
         We use a small set of providers to run the service: Supabase (database, authentication and
         file storage), Cloudflare (hosting and content delivery), Razorpay (payment processing),
         Meta/WhatsApp Business (messages, where the academy has connected it), and our AI provider
-        for Nev AI. Email is sent through the academy's own configured provider.
+        for Kaizen. Email is sent through the academy's own configured provider.
       </p>
 
       <h2>Retention and deletion</h2>

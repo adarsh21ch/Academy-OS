@@ -8,7 +8,7 @@ import type { UIMessage } from "ai";
 export function messagesToMarkdown(title: string, messages: UIMessage[]): string {
   const lines: string[] = [`# ${title}`, ""];
   for (const m of messages) {
-    const who = m.role === "user" ? "You" : m.role === "assistant" ? "NevorAI" : m.role;
+    const who = m.role === "user" ? "You" : m.role === "assistant" ? "Kaizen" : m.role;
     lines.push(`## ${who}`);
     for (const p of m.parts) {
       if (p.type === "text") lines.push((p as { text: string }).text);

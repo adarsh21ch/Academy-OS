@@ -303,7 +303,7 @@ function Hero({ whatsappUrl, emailUrl }: { whatsappUrl: string; emailUrl: string
             className="max-w-xl text-lg leading-relaxed text-white/70"
           >
             Admissions, fees, attendance and ball-by-ball match scoring in one place — plus your own
-            academy website and Nev AI answering parent enquiries on WhatsApp while you are on the
+            academy website and Kaizen answering parent enquiries on WhatsApp while you are on the
             ground.
           </motion.p>
 
@@ -449,7 +449,7 @@ function EnquiryCard() {
     >
       <div className="flex items-center gap-2 text-[11px] font-semibold uppercase tracking-wider text-emerald-600">
         <WhatsAppIcon />
-        New enquiry · answered by Nev AI
+        New enquiry · answered by Kaizen
       </div>
       <p className="mt-2.5 text-sm leading-snug text-slate-700">
         "Morning batch ke liye admission open hai?"
@@ -532,7 +532,7 @@ function WhatItSaves() {
     "Every student, fee and receipt in one dashboard",
     "Overdue reminders sent automatically on WhatsApp",
     "Attendance tapped in from the coach's phone",
-    "Enquiries answered by Nev AI the moment they arrive",
+    "Enquiries answered by Kaizen the moment they arrive",
     "Live scoreboard parents follow from home",
     "Your own branded academy website, live from day one",
   ];
@@ -621,7 +621,7 @@ function WhatItSaves() {
         />
         <SaveCard
           title="Enquiries that convert"
-          body="Nev AI replies the moment a parent messages — even at 6 AM when you are on the ground."
+          body="Kaizen replies the moment a parent messages — even at 6 AM when you are on the ground."
           icon={<WhatsAppIcon />}
         />
       </div>
@@ -662,7 +662,7 @@ function Features() {
       icon: <CalendarIcon />,
     },
     {
-      title: "Nev AI assistant",
+      title: "Kaizen assistant",
       body: "Answers parent enquiries on WhatsApp instantly, and answers your own questions about your academy's numbers.",
       icon: <WhatsAppIcon />,
     },
@@ -1093,7 +1093,7 @@ const FAQ_GROUPS: FaqGroup[] = [
       },
       {
         q: "There's AI in it — will it get something wrong?",
-        a: "You stay in control. Nev AI helps with parent enquiries and answering questions about your academy's own numbers — it isn't left to run your academy on its own. We'll show you exactly what it does and doesn't touch on the demo call.",
+        a: "You stay in control. Kaizen helps with parent enquiries and answering questions about your academy's own numbers — it isn't left to run your academy on its own. We'll show you exactly what it does and doesn't touch on the demo call.",
       },
     ],
   },

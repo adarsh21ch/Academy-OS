@@ -207,7 +207,7 @@ function Overview() {
             />
             <Kpi
               icon={<Sparkles className="size-4" />}
-              label="NevorAI usage"
+              label="Kaizen usage"
               value={stats?.trial_tenants ?? 0}
               sub="Active AI conversations"
             />

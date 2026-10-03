@@ -66,7 +66,7 @@ export function ActionQueue() {
       </div>
       {rows.length === 0 ? (
         <div className="rounded-md border border-dashed border-border py-6 text-center text-sm text-muted-foreground">
-          No queued actions. NevorAI will queue anything that changes data here for your approval.
+          No queued actions. Kaizen will queue anything that changes data here for your approval.
         </div>
       ) : (
         <ul className="space-y-2">
